@@ -1,42 +1,37 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
-import { styles } from './MainLayoutStyles';
-import Navbar from './Navbar';
-import Drawer from './Drawer';
+import AppBar from './appBar/AppBar';
+import Drawer from './drawer/Drawer';
+import {
+	RootContainer,
+	ContentWrapper,
+	MainContent,
+	StyledDrawer,
+} from './MainLayoutStyles';
 
 const MainLayout = React.memo(() => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-	const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen((prev) => !prev);
 	}, []);
 
 	const closeMenu = useCallback(() => {
-		if (isMobile) {
-			setIsSidebarOpen(false);
-		}
-	}, [isMobile]);
-
-	useEffect(() => {
-		const handleResize = () => {
-			setIsMobile(window.innerWidth < 768);
-		};
-
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		// setIsSidebarOpen((prev) => !prev);
 	}, []);
 
 	return (
-		<styles.container>
-			<Navbar toggleSidebar={toggleSidebar} />
-			<styles.contentWrapper>
-				<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
-				<styles.mainContent sidebarOpen={isSidebarOpen && !isMobile}>
+		<RootContainer>
+			<AppBar toggleSidebar={toggleSidebar} />
+			<ContentWrapper>
+				<StyledDrawer open={isSidebarOpen}>
+					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
+				</StyledDrawer>
+				<MainContent>
 					<Outlet />
-				</styles.mainContent>
-			</styles.contentWrapper>
-		</styles.container>
+				</MainContent>
+			</ContentWrapper>
+		</RootContainer>
 	);
 });
 

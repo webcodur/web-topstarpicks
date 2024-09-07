@@ -3,8 +3,12 @@ import { LoginWrapper } from './LoginStyles';
 import LoginForm from './LoginForm';
 import useLoginForm from 'hooks/useLoginForm';
 import useLoginSubmit from 'hooks/useLoginSubmit';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 const Login = () => {
+	const navigate = useNavigate();
 	const { email, setEmail, pw, setPw, emailError, pwError, isSubmitDisabled } =
 		useLoginForm();
 
@@ -17,7 +21,10 @@ const Login = () => {
 
 	return (
 		<LoginWrapper>
-			<h2>로그인</h2>
+			<Box style={{ display: 'flex' }}>
+				<Box style={{ color: 'gray' }}>로그인</Box>
+				<Button onClick={() => navigate('/')}>X</Button>
+			</Box>
 			<br />
 			<LoginForm
 				email={email}

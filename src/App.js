@@ -1,38 +1,45 @@
-// src/App.js
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
-
-// COPMPONENTS
-import MainLayout from 'components/mainLayout/MainLayout';
-import Home from 'pages/Home';
-import Login from 'pages/Login';
-import About from 'pages/About';
-import Articles from 'pages/Articles';
-import Articles2 from 'pages/Articles2';
-import Dummy from 'pages/Dummy';
-
-// react-query
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useAtom } from 'jotai';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+
+import { darkModeAtom } from 'store/atom';
 import { queryClient } from './queryClient';
+import { lightTheme, darkTheme } from './theme';
+import { routes } from './routes';
+
+import MainLayout from 'components/mainLayout/MainLayout';
+
+import './App.css';
 
 function App() {
+	const [darkMode] = useAtom(darkModeAtom);
+
+	const theme = darkMode ? darkTheme : lightTheme;
+
 	return (
-		<BrowserRouter>
-			<QueryClientProvider client={queryClient}>
-				<Routes>
-					<Route path="/" element={<MainLayout />}>
-						<Route index element={<Home />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/about" element={<About />} />
-						<Route path="/articles" element={<Articles />} />
-						<Route path="/articles2" element={<Articles2 />} />
-						<Route path="/dummy" element={<Dummy />} />
-					</Route>
-				</Routes>
-				<ReactQueryDevtools initialIsOpen={false} />
-			</QueryClientProvider>
-		</BrowserRouter>
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<Routes>
+						<Route element={<MainLayout />}>
+							{routes.map((route) => (
+								<Route
+									key={route.path}
+									path={route.path}
+									element={route.element}
+								/>
+							))}
+						</Route>
+					</Routes>
+					<ReactQueryDevtools initialIsOpen={false} />
+				</QueryClientProvider>
+			</BrowserRouter>
+		</ThemeProvider>
 	);
 }
 
