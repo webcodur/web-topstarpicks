@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { isLoggedInAtom } from 'store/atom';
 
-const API_URL = 'https://dev.playground.lunchlab.me';
+const API_URL = '';
 
 const useLoginSubmit = () => {
 	const [, setIsLoggedIn] = useAtom(isLoggedInAtom);

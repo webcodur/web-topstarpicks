@@ -1,4 +1,5 @@
 // SettingsModal.jsx
+/* 우상단 설정창 */
 import React, { memo } from 'react';
 import {
 	Modal,
@@ -31,6 +32,7 @@ const SettingsModal = memo(({ open, onClose }) => {
 	return (
 		<Modal open={open} onClose={onClose} aria-labelledby="settings-modal-title">
 			<SettingsModalContainer>
+				{/* 제목/닫기 버튼 */}
 				<SettingsModalHeader>
 					<Typography id="settings-modal-title" variant="h6" component="h2">
 						{t('settings')}
@@ -40,6 +42,7 @@ const SettingsModal = memo(({ open, onClose }) => {
 					</IconButton>
 				</SettingsModalHeader>
 
+				{/* 다크 모드 */}
 				<FormControlLabel
 					control={
 						<Switch checked={darkMode} onChange={handleDarkModeToggle} />
@@ -47,6 +50,7 @@ const SettingsModal = memo(({ open, onClose }) => {
 					label={t(darkMode ? 'dark_mode' : 'light_mode')}
 				/>
 
+				{/* 다국어 설정 */}
 				<LanguageSelectWrapper>
 					<Typography variant="subtitle1">{t('language_settings')}</Typography>
 					<Select

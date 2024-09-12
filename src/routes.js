@@ -1,12 +1,11 @@
-import React from 'react';
 import Home from 'pages/Home';
 import Login from 'pages/Login';
-import Recommend from 'pages/Recommend';
-import ContentPage from 'pages/ContentPage';
+import Jobs from 'pages/jobs';
+import Content from 'pages/Content';
 
 export const routes = [
 	{ path: '/', element: <Home /> },
 	{ path: '/login', element: <Login /> },
-	{ path: '/:jobCategory', element: <Recommend /> },
-	{ path: '/:jobCategory/:personName/:contentType', element: <ContentPage /> },
+	{ path: '/:jobs', element: <Jobs /> },
+	{ path: '/:jobs/:personName/:contentType', element: <Content /> },
 ];
