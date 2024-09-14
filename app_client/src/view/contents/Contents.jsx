@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Container, Box } from '@mui/material';
-
-import { recommendationData } from 'store/content/recommendationData';
+import { Typography, Container, Box, CircularProgress } from '@mui/material';
 import { parseNameFromUrl } from 'utils/urlUtils';
 import {
 	StyledCard,
@@ -18,25 +16,62 @@ import {
 } from './ContentsStyle';
 import { Link } from 'react-router-dom';
 
+const API_BASE_URL = 'http://localhost:4000'; // API 서버의 기본 URL을 여기에 설정하세요
+
 const ContentPage = () => {
 	const { personName, contentType } = useParams();
+	const [recommendations, setRecommendations] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const [personInfo, setPersonInfo] = useState(null);
 
-	const person = recommendationData[parseNameFromUrl(personName)];
-	const typeData = person?.[contentType];
+	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true);
+			try {
+				// 인물 정보 가져오기
+				const personResponse = await fetch(
+					`${API_BASE_URL}/api/celebrities?name=${encodeURIComponent(
+						parseNameFromUrl(personName)
+					)}`
+				);
+				if (!personResponse.ok) {
+					const errorText = await personResponse.text();
+					throw new Error(
+						`인물 정보를 가져오는데 실패했습니다. 상태: ${personResponse.status}, 응답: ${errorText}`
+					);
+				}
+				const personData = await personResponse.json();
+				setPersonInfo(personData.data[0]);
 
-	if (!person) return <Typography>Person not found</Typography>;
+				// 추천 정보 가져오기
+				const recommendationsResponse = await fetch(
+					`${API_BASE_URL}/api/recommendations?celebrity_name=${encodeURIComponent(
+						parseNameFromUrl(personName)
+					)}&content_type=${encodeURIComponent(contentType)}`
+				);
+				if (!recommendationsResponse.ok) {
+					const errorText = await recommendationsResponse.text();
+					throw new Error(
+						`추천 정보를 가져오는데 실패했습니다. 상태: ${recommendationsResponse.status}, 응답: ${errorText}`
+					);
+				}
+				const recommendationsData = await recommendationsResponse.json();
+				setRecommendations(recommendationsData.data);
+			} catch (err) {
+				console.error('데이터 가져오기 오류:', err);
+				setError(err.message);
+			} finally {
+				setLoading(false);
+			}
+		};
 
-	const CelebImage = ({ imgWebSrc, name }) => {
-		if (imgWebSrc) {
-			return <StyledImage src={imgWebSrc} alt={name} />;
-		}
-		return (
-			<StyledImage
-				src={`https://via.placeholder.com/150?text=${encodeURIComponent(name)}`}
-				alt={name}
-			/>
-		);
-	};
+		fetchData();
+	}, [personName, contentType]);
+
+	if (loading) return <CircularProgress />;
+	if (error) return <Typography color="error">{error}</Typography>;
+	if (!personInfo) return <Typography>인물을 찾을 수 없습니다.</Typography>;
 
 	return (
 		<Container maxWidth="md" sx={{ mt: 4 }}>
@@ -49,39 +84,60 @@ const ContentPage = () => {
 					marginBottom: '100px',
 				}}>
 				<ImageContainer>
-					<CelebImage imgWebSrc={person.imgWebSrc} name={person.name} />
+					<StyledImage
+						src={
+							personInfo.img_link ||
+							`https://via.placeholder.com/150?text=${encodeURIComponent(
+								personInfo.name
+							)}`
+						}
+						alt={personInfo.name}
+					/>
 				</ImageContainer>
 				<Typography variant="h4" gutterBottom align="center">
-					{personName}'s {contentType}
+					{personInfo.name}의 {contentType}
 				</Typography>
 			</Box>
 
-			{typeData.title.map((title, index) => (
+			{recommendations.map((recommendation, index) => (
 				<StyledCard key={index} sx={{ mb: 3 }}>
 					<StyledCardContent>
 						<StyledTitle variant="h5" align="center">
-							NO {index + 1}: &nbsp; {title}
+							NO {index + 1}: &nbsp; {recommendation.title}
 						</StyledTitle>
 
 						<ImageContainer>
 							<StyledBookImage
-								src={typeData.contentImgSrc[index]}
-								alt={typeData.contentImgSrc[index]}
+								src={
+									recommendation.img_link ||
+									`https://via.placeholder.com/150?text=${encodeURIComponent(
+										recommendation.title
+									)}`
+								}
+								alt={recommendation.title}
 							/>
 						</ImageContainer>
 
 						<QuoteContainer>
 							<QuoteIconStart />
-							<QuoteText variant="body1">{typeData.feelings[index]}</QuoteText>
+							<QuoteText variant="body1">{recommendation.reason}</QuoteText>
 							<QuoteIconEnd />
 						</QuoteContainer>
 
 						<Typography variant="body1" paragraph>
-							{typeData.introduction[index]}
+							작성자/감독: {recommendation.creator}, 출시일:{' '}
+							{new Date(recommendation.release_date).toLocaleDateString()}
 						</Typography>
 
-						{/* yes24 링크 */}
-						<Link style={{ color: 'red' }}>yes24</Link>
+						{recommendation.affiliate_link && (
+							<Link
+								to={recommendation.affiliate_link}
+								style={{ color: 'red' }}
+								target="_blank"
+								rel="noopener noreferrer">
+								구매 링크
+							</Link>
+						)}
 					</StyledCardContent>
 				</StyledCard>
 			))}

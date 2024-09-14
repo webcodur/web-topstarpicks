@@ -1,4 +1,4 @@
-export const jobs = [
+export const profession = [
 	'entrepreneur',
 	'investor',
 	'politician',
@@ -10,7 +10,7 @@ export const jobs = [
 	'influencer',
 ];
 
-export const jobsMap = {
+export const professionMap = {
 	entrepreneur: '기업가',
 	investor: '투자자',
 	politician: '정치인',
