@@ -1,0 +1,14 @@
+{
+  "name": "web-topstarpicks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "fe": "pnpm --prefix app_client start",
+    "be": "pnpm --prefix app_server start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
