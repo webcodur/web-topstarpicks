@@ -19,6 +19,40 @@ app.listen(port, () => {
 	console.log(`서버가 포트 ${port}에서 시작되었습니다.`);
 });
 
+// 인물명으로 단일 인물 정보 조회
+app.get('/api/celebrities/name', (req, res) => {
+	const { name } = req.query;
+
+	if (!name) {
+		res.status(400).json({ error: '인물 이름을 제공해야 합니다.' });
+		return;
+	}
+
+	const sql = SQL`
+    SELECT 
+      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.biography, cel.img_link,
+      GROUP_CONCAT(DISTINCT con.type) AS recommended_content_types
+    FROM 
+      celebrities cel
+    LEFT JOIN 
+      recommendations rec ON cel.id = rec.celebrity_id
+    LEFT JOIN 
+      content con ON rec.content_id = con.id
+    WHERE 
+      cel.name = ${name}
+    GROUP BY 
+      cel.id
+  `;
+
+	db.all(sql.text, sql.values, (err, rows) => {
+		if (err) {
+			res.status(400).json({ error: err.message });
+			return;
+		}
+		res.json({ message: 'success', data: rows });
+	});
+});
+
 // 유명인사 직군별 데이터 조회
 app.get('/api/celebrities', (req, res) => {
 	const { profession } = req.query;
@@ -84,7 +118,7 @@ app.get('/api/recommendations', (req, res) => {
 
 	const sql = SQL`
     SELECT 
-      r.title, r.creator, r.release_date, r.recommendation_text as reason, r.affiliate_link, r.img_link
+      r.title, r.creator, r.release_date, r.recommendation_text as reason, r.affiliate_link, r.img_link, r.mediaDescription
     FROM 
       recommendations r
     JOIN 
@@ -98,6 +132,31 @@ app.get('/api/recommendations', (req, res) => {
       r.release_date DESC
   `;
 
+	db.all(sql.text, sql.values, (err, rows) => {
+		if (err) {
+			res.status(400).json({ error: err.message });
+			return;
+		}
+		res.json({ message: 'success', data: rows });
+	});
+});
+
+// 컨텐츠 타입별 개수 조회
+app.get('/api/recommendations/number', (req, res) => {
+	const sql = SQL`
+    SELECT con.type, COUNT(*) as count
+    FROM recommendations as rec
+    INNER JOIN content as con
+    ON con.id = rec.content_id
+    GROUP BY con.type
+
+    UNION ALL
+
+    SELECT '전체' as type, COUNT(*) as count
+    FROM recommendations as rec
+    INNER JOIN content as con
+    ON con.id = rec.content_id;
+  `;
 	db.all(sql.text, sql.values, (err, rows) => {
 		if (err) {
 			res.status(400).json({ error: err.message });

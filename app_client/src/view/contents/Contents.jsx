@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Container, Box, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { parseNameFromUrl } from 'utils/urlUtils';
+import { fetchPersonInfo } from 'api/celebrityApi';
+import { fetchRecommendations } from 'api/recommendationApi';
 import {
 	StyledCard,
 	StyledCardContent,
 	StyledTitle,
 	QuoteContainer,
 	QuoteText,
-	QuoteIconStart,
-	QuoteIconEnd,
 	StyledImage,
 	StyledBookImage,
 	ImageContainer,
+	PageContainer,
+	PersonInfoContainer,
+	PersonName,
+	ErrorMessage,
+	AffiliateLink,
 } from './ContentsStyle';
-import { Link } from 'react-router-dom';
-
-const API_BASE_URL = 'http://localhost:4000'; // API 서버의 기본 URL을 여기에 설정하세요
 
 const ContentPage = () => {
 	const { personName, contentType } = useParams();
@@ -27,37 +29,17 @@ const ContentPage = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			setLoading(true);
-			try {
-				// 인물 정보 가져오기
-				const personResponse = await fetch(
-					`${API_BASE_URL}/api/celebrities?name=${encodeURIComponent(
-						parseNameFromUrl(personName)
-					)}`
-				);
-				if (!personResponse.ok) {
-					const errorText = await personResponse.text();
-					throw new Error(
-						`인물 정보를 가져오는데 실패했습니다. 상태: ${personResponse.status}, 응답: ${errorText}`
-					);
-				}
-				const personData = await personResponse.json();
-				setPersonInfo(personData.data[0]);
+			const celebName = parseNameFromUrl(personName);
 
-				// 추천 정보 가져오기
-				const recommendationsResponse = await fetch(
-					`${API_BASE_URL}/api/recommendations?celebrity_name=${encodeURIComponent(
-						parseNameFromUrl(personName)
-					)}&content_type=${encodeURIComponent(contentType)}`
+			try {
+				const personData = await fetchPersonInfo(celebName);
+				setPersonInfo(personData);
+
+				const recommendationsData = await fetchRecommendations(
+					celebName,
+					contentType
 				);
-				if (!recommendationsResponse.ok) {
-					const errorText = await recommendationsResponse.text();
-					throw new Error(
-						`추천 정보를 가져오는데 실패했습니다. 상태: ${recommendationsResponse.status}, 응답: ${errorText}`
-					);
-				}
-				const recommendationsData = await recommendationsResponse.json();
-				setRecommendations(recommendationsData.data);
+				setRecommendations(recommendationsData);
 			} catch (err) {
 				console.error('데이터 가져오기 오류:', err);
 				setError(err.message);
@@ -70,19 +52,12 @@ const ContentPage = () => {
 	}, [personName, contentType]);
 
 	if (loading) return <CircularProgress />;
-	if (error) return <Typography color="error">{error}</Typography>;
-	if (!personInfo) return <Typography>인물을 찾을 수 없습니다.</Typography>;
+	if (error) return <ErrorMessage>{error}</ErrorMessage>;
+	if (!personInfo) return <ErrorMessage>인물을 찾을 수 없습니다.</ErrorMessage>;
 
 	return (
-		<Container maxWidth="md" sx={{ mt: 4 }}>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					mb: 4,
-					marginBottom: '100px',
-				}}>
+		<PageContainer>
+			<PersonInfoContainer>
 				<ImageContainer>
 					<StyledImage
 						src={
@@ -94,15 +69,15 @@ const ContentPage = () => {
 						alt={personInfo.name}
 					/>
 				</ImageContainer>
-				<Typography variant="h4" gutterBottom align="center">
+				<PersonName>
 					{personInfo.name}의 {contentType}
-				</Typography>
-			</Box>
+				</PersonName>
+			</PersonInfoContainer>
 
 			{recommendations.map((recommendation, index) => (
-				<StyledCard key={index} sx={{ mb: 3 }}>
+				<StyledCard key={index}>
 					<StyledCardContent>
-						<StyledTitle variant="h5" align="center">
+						<StyledTitle>
 							NO {index + 1}: &nbsp; {recommendation.title}
 						</StyledTitle>
 
@@ -119,29 +94,31 @@ const ContentPage = () => {
 						</ImageContainer>
 
 						<QuoteContainer>
-							<QuoteIconStart />
-							<QuoteText variant="body1">{recommendation.reason}</QuoteText>
-							<QuoteIconEnd />
+							<QuoteText>
+								"{recommendation.reason}" - {personInfo.name}
+							</QuoteText>
 						</QuoteContainer>
 
-						<Typography variant="body1" paragraph>
-							작성자/감독: {recommendation.creator}, 출시일:{' '}
-							{new Date(recommendation.release_date).toLocaleDateString()}
-						</Typography>
+						<p>작성: {recommendation.creator} </p>
+
+						<p>
+							출시: {new Date(recommendation.release_date).toLocaleDateString()}
+						</p>
+
+						<p>설명: {recommendation.mediaDescription}</p>
 
 						{recommendation.affiliate_link && (
-							<Link
+							<AffiliateLink
 								to={recommendation.affiliate_link}
-								style={{ color: 'red' }}
 								target="_blank"
 								rel="noopener noreferrer">
 								구매 링크
-							</Link>
+							</AffiliateLink>
 						)}
 					</StyledCardContent>
 				</StyledCard>
 			))}
-		</Container>
+		</PageContainer>
 	);
 };
 

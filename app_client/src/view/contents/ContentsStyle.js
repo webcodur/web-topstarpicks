@@ -1,6 +1,23 @@
 import styled from '@emotion/styled';
-import { Typography, Card, CardContent } from '@mui/material';
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import { Card, CardContent } from '@mui/material';
+import { Link } from 'react-router-dom';
+
+export const PageContainer = styled.div`
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem 0;
+`;
+
+export const PersonInfoContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 100px;
+`;
+
+export const PersonName = styled.h1`
+	text-align: center;
+`;
 
 export const StyledCard = styled(Card)`
 	margin-bottom: 100px;
@@ -12,8 +29,9 @@ export const StyledCardContent = styled(CardContent)`
 	align-items: center;
 `;
 
-export const StyledTitle = styled(Typography)`
+export const StyledTitle = styled.h2`
 	margin-bottom: 24px;
+	text-align: center;
 `;
 
 export const QuoteContainer = styled.div`
@@ -24,30 +42,11 @@ export const QuoteContainer = styled.div`
 	padding: 20px;
 	border-radius: 4px;
 	margin-bottom: 20px;
-	position: relative;
 `;
 
-export const QuoteText = styled(Typography)`
+export const QuoteText = styled.p`
 	color: ${(props) => props.theme.palette.text.secondary};
-	padding-left: 32px;
-	padding-right: 32px;
-`;
-
-export const QuoteIconStart = styled(FormatQuoteIcon)`
-	position: absolute;
-	top: -10px;
-	left: 10px;
-	color: ${(props) => props.theme.palette.primary.main};
-	font-size: 40px;
-`;
-
-export const QuoteIconEnd = styled(FormatQuoteIcon)`
-	position: absolute;
-	bottom: -10px;
-	right: 10px;
-	color: ${(props) => props.theme.palette.primary.main};
-	font-size: 40px;
-	transform: rotate(180deg);
+	font-style: italic;
 `;
 
 export const StyledImage = styled.img`
@@ -64,4 +63,12 @@ export const StyledBookImage = styled.img`
 
 export const ImageContainer = styled.div`
 	margin-bottom: ${(props) => props.theme.spacing(2)};
+`;
+
+export const ErrorMessage = styled.p`
+	color: red;
+`;
+
+export const AffiliateLink = styled(Link)`
+	color: red;
 `;

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import { calculateAge } from 'utils/date';
+import { fetchCelebrities } from 'api/celebrityApi';
 import {
 	StyledCard,
 	StyledCardContent,
@@ -29,27 +30,17 @@ const Profession = () => {
 	const [professionData, setProfessionData] = useState(null);
 
 	useEffect(() => {
-		const fetchCelebrities = async () => {
+		const loadCelebrities = async () => {
 			try {
-				const url =
-					profession === 'all'
-						? 'http://localhost:4000/api/celebrities'
-						: `http://localhost:4000/api/celebrities?profession=${encodeURIComponent(
-								profession
-						  )}`;
-
-				const response = await fetch(url);
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				}
-				const data = await response.json();
-				setProfessionData(data.data);
+				const data = await fetchCelebrities(profession);
+				setProfessionData(data);
 			} catch (error) {
-				console.error('셀럽 데이터 로딩 실패:', error);
+				console.error('Failed to load celebrity data:', error);
+				// You might want to set an error state here and display it to the user
 			}
 		};
 
-		fetchCelebrities();
+		loadCelebrities();
 	}, [profession]);
 
 	const handleContentClick = useCallback(

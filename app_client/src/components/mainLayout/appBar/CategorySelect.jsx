@@ -1,32 +1,55 @@
 // CategorySelect.jsx
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Select, MenuItem } from '@mui/material';
 import { useAtom } from 'jotai';
-import { contentTypeAtom } from 'store/atom';
-import { countContentTypes } from 'utils/countContentTypes';
-import { recommendationData } from 'store/content/recommendationData';
+import { contentTypeAtom, contentTypeNumberAtom } from 'store/atom';
+import { fetchContentTypeNumber } from 'api/recommendationApi';
 
 const CategorySelect = memo(() => {
 	const [contentType, setContentType] = useAtom(contentTypeAtom);
+	const [contentTypeNumbers, setContentTypeNumbers] = useState(
+		contentTypeNumberAtom
+	);
+
 	const handleCategoryChange = (event) => {
 		setContentType(event.target.value);
+		// 여기서 필터링 로직 전개
 	};
-	const res = countContentTypes(recommendationData);
 
+	const getNumber = (type) => {
+		if (JSON.stringify(contentTypeNumbers) === JSON.stringify({})) return <></>;
+		const targetObj = contentTypeNumbers.find((ele) => ele.type === type);
+		return targetObj ? targetObj.count : 0;
+	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const result = await fetchContentTypeNumber();
+				setContentTypeNumbers(result);
+				console.log('Content type numbers:', result);
+			} catch (error) {
+				console.error('Error fetching content type numbers:', error);
+			}
+		};
+		fetchData();
+	}, []);
+
+	if (!contentTypeNumbers) return <></>;
 	return (
 		<Select
 			value={contentType}
 			onChange={handleCategoryChange}
 			sx={{ color: 'inherit', mr: 2 }}
 			size="small">
-			<MenuItem value="전체">전체 분류({res.all})</MenuItem>
-			<MenuItem value="책">책({res.book})</MenuItem>
-			<MenuItem value="영화">영화({res.movie})</MenuItem>
-			<MenuItem value="게임">게임({res.game})</MenuItem>
-			<MenuItem value="음악">음악({res.music})</MenuItem>
-			<MenuItem value="웹툰">웹툰({res.webtoon})</MenuItem>
-			<MenuItem value="애니">애니({res.anime})</MenuItem>
-			<MenuItem value="맛집">맛집({res.restaurant})</MenuItem>
+			<MenuItem value="전체">전체 ({getNumber('전체')})</MenuItem>
+			<MenuItem value="책">책 ({getNumber('책')})</MenuItem>
+			<MenuItem value="영화">영화 ({getNumber('영화')})</MenuItem>
+			<MenuItem value="게임">게임 ({getNumber('게임')})</MenuItem>
+			<MenuItem value="음악">음악 ({getNumber('음악')})</MenuItem>
+			<MenuItem value="웹툰">웹툰 ({getNumber('웹툰')})</MenuItem>
+			<MenuItem value="애니">애니 ({getNumber('애니')})</MenuItem>
+			<MenuItem value="맛집">맛집 ({getNumber('맛집')})</MenuItem>
 		</Select>
 	);
 });
