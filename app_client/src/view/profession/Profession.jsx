@@ -14,6 +14,9 @@ import {
 	StyledButton,
 } from './ProfessionStyles';
 
+import { useAtom } from 'jotai';
+import { contentTypeAtom } from 'store/atom';
+
 const CelebImage = ({ imgLink, name }) => {
 	if (imgLink) return <StyledImage src={imgLink} alt={name} />;
 	return (
@@ -26,6 +29,7 @@ const CelebImage = ({ imgLink, name }) => {
 
 const Profession = () => {
 	const { profession } = useParams();
+	const [contentType, setContentType] = useAtom(contentTypeAtom);
 	const navigate = useNavigate();
 	const [professionData, setProfessionData] = useState(null);
 
@@ -33,15 +37,25 @@ const Profession = () => {
 		const loadCelebrities = async () => {
 			try {
 				const data = await fetchCelebrities(profession);
-				setProfessionData(data);
+
+				let filteredData;
+				console.log('contentType', contentType);
+				if (contentType !== '전체') {
+					filteredData = data.filter((celeb) => {
+						return (
+							celeb.recommended_content_types &&
+							celeb.recommended_content_types.includes(contentType)
+						);
+					});
+					setProfessionData(filteredData);
+				} else setProfessionData(data);
 			} catch (error) {
 				console.error('Failed to load celebrity data:', error);
-				// You might want to set an error state here and display it to the user
 			}
 		};
 
 		loadCelebrities();
-	}, [profession]);
+	}, [profession, contentType]);
 
 	const handleContentClick = useCallback(
 		(personName, content) => {
@@ -89,6 +103,10 @@ const Profession = () => {
 									{person.recommended_content_types &&
 										person.recommended_content_types
 											.split(',')
+											.filter(
+												(content) =>
+													contentType === '전체' || content === contentType
+											) // 전체일 땐 모든 버튼, 그 외엔 선택한 contentType만
 											.map((content) => (
 												<StyledButton
 													key={`${person.name}-${content}`}

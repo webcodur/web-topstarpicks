@@ -82,6 +82,11 @@ const ContentPage = () => {
 							NO {index + 1}: &nbsp; {recommendation.title}
 						</StyledTitle>
 
+						<p>
+							{recommendation.creator},{' '}
+							{new Date(recommendation.release_date).toLocaleDateString()}
+						</p>
+						<br />
 						<ImageContainer>
 							<StyledBookImage
 								src={
@@ -106,13 +111,7 @@ const ContentPage = () => {
 							</p>
 						</QuoteContainer>
 
-						<p>작성: {recommendation.creator} </p>
-
-						<p>
-							출시: {new Date(recommendation.release_date).toLocaleDateString()}
-						</p>
-
-						<p>설명: {recommendation.mediaDescription}</p>
+						<p>{recommendation.mediaDescription}</p>
 
 						{recommendation.affiliate_link && (
 							<AffiliateLink
