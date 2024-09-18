@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Snackbar } from '@mui/material';
 import { StyledBox } from './AdminStyles';
 import CelebritiesManager from './CelebritiesManager';
+import RecommendationManager from './RecommendationManager';
 
 const Admin = () => {
 	const [snackbar, setSnackbar] = useState({ open: false, message: '' });
@@ -12,9 +13,11 @@ const Admin = () => {
 
 	return (
 		<StyledBox>
+			{/* 셀럽 정보 관리자 */}
 			<CelebritiesManager showSnackbar={showSnackbar} />
 
-			{/* Here you can add more components for other tables */}
+			{/* 추천 컨텐츠 정보 관리자 */}
+			<RecommendationManager showSnackbar={showSnackbar} />
 
 			<Snackbar
 				open={snackbar.open}
