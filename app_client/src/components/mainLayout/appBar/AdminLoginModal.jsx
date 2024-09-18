@@ -9,7 +9,7 @@ const AdminLoginModal = ({ open, onClose }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (password === 'admin') {
+		if (password === '123') {
 			navigate('/admin');
 			onClose();
 		} else {

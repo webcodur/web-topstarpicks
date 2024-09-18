@@ -27,7 +27,7 @@ const CategorySelect = memo(() => {
 			try {
 				const result = await fetchContentTypeNumber();
 				setContentTypeNumbers(result);
-				console.log('Content type numbers:', result);
+				// console.log('Content type numbers:', result);
 			} catch (error) {
 				console.error('Error fetching content type numbers:', error);
 			}
