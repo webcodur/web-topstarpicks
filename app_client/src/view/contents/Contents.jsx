@@ -19,6 +19,7 @@ import {
 	ErrorMessage,
 	AffiliateLink,
 } from './ContentsStyle';
+import { Link } from 'react-router-dom';
 
 const ContentPage = () => {
 	const { personName, contentType } = useParams();
@@ -97,6 +98,12 @@ const ContentPage = () => {
 							<QuoteText>
 								"{recommendation.reason}" - {personInfo.name}
 							</QuoteText>
+							<p>
+								소스:{' '}
+								<Link to={recommendation.recommendation_source}>
+									{recommendation.recommendation_source}
+								</Link>
+							</p>
 						</QuoteContainer>
 
 						<p>작성: {recommendation.creator} </p>

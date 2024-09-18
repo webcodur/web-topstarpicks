@@ -52,8 +52,8 @@ const Profession = () => {
 
 	const pageTitle = useMemo(() => {
 		return profession === 'all'
-			? '전체 카테고리'
-			: `${profession.charAt(0).toUpperCase() + profession.slice(1)} 셀럽들`;
+			? '전체 셀럽'
+			: `${profession.charAt(0).toUpperCase() + profession.slice(1)} 셀럽`;
 	}, [profession]);
 
 	if (!professionData || professionData.length === 0) return null;
