@@ -12,7 +12,12 @@ export const PersonInfoContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-bottom: 100px;
+	margin-bottom: 40px;
+`;
+
+export const PersonInfoText = styled.p`
+	margin: 5px 0;
+	color: ${(props) => props.theme.palette.text.secondary};
 `;
 
 export const PersonName = styled.h1`
@@ -50,9 +55,9 @@ export const QuoteText = styled.p`
 `;
 
 export const StyledImage = styled.img`
-	max-width: 300px;
-	height: 400px;
+	width: 400px;
 	object-fit: cover;
+	margin-bottom: 50px;
 `;
 
 export const StyledBookImage = styled.img`
@@ -71,4 +76,49 @@ export const ErrorMessage = styled.p`
 
 export const AffiliateLink = styled(Link)`
 	color: red;
+`;
+
+export const TableOfContents = styled.div`
+	text-align: center;
+	background-color: ${(props) => props.theme.palette.background.paper};
+	padding: 20px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const TOCItem = styled.div`
+	cursor: pointer;
+	text-align: center;
+	padding: 8px 0;
+	&:hover {
+		color: ${(props) => props.theme.palette.primary.main};
+	}
+`;
+
+export const FloatingMenuButton = styled.div`
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 1000;
+`;
+
+export const FloatingMenu = styled.div`
+	position: fixed;
+	top: 50%;
+	right: 20px;
+	transform: translateY(-50%);
+	background-color: ${(props) => props.theme.palette.background.paper};
+	padding: 20px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 999;
+`;
+
+export const FloatingMenuItem = styled.div`
+	cursor: pointer;
+	padding: 8px 0;
+	&:hover {
+		color: ${(props) => props.theme.palette.primary.main};
+	}
 `;
