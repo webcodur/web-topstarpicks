@@ -36,17 +36,20 @@ const RecommendationCard = forwardRef(
 					/>
 				</ImageContainer>
 
-				<QuoteContainer>
-					<QuoteText>
-						"{recommendation.reason}" - {personInfo.name}
-					</QuoteText>
-					<p>
-						소스:{' '}
-						<Link to={recommendation.recommendation_source}>
-							{recommendation.recommendation_source}
-						</Link>
-					</p>
-				</QuoteContainer>
+				{recommendation.reason.length > 1 && (
+					<QuoteContainer>
+						<QuoteText>
+							"{recommendation.reason}" - {personInfo.name}
+						</QuoteText>
+						<p>
+							<Link
+								style={{ color: 'orange' }}
+								to={recommendation.recommendation_source}>
+								출처
+							</Link>
+						</p>
+					</QuoteContainer>
+				)}
 
 				<p>{recommendation.mediaDescription}</p>
 

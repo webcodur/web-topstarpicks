@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Snackbar } from '@mui/material';
 import { StyledBox } from './AdminStyles';
+
 import CelebritiesManager from './CelebritiesManager';
 import RecommendationManager from './RecommendationManager';
 
