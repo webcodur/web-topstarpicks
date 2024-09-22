@@ -1,0 +1,92 @@
+name: TopStarPicks CI/CD 파이프라인 (블루-그린 배포)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  HOME: /root
+  BLUE_PORT: 3002
+  GREEN_PORT: 3003
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: 0-1. 코드 체크아웃
+        uses: actions/checkout@v2
+
+      - name: 0-2. 환경 설정
+        id: setup
+        run: |
+          echo "HOME=/root" >> $GITHUB_ENV
+          if [ -f $HOME/topstarpicks_active_build.txt ]; then
+            echo "CURRENT_BUILD=$(cat $HOME/topstarpicks_active_build.txt)" >> $GITHUB_OUTPUT
+          else
+            echo "CURRENT_BUILD=blue" >> $GITHUB_OUTPUT
+            echo "blue" > $HOME/topstarpicks_active_build.txt
+          fi
+
+      - name: 1. 새 빌드 결정
+        id: new_build
+        run: |
+          if [ "${{ steps.setup.outputs.CURRENT_BUILD }}" = "blue" ]; then
+            echo "NEW_BUILD=green" >> $GITHUB_OUTPUT
+            echo "NEW_PORT=${{ env.GREEN_PORT }}" >> $GITHUB_OUTPUT
+            echo "OLD_PORT=${{ env.BLUE_PORT }}" >> $GITHUB_OUTPUT
+          else
+            echo "NEW_BUILD=blue" >> $GITHUB_OUTPUT
+            echo "NEW_PORT=${{ env.BLUE_PORT }}" >> $GITHUB_OUTPUT
+            echo "OLD_PORT=${{ env.GREEN_PORT }}" >> $GITHUB_OUTPUT
+          fi
+
+      # React 관련 단계
+      - name: R1. React 빌드 준비 및 빌드
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd ${{ env.HOME }}/topstarpicks
+          git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git pull origin main
+
+          cd frontend
+          NEW_BUILD_DIR="build_${{ steps.new_build.outputs.NEW_BUILD }}"
+
+          rm -rf "$NEW_BUILD_DIR"
+          mkdir -p "$NEW_BUILD_DIR"
+
+          yarn install
+          yarn build
+
+          mv build/* "$NEW_BUILD_DIR/"
+
+          if [ -z "$(ls -A $NEW_BUILD_DIR)" ]; then
+            exit 1
+          fi
+
+      - name: R2. 새 React 버전 시작
+        run: |
+          cd ${{ env.HOME }}/topstarpicks/frontend
+          tmux new-session -d -s topstarpicks_react_${{ steps.new_build.outputs.NEW_BUILD }} \
+          "serve -s build_${{ steps.new_build.outputs.NEW_BUILD }} -l ${{ steps.new_build.outputs.NEW_PORT }}"
+
+      - name: R3. Nginx 설정 업데이트
+        run: |
+          sudo sed -i 's/server 127.0.0.1:[0-9]*/server 127.0.0.1:${{ steps.new_build.outputs.NEW_PORT }}/' /etc/nginx/sites-available/topstarpicks.com
+          sudo sed -i 's/server 127.0.0.1:[0-9]* backup/server 127.0.0.1:${{ steps.new_build.outputs.OLD_PORT }} backup/' /etc/nginx/sites-available/topstarpicks.com
+          sudo nginx -t && sudo systemctl reload nginx
+
+      - name: R4. 활성 빌드 업데이트
+        run: echo "${{ steps.new_build.outputs.NEW_BUILD }}" > ${{ env.HOME }}/topstarpicks_active_build.txt
+
+      - name: R5. 이전 React 버전 중지
+        run: tmux kill-session -t topstarpicks_react_${{ steps.setup.outputs.CURRENT_BUILD }} || true
+
+      # Node.js 백엔드 관련 단계
+      - name: B1. Node.js 백엔드 재시작
+        run: |
+          tmux kill-session -t topstarpicks_backend || true
+          tmux new-session -d -s topstarpicks_backend \
+          'cd ${{ env.HOME }}/topstarpicks/backend && npm install && NODE_ENV=production node server.js'
