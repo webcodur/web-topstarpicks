@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, MenuItem, Select } from '@mui/material';
-import { DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:4000/api';
+import { Button } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { fetchAllCelebrities } from 'api/celebrityApi';
+import {
+	fetchAllRecommendations,
+	createRecommendation,
+	updateRecommendation,
+	deleteRecommendation,
+	fetchContentTypeNumber,
+} from 'api/recommendationApi';
+import getRecsColumns from './recsColumns';
 
 const categoriesMap = {
 	book: '책',
@@ -29,8 +33,8 @@ const Recs = ({ showSnackbar }) => {
 
 	const fetchRecommendations = useCallback(async () => {
 		try {
-			const response = await axios.get(`${API_BASE_URL}/recommendations/all`);
-			const rowsWithInfo = response.data.data.map((recommendation) => ({
+			const recommendations = await fetchAllRecommendations();
+			const rowsWithInfo = recommendations.map((recommendation) => ({
 				...recommendation,
 				id: recommendation.id || `temp_${Date.now()}_${Math.random()}`,
 				isNew: false,
@@ -45,8 +49,8 @@ const Recs = ({ showSnackbar }) => {
 
 	const fetchCelebrities = useCallback(async () => {
 		try {
-			const response = await axios.get(`${API_BASE_URL}/celebrities/all`);
-			setCelebrities(response.data.data);
+			const celebs = await fetchAllCelebrities();
+			setCelebrities(celebs);
 		} catch (error) {
 			console.error('Error fetching celebrities:', error);
 			showSnackbar('유명인사 정보를 불러오는 데 실패했습니다.');
@@ -55,12 +59,8 @@ const Recs = ({ showSnackbar }) => {
 
 	const fetchContentTypes = useCallback(async () => {
 		try {
-			const response = await axios.get(
-				`${API_BASE_URL}/recommendations/number`
-			);
-			setContentTypes(
-				response.data.data.filter((item) => item.type !== '전체')
-			);
+			const types = await fetchContentTypeNumber();
+			setContentTypes(types.filter((item) => item.type !== '전체'));
 		} catch (error) {
 			console.error('Error fetching content types:', error);
 			showSnackbar('컨텐츠 타입 정보를 불러오는 데 실패했습니다.');
@@ -97,7 +97,7 @@ const Recs = ({ showSnackbar }) => {
 		async (id) => {
 			try {
 				if (!id.toString().startsWith('temp_')) {
-					await axios.delete(`${API_BASE_URL}/recommendations/${id}`);
+					await deleteRecommendation(id);
 				}
 				setRows((prev) => prev.filter((row) => row.id !== id));
 				showSnackbar('추천 정보가 삭제되었습니다.');
@@ -139,15 +139,9 @@ const Recs = ({ showSnackbar }) => {
 				const { isNew, isEdited, ...recommendationData } = row;
 
 				if (isNew) {
-					await axios.post(
-						`${API_BASE_URL}/recommendations`,
-						recommendationData
-					);
+					await createRecommendation(recommendationData);
 				} else {
-					await axios.put(
-						`${API_BASE_URL}/recommendations/${id}`,
-						recommendationData
-					);
+					await updateRecommendation(id, recommendationData);
 				}
 
 				showSnackbar('추천 정보가 저장되었습니다.');
@@ -160,109 +154,14 @@ const Recs = ({ showSnackbar }) => {
 		[rows, fetchRecommendations, showSnackbar]
 	);
 
-	const columns = [
-		{
-			field: 'celebrity_id',
-			headerName: '유명인사',
-			width: 150,
-			editable: true,
-			renderCell: (params) => (
-				<Select
-					value={params.value}
-					onChange={(e) => {
-						const updatedRow = { ...params.row, celebrity_id: e.target.value };
-						processRowUpdate(updatedRow, params.row);
-					}}
-					fullWidth>
-					{celebrities.map((celebrity) => (
-						<MenuItem key={celebrity.id} value={celebrity.id}>
-							{celebrity.name}
-						</MenuItem>
-					))}
-				</Select>
-			),
-		},
-		{
-			field: 'content_type',
-			headerName: '컨텐츠 타입',
-			width: 150,
-			editable: true,
-			renderCell: (params) => (
-				<Select
-					value={params.value}
-					onChange={(e) => {
-						const updatedRow = {
-							...params.row,
-							content_type: e.target.value,
-							content_id: contentIdMap[e.target.value] || '',
-						};
-						processRowUpdate(updatedRow, params.row);
-					}}
-					fullWidth>
-					{Object.values(categoriesMap).map((type) => (
-						<MenuItem key={type} value={type}>
-							{type}
-						</MenuItem>
-					))}
-				</Select>
-			),
-		},
-		{ field: 'title', headerName: '제목', width: 200, editable: true },
-		{ field: 'creator', headerName: '제작자', width: 150, editable: true },
-		{ field: 'release_date', headerName: '출시일', width: 120, editable: true },
-		{
-			field: 'recommendation_text',
-			headerName: '추천 이유',
-			width: 200,
-			editable: true,
-		},
-		{
-			field: 'recommendation_source',
-			headerName: '출처',
-			width: 150,
-			editable: true,
-		},
-		{
-			field: 'img_link',
-			headerName: '이미지 링크',
-			width: 200,
-			editable: true,
-		},
-		{
-			field: 'affiliate_link',
-			headerName: '제휴 링크',
-			width: 200,
-			editable: true,
-		},
-		{
-			field: 'mediaDescription',
-			headerName: '미디어 설명',
-			width: 200,
-			editable: true,
-		},
-		{
-			field: 'actions',
-			type: 'actions',
-			headerName: '작업',
-			width: 120,
-			getActions: (params) => [
-				...(params.row.isNew || params.row.isEdited
-					? [
-							<GridActionsCellItem
-								icon={<CheckIcon />}
-								label="Save"
-								onClick={() => handleSaveRow(params.id)}
-							/>,
-					  ]
-					: []),
-				<GridActionsCellItem
-					icon={<DeleteIcon />}
-					label="Delete"
-					onClick={() => handleDeleteRecommendation(params.id)}
-				/>,
-			],
-		},
-	];
+	const columns = getRecsColumns(
+		celebrities,
+		categoriesMap,
+		contentIdMap,
+		processRowUpdate,
+		handleSaveRow,
+		handleDeleteRecommendation
+	);
 
 	return (
 		<>
@@ -277,9 +176,6 @@ const Recs = ({ showSnackbar }) => {
 				rows={rows}
 				columns={columns}
 				pageSize={5}
-				components={{
-					Toolbar: GridToolbar,
-				}}
 				processRowUpdate={processRowUpdate}
 				experimentalFeatures={{ newEditingApi: true }}
 			/>

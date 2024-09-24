@@ -32,7 +32,8 @@ const ContentPage = () => {
 
 			try {
 				const personData = await fetchPersonInfo(celebName);
-				setPersonInfo(personData);
+				// 여기서 personData가 배열인지 확인하고, 첫 번째 요소를 사용합니다.
+				setPersonInfo(Array.isArray(personData) ? personData[0] : personData);
 
 				const recommendationsData = await fetchRecommendations(
 					celebName,
@@ -78,8 +79,7 @@ const ContentPage = () => {
 						alt={personInfo.name}
 					/>
 				</ImageContainer>
-				{/* <PersonName>{personInfo.name}</PersonName> */}
-				<PersonInfoText>이름: {personInfo.name}</PersonInfoText>
+				<PersonName>{personInfo.name}</PersonName>
 				<PersonInfoText>출생: {personInfo.birth_date}</PersonInfoText>
 				<PersonInfoText>성별: {personInfo.gender}</PersonInfoText>
 				<PersonInfoText>국적: {personInfo.nationality}</PersonInfoText>
