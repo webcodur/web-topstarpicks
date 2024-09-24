@@ -49,4 +49,5 @@ export const StyledDrawer = styled(Box)(({ theme, open }) => ({
 		height: '100%',
 		transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
 	},
+	zIndex: 1,
 }));

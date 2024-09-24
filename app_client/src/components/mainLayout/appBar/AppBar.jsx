@@ -32,27 +32,32 @@ const AppBar = memo(({ toggleSidebar }) => {
 
 	return (
 		<MuiAppBar position="static">
-			<Toolbar>
-				<IconButton
-					edge="start"
-					color="inherit"
-					aria-label="menu"
-					onClick={toggleSidebar}
-					sx={{ mr: 2 }}>
-					<MenuIcon />
-				</IconButton>
+			<Toolbar sx={{ justifyContent: 'space-between' }}>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					<IconButton
+						edge="start"
+						color="inherit"
+						aria-label="menu"
+						onClick={toggleSidebar}
+						sx={{ mr: 2 }}>
+						<MenuIcon />
+					</IconButton>
+					<CategorySelect />
+				</Box>
 
 				<Button
 					variant="h6"
 					component="div"
-					sx={{ flexGrow: 1 }}
-					onClick={handleNavigateHome}>
+					onClick={handleNavigateHome}
+					sx={{
+						position: 'absolute',
+						left: '50%',
+						transform: 'translateX(-50%)',
+					}}>
 					{t('app_name')}
 				</Button>
 
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					<CategorySelect />
-
 					<IconButton
 						color="inherit"
 						aria-label="settings"
