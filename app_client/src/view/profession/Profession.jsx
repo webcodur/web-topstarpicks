@@ -1,113 +1,27 @@
-import React, {
-	useState,
-	useEffect,
-	useMemo,
-	useCallback,
-	useRef,
-} from 'react';
+import React, { useCallback, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import { calculateAge } from 'utils/date';
-import { fetchCelebrities } from 'api/celebrityApi';
+import { useAtom } from 'jotai';
+import { contentTypeAtom } from 'store/atom';
+import CelebImage from './CelebImage';
+import useProfessionData from './useProfessionData';
 import {
 	StyledCard,
 	StyledCardContent,
-	ImageContainer,
-	StyledImage,
 	Introduction,
 	ButtonContainer,
 	StyledButton,
-	OverlayContainer,
-	OverlayButton,
 } from './ProfessionStyles';
-
-import { useAtom } from 'jotai';
-import { contentTypeAtom } from 'store/atom';
-
-const CelebImage = ({
-	imgLink,
-	name,
-	contentTypes,
-	onContentTypeClick,
-	showOverlay,
-	onImageClick,
-	onOverlayClick,
-}) => {
-	return (
-		<ImageContainer onClick={onImageClick}>
-			<StyledImage
-				src={
-					imgLink ||
-					`https://via.placeholder.com/150?text=${encodeURIComponent(name)}`
-				}
-				alt={name}
-			/>
-			{showOverlay && (
-				<OverlayContainer onClick={onOverlayClick}>
-					{contentTypes.map((content) => (
-						<OverlayButton
-							key={content}
-							onClick={(e) => {
-								e.stopPropagation();
-								onContentTypeClick(content);
-							}}>
-							{content}
-						</OverlayButton>
-					))}
-				</OverlayContainer>
-			)}
-		</ImageContainer>
-	);
-};
 
 const Profession = () => {
 	const { profession } = useParams();
 	const [contentType] = useAtom(contentTypeAtom);
 	const navigate = useNavigate();
-	const [professionData, setProfessionData] = useState(null);
-	const [selectedPersonId, setSelectedPersonId] = useState(null);
 	const containerRef = useRef(null);
 
-	useEffect(() => {
-		const loadCelebrities = async () => {
-			try {
-				const data = await fetchCelebrities(profession);
-
-				let filteredData;
-				console.log('contentType', contentType);
-				if (contentType !== '전체') {
-					filteredData = data.filter((celeb) => {
-						return (
-							celeb.recommended_content_types &&
-							celeb.recommended_content_types.includes(contentType)
-						);
-					});
-					setProfessionData(filteredData);
-				} else setProfessionData(data);
-			} catch (error) {
-				console.error('Failed to load celebrity data:', error);
-			}
-		};
-
-		loadCelebrities();
-	}, [profession, contentType]);
-
-	useEffect(() => {
-		const handleOutsideClick = (event) => {
-			if (
-				containerRef.current &&
-				!containerRef.current.contains(event.target)
-			) {
-				setSelectedPersonId(null);
-			}
-		};
-
-		document.addEventListener('mousedown', handleOutsideClick);
-		return () => {
-			document.removeEventListener('mousedown', handleOutsideClick);
-		};
-	}, []);
+	const professionData = useProfessionData(profession, contentType);
 
 	const handleContentClick = useCallback(
 		(personName, content) => {
@@ -115,15 +29,6 @@ const Profession = () => {
 		},
 		[profession, navigate]
 	);
-
-	const handleImageClick = useCallback((personId) => {
-		setSelectedPersonId((prevId) => (prevId === personId ? null : personId));
-	}, []);
-
-	const handleOverlayClick = useCallback((e) => {
-		e.stopPropagation();
-		setSelectedPersonId(null);
-	}, []);
 
 	const pageTitle = useMemo(() => {
 		return profession === 'all'
@@ -156,9 +61,6 @@ const Profession = () => {
 										onContentTypeClick={(content) =>
 											handleContentClick(person.name, content)
 										}
-										showOverlay={selectedPersonId === person.id}
-										onImageClick={() => handleImageClick(person.id)}
-										onOverlayClick={handleOverlayClick}
 									/>
 
 									<Typography variant="h6" gutterBottom>
