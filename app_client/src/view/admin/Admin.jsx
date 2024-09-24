@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { Snackbar } from '@mui/material';
 import { StyledBox } from './AdminStyles';
 
-import CelebritiesManager from './CelebritiesManager';
-import RecommendationManager from './RecommendationManager';
+import Celeb from './manager/celeb/Celeb';
+import Recommendation from './manager/recs/Recs';
 
 const Admin = () => {
 	const [snackbar, setSnackbar] = useState({ open: false, message: '' });
@@ -14,11 +14,8 @@ const Admin = () => {
 
 	return (
 		<StyledBox>
-			{/* 셀럽 정보 관리자 */}
-			<CelebritiesManager showSnackbar={showSnackbar} />
-
-			{/* 추천 컨텐츠 정보 관리자 */}
-			<RecommendationManager showSnackbar={showSnackbar} />
+			<Celeb showSnackbar={showSnackbar} />
+			<Recommendation showSnackbar={showSnackbar} />
 
 			<Snackbar
 				open={snackbar.open}

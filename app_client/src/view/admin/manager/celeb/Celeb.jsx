@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:4000/api';
 
-const CelebritiesManager = ({ showSnackbar }) => {
+const Celeb = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 
 	const fetchCelebrities = useCallback(async () => {
@@ -162,4 +162,4 @@ const CelebritiesManager = ({ showSnackbar }) => {
 	);
 };
 
-export default CelebritiesManager;
+export default Celeb;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, IconButton, MenuItem, Select } from '@mui/material';
+import { Button, MenuItem, Select } from '@mui/material';
 import { DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
@@ -22,7 +22,7 @@ const contentIdMap = Object.keys(categoriesMap).reduce((acc, key, index) => {
 	return acc;
 }, {});
 
-const RecommendationManager = ({ showSnackbar }) => {
+const Recs = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 	const [celebrities, setCelebrities] = useState([]);
 	const [contentTypes, setContentTypes] = useState([]);
@@ -287,4 +287,4 @@ const RecommendationManager = ({ showSnackbar }) => {
 	);
 };
 
-export default RecommendationManager;
+export default Recs;
