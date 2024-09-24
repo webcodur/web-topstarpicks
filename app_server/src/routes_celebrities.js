@@ -14,7 +14,7 @@ router.get('/name', (req, res) => {
 
 	const sql = SQL`
     SELECT 
-      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.biography, cel.img_link,
+      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link
       GROUP_CONCAT(DISTINCT con.type) AS recommended_content_types
     FROM 
       celebrities cel
@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 	const { profession } = req.query;
 	let sql = SQL`
     SELECT 
-      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.biography, cel.img_link,
+      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link, 
       GROUP_CONCAT(DISTINCT con.type) AS recommended_content_types
     FROM 
       celebrities cel
@@ -113,13 +113,14 @@ router.post('/', (req, res) => {
 		gender,
 		nationality,
 		birth_date,
+		date_of_death,
 		biography,
 		img_link,
 	} = req.body;
 
 	const sql = SQL`
-    INSERT INTO celebrities (name, profession, gender, nationality, birth_date, biography, img_link)
-    VALUES (${name}, ${profession}, ${gender}, ${nationality}, ${birth_date}, ${biography}, ${img_link})
+    INSERT INTO celebrities (name, profession, gender, nationality, birth_date, date_of_death, biography, img_link)
+    VALUES (${name}, ${profession}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link})
   `;
 
 	db.run(sql.text, sql.values, function (err) {
@@ -139,6 +140,7 @@ router.put('/:id', (req, res) => {
 		gender,
 		nationality,
 		birth_date,
+		date_of_death,
 		biography,
 		img_link,
 	} = req.body;
@@ -150,6 +152,7 @@ router.put('/:id', (req, res) => {
         gender = ${gender}, 
         nationality = ${nationality}, 
         birth_date = ${birth_date}, 
+        date_of_death = ${date_of_death}, 
         biography = ${biography}, 
         img_link = ${img_link}
     WHERE id = ${req.params.id}

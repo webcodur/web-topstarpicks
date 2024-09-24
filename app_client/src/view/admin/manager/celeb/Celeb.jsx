@@ -39,6 +39,7 @@ const Celeb = ({ showSnackbar }) => {
 			gender: '',
 			nationality: '',
 			birth_date: '',
+			date_of_death: '',
 			biography: '',
 			img_link: '',
 			isNew: true,

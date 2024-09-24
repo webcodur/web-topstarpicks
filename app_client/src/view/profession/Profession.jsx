@@ -69,9 +69,20 @@ const Profession = () => {
 
 									<Introduction>
 										<Typography variant="body2">{person.profession}</Typography>
-										<Typography variant="body2">
-											{person.gender}, {calculateAge(person.birth_date)}세
-										</Typography>
+
+										{!person.date_of_death && (
+											<Typography variant="body2">
+												{person.gender}, {calculateAge(person.birth_date)}세
+											</Typography>
+										)}
+
+										{person.date_of_death && (
+											<Typography variant="body2">
+												{person.gender}, {person.birth_date} ~{' '}
+												{person.date_of_death}
+											</Typography>
+										)}
+
 										<Typography variant="body2">{person.biography}</Typography>
 									</Introduction>
 
