@@ -7,6 +7,8 @@ import { fetchRecommendations } from 'api/recommendationApi';
 import TableOfContents from './TableOfContents';
 import FloatingMenu from './FloatingMenu';
 import RecommendationCard from './RecommendationCard';
+import Title from './Title';
+
 import {
 	PageContainer,
 	PersonInfoContainer,
@@ -66,6 +68,12 @@ const ContentPage = () => {
 
 	return (
 		<PageContainer>
+			<Title
+				name={personInfo.name}
+				length={recommendations.length}
+				contentType={contentType}
+			/>
+
 			{/* 셀럽 정보 */}
 			<PersonInfoContainer>
 				<ImageContainer>
@@ -94,8 +102,6 @@ const ContentPage = () => {
 			<TableOfContents
 				recommendations={recommendations}
 				onItemClick={scrollToContent}
-				personInfo={personInfo}
-				contentType={contentType}
 			/>
 
 			{/* 추천 컨텐츠 항목 */}

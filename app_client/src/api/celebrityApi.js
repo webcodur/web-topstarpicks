@@ -5,7 +5,7 @@ export const fetchCelebrities = createApiCall(
 		axiosInstance.get('/celebrities', {
 			params: profession !== 'all' ? { profession } : {},
 		}),
-	'인물 정보를 가져오는데 실패했습니다:'
+	'전체 인물 정보를 가져오는데 실패했습니다:'
 );
 
 export const fetchPersonInfo = createApiCall(
@@ -13,7 +13,7 @@ export const fetchPersonInfo = createApiCall(
 		axiosInstance.get('/celebrities/name', {
 			params: { name: celebName },
 		}),
-	'인물 정보를 가져오는데 실패했습니다:'
+	'개별 인물 정보를 가져오는데 실패했습니다:'
 );
 
 // Admin 관련 API 호출 추가

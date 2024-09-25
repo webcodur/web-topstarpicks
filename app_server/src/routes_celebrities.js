@@ -14,7 +14,7 @@ router.get('/name', (req, res) => {
 
 	const sql = SQL`
     SELECT 
-      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link
+      cel.id, cel.name, cel.profession, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link,
       GROUP_CONCAT(DISTINCT con.type) AS recommended_content_types
     FROM 
       celebrities cel
