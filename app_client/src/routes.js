@@ -5,7 +5,7 @@ import Content from 'pages/Content';
 import Admin from 'pages/Admin';
 
 export const routes = [
-	{ path: '/', element: <Navigate to="/all" /> },
+	{ path: '/', element: <Navigate to="/전체" /> },
 	{ path: '/login', element: <Login /> },
 	{
 		path: '/admin',

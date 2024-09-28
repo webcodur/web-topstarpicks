@@ -37,7 +37,7 @@ const Drawer = () => {
 	}, []);
 
 	const getNumberByProfession = (text) => {
-		if (text === 'all') return totalCount;
+		if (text === '전체') return totalCount;
 		const profession = numbers.find((item) => item.profession === text);
 		return profession ? profession.profession_count : 0;
 	};

@@ -7,7 +7,8 @@ const useProfessionData = (profession, contentType) => {
 	useEffect(() => {
 		const loadCelebrities = async () => {
 			try {
-				const data = await fetchCelebrities(profession);
+				const fixProfession = profession === '전체' ? 'all' : profession;
+				const data = await fetchCelebrities(fixProfession);
 
 				if (contentType !== '전체') {
 					const filteredData = data.filter(

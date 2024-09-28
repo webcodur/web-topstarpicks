@@ -31,18 +31,24 @@ const Profession = () => {
 	);
 
 	const pageTitle = useMemo(() => {
-		return profession === 'all'
-			? '전체 셀럽'
-			: `${profession.charAt(0).toUpperCase() + profession.slice(1)} 셀럽`;
+		return profession === '전체' ? '유명인사' : profession;
 	}, [profession]);
 
 	if (!professionData || professionData.length === 0) return null;
 
 	return (
 		<div ref={containerRef}>
-			<Typography variant="h4" component="h1" gutterBottom>
-				{pageTitle}
-			</Typography>
+			{contentType === '전체' && (
+				<Typography variant="h4" component="h1" gutterBottom>
+					{pageTitle}
+				</Typography>
+			)}
+
+			{contentType !== '전체' && (
+				<Typography variant="h4" component="h1" gutterBottom>
+					{pageTitle}들의 {contentType}
+				</Typography>
+			)}
 
 			<Grid container spacing={3}>
 				{professionData.map((person) => {
