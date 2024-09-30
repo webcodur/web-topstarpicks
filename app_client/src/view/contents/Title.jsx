@@ -1,7 +1,7 @@
 import React from 'react';
 import { get이가 } from 'josa-complete';
 
-const unitByContentType = {
+const unitBycontentName = {
 	책: '권',
 	영화: '편',
 	맛집: '곳',
@@ -10,12 +10,12 @@ const unitByContentType = {
 	음악: '곡',
 };
 
-const Title = ({ name, contentType, length }) => {
+const Title = ({ name, contentName, length }) => {
 	return (
 		<h1 style={{ textAlign: 'center ', marginBottom: '35px' }}>
 			{name}
-			{get이가(name)} 추천하는 {contentType} {length}
-			{unitByContentType[contentType]}
+			{get이가(name)} 추천하는 {contentName} {length}
+			{unitBycontentName[contentName]}
 		</h1>
 	);
 };

@@ -2,13 +2,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Select, MenuItem } from '@mui/material';
 import { useAtom } from 'jotai';
-import { contentTypeAtom, contentTypeNumberAtom } from 'store/atom';
+import { contentNameAtom, contentNameNumberAtom } from 'store/atom';
 import { fetchContentTypeNumber } from 'api/recommendationApi';
 
 const CategorySelect = memo(() => {
-	const [contentType, setContentType] = useAtom(contentTypeAtom);
+	const [contentType, setContentType] = useAtom(contentNameAtom);
 	const [contentTypeNumbers, setContentTypeNumbers] = useState(
-		contentTypeNumberAtom
+		contentNameNumberAtom
 	);
 
 	const handleCategoryChange = (event) => {

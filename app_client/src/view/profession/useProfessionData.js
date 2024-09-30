@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchCelebrities } from 'api/celebrityApi';
 
-const useProfessionData = (profession, contentType) => {
+const useProfessionData = (profession, contentName) => {
 	const [professionData, setProfessionData] = useState(null);
 
 	useEffect(() => {
@@ -10,11 +10,11 @@ const useProfessionData = (profession, contentType) => {
 				const fixProfession = profession === '전체' ? 'all' : profession;
 				const data = await fetchCelebrities(fixProfession);
 
-				if (contentType !== '전체') {
+				if (contentName !== '전체') {
 					const filteredData = data.filter(
 						(celeb) =>
-							celeb.recommended_content_types &&
-							celeb.recommended_content_types.includes(contentType)
+							celeb.recommended_content_names &&
+							celeb.recommended_content_names.includes(contentName)
 					);
 					setProfessionData(filteredData);
 				} else {
@@ -26,7 +26,7 @@ const useProfessionData = (profession, contentType) => {
 		};
 
 		loadCelebrities();
-	}, [profession, contentType]);
+	}, [profession, contentName]);
 
 	return professionData;
 };

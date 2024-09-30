@@ -29,7 +29,7 @@ const contentIdMap = Object.keys(categoriesMap).reduce((acc, key, index) => {
 const Recs = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 	const [celebrities, setCelebrities] = useState([]);
-	const [contentTypes, setContentTypes] = useState([]);
+	const [contentNames, setcontentNames] = useState([]);
 
 	const fetchRecommendations = useCallback(async () => {
 		try {
@@ -57,10 +57,10 @@ const Recs = ({ showSnackbar }) => {
 		}
 	}, [showSnackbar]);
 
-	const fetchContentTypes = useCallback(async () => {
+	const fetchcontentNames = useCallback(async () => {
 		try {
 			const types = await fetchContentTypeNumber();
-			setContentTypes(types.filter((item) => item.type !== '전체'));
+			setcontentNames(types.filter((item) => item.type !== '전체'));
 		} catch (error) {
 			console.error('Error fetching content types:', error);
 			showSnackbar('컨텐츠 타입 정보를 불러오는 데 실패했습니다.');
@@ -70,15 +70,15 @@ const Recs = ({ showSnackbar }) => {
 	useEffect(() => {
 		fetchRecommendations();
 		fetchCelebrities();
-		fetchContentTypes();
-	}, [fetchRecommendations, fetchCelebrities, fetchContentTypes]);
+		fetchcontentNames();
+	}, [fetchRecommendations, fetchCelebrities, fetchcontentNames]);
 
 	const handleAddRecommendation = useCallback(() => {
 		const newRecommendation = {
 			id: `temp_${Date.now()}`,
 			celebrity_id: '',
 			content_id: '',
-			content_type: '',
+			content_name: '',
 			title: '',
 			creator: '',
 			release_date: '',
@@ -118,9 +118,9 @@ const Recs = ({ showSnackbar }) => {
 			? { ...newRow, isEdited: true }
 			: { ...newRow, isEdited: oldRow.isEdited };
 
-		// content_type이 변경되었다면 content_id도 업데이트
-		if (newRow.content_type !== oldRow.content_type) {
-			updatedRow.content_id = contentIdMap[newRow.content_type] || '';
+		// content_name이 변경되었다면 content_id도 업데이트
+		if (newRow.content_name !== oldRow.content_name) {
+			updatedRow.content_id = contentIdMap[newRow.content_name] || '';
 		}
 
 		setRows((prevRows) =>

@@ -36,3 +36,8 @@ export const deleteCelebrity = createApiCall(
 	(id) => axiosInstance.delete(`/celebrities/${id}`),
 	'유명인사 정보 삭제에 실패했습니다:'
 );
+
+export const fetchInfluenceIndex = createApiCall(
+	(testName) => axiosInstance.get(`/celebrities/influenceIndex/${testName}`),
+	'influenceIndex 정보를 가져오는데 실패했습니다:'
+);

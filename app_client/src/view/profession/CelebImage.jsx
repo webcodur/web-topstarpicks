@@ -6,7 +6,7 @@ import {
 	OverlayButton,
 } from './ProfessionStyles';
 
-const CelebImage = ({ imgLink, name, contentTypes, onContentTypeClick }) => {
+const CelebImage = ({ imgLink, name, contentNames, oncontentNameClick }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
 
@@ -53,12 +53,12 @@ const CelebImage = ({ imgLink, name, contentTypes, onContentTypeClick }) => {
 			/>
 			{showOverlay && (
 				<OverlayContainer>
-					{contentTypes.map((content) => (
+					{contentNames.map((content) => (
 						<OverlayButton
 							key={content}
 							onClick={(e) => {
 								e.stopPropagation();
-								onContentTypeClick(content);
+								oncontentNameClick(content);
 							}}>
 							{content}
 						</OverlayButton>

@@ -34,7 +34,7 @@ const getRecsColumns = (
 		),
 	},
 	{
-		field: 'content_type',
+		field: 'content_name',
 		headerName: '컨텐츠 타입',
 		width: 150,
 		editable: true,
@@ -44,7 +44,7 @@ const getRecsColumns = (
 				onChange={(e) => {
 					const updatedRow = {
 						...params.row,
-						content_type: e.target.value,
+						content_name: e.target.value,
 						content_id: contentIdMap[e.target.value] || '',
 					};
 					processRowUpdate(updatedRow, params.row);

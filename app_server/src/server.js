@@ -3,8 +3,10 @@ const express = require('express');
 const cors = require('cors');
 
 // 라우터 파일 불러오기
-const celebritiesRoutes = require('./routes_celebrities');
-const recommendationsRoutes = require('./routes_recommendations');
+const routes_celebrities = require('./routes/celebrities');
+const routes_recommendations = require('./routes/recommendations');
+const routes_content = require('./routes/content');
+const routes_profession = require('./routes/profession');
 
 // Express 애플리케이션 생성
 const app = express();
@@ -20,8 +22,10 @@ app.use(
 );
 
 // API 라우트 설정
-app.use('/api/celebrities', celebritiesRoutes);
-app.use('/api/recommendations', recommendationsRoutes);
+app.use('/api/celebrities', routes_celebrities);
+app.use('/api/recommendations', routes_recommendations);
+app.use('/api/content', routes_content);
+app.use('/api/profession', routes_profession);
 
 // 글로벌 에러 핸들링 미들웨어
 app.use((err, req, res, next) => {

@@ -4,7 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import { calculateAge } from 'utils/date';
 import { useAtom } from 'jotai';
-import { contentTypeAtom } from 'store/atom';
+import { contentNameAtom } from 'store/atom';
 import CelebImage from './CelebImage';
 import useProfessionData from './useProfessionData';
 import {
@@ -14,14 +14,15 @@ import {
 	ButtonContainer,
 	StyledButton,
 } from './ProfessionStyles';
+import { useState } from 'react';
+import { fetchInfluenceIndex } from 'api/celebrityApi';
 
 const Profession = () => {
-	const { profession } = useParams();
-	const [contentType] = useAtom(contentTypeAtom);
-	const navigate = useNavigate();
+	const [contentName] = useAtom(contentNameAtom);
 	const containerRef = useRef(null);
-
-	const professionData = useProfessionData(profession, contentType);
+	const navigate = useNavigate();
+	const { profession } = useParams();
+	const professionData = useProfessionData(profession, contentName);
 
 	const handleContentClick = useCallback(
 		(personName, content) => {
@@ -34,26 +35,42 @@ const Profession = () => {
 		return profession === '전체' ? '유명인사' : profession;
 	}, [profession]);
 
+	const [testName, setTestName] = useState('test');
+	const handleChange = (e) => {
+		setTestName(e.target.value);
+	};
+	const api호출 = async () => {
+		const asdf = await fetchInfluenceIndex(testName);
+		console.log('asdf', asdf);
+	};
+
 	if (!professionData || professionData.length === 0) return null;
 
 	return (
 		<div ref={containerRef}>
-			{contentType === '전체' && (
+			<br />
+			<input type="text" value={testName} onChange={handleChange} />
+			<button onClick={api호출}>
+				<b>BUTTON</b>
+			</button>
+			<br />
+			<br />
+			{contentName === '전체' && (
 				<Typography variant="h4" component="h1" gutterBottom>
 					{pageTitle}
 				</Typography>
 			)}
 
-			{contentType !== '전체' && (
+			{contentName !== '전체' && (
 				<Typography variant="h4" component="h1" gutterBottom>
-					{pageTitle}들의 {contentType}
+					{pageTitle}들의 {contentName}
 				</Typography>
 			)}
 
 			<Grid container spacing={3}>
 				{professionData.map((person) => {
-					const contentTypes = person.recommended_content_types
-						? person.recommended_content_types.split(',')
+					const contentNames = person.recommended_content_names
+						? person.recommended_content_names.split(',')
 						: [];
 
 					return (
@@ -63,8 +80,8 @@ const Profession = () => {
 									<CelebImage
 										imgLink={person.img_link}
 										name={person.name}
-										contentTypes={contentTypes}
-										onContentTypeClick={(content) =>
+										contentNames={contentNames}
+										oncontentNameClick={(content) =>
 											handleContentClick(person.name, content)
 										}
 									/>
@@ -93,10 +110,10 @@ const Profession = () => {
 									</Introduction>
 
 									<ButtonContainer>
-										{contentTypes
+										{contentNames
 											.filter(
 												(content) =>
-													contentType === '전체' || content === contentType
+													contentName === '전체' || content === contentName
 											)
 											.map((content) => (
 												<StyledButton

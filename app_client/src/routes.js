@@ -16,5 +16,5 @@ export const routes = [
 		element: <Profession />,
 	},
 
-	{ path: '/:profession/:personName/:contentType', element: <Content /> },
+	{ path: '/:profession/:personName/:contentName', element: <Content /> },
 ];

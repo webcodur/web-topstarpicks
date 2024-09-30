@@ -1,9 +1,9 @@
 import { axiosInstance, createApiCall } from './apiUtils';
 
 export const fetchRecommendations = createApiCall(
-	(celebName, contentType) =>
+	(celebName, contentName) =>
 		axiosInstance.get('/recommendations', {
-			params: { celebrity_name: celebName, content_type: contentType },
+			params: { celebrity_name: celebName, content_name: contentName },
 		}),
 	'추천 정보를 가져오는데 실패했습니다:'
 );

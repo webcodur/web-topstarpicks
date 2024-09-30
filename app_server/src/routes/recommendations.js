@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./database');
+const db = require('../database');
 const SQL = require('sql-template-strings');
 
 // 특정 인물의 특정 타입 컨텐츠 추천 목록 조회
 router.get('/', (req, res) => {
-	const { celebrity_name, content_type } = req.query;
+	const { celebrity_name, content_name } = req.query;
 
-	if (!celebrity_name || !content_type) {
+	if (!celebrity_name || !content_name) {
 		res
 			.status(400)
 			.json({ error: '인물 이름과 컨텐츠 타입을 모두 제공해야 합니다.' });
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
       content ct ON r.content_id = ct.id
     WHERE 
       c.name = ${celebrity_name}
-      AND ct.type = ${content_type}
+      AND ct.type = ${content_name}
     ORDER BY 
       r.release_date DESC
   `;
@@ -42,11 +42,11 @@ router.get('/', (req, res) => {
 // 컨텐츠 타입별 개수 조회
 router.get('/number', (req, res) => {
 	const sql = SQL`
-    SELECT con.type, COUNT(*) as count
+    SELECT con.name, COUNT(*) as count
     FROM recommendations as rec
     INNER JOIN content as con
     ON con.id = rec.content_id
-    GROUP BY con.type
+    GROUP BY con.name
 
     UNION ALL
 
@@ -67,7 +67,7 @@ router.get('/number', (req, res) => {
 // GET: 모든 추천 정보 조회 (관리자용)
 router.get('/all', (req, res) => {
 	const sql = SQL`
-    SELECT r.*, c.name as celebrity_name, ct.type as content_type
+    SELECT r.*, c.name as celebrity_name, ct.type as content_name
     FROM recommendations r
     JOIN celebrities c ON r.celebrity_id = c.id
     JOIN content ct ON r.content_id = ct.id

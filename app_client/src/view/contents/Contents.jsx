@@ -20,7 +20,7 @@ import {
 } from './ContentsStyle';
 
 const ContentPage = () => {
-	const { personName, contentType } = useParams();
+	const { personName, contentName } = useParams();
 	const [recommendations, setRecommendations] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -39,7 +39,7 @@ const ContentPage = () => {
 
 				const recommendationsData = await fetchRecommendations(
 					celebName,
-					contentType
+					contentName
 				);
 				setRecommendations(recommendationsData);
 				contentRefs.current = recommendationsData.map(() => React.createRef());
@@ -52,7 +52,7 @@ const ContentPage = () => {
 		};
 
 		fetchData();
-	}, [personName, contentType]);
+	}, [personName, contentName]);
 
 	const scrollToContent = (index) => {
 		contentRefs.current[index].current.scrollIntoView({ behavior: 'smooth' });
@@ -71,7 +71,7 @@ const ContentPage = () => {
 			<Title
 				name={personInfo.name}
 				length={recommendations.length}
-				contentType={contentType}
+				contentName={contentName}
 			/>
 
 			{/* 셀럽 정보 */}
