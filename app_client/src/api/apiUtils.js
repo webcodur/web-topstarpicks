@@ -23,8 +23,11 @@ export const handleApiError = (error) => {
 };
 
 export const createApiCall =
-	(apiCall, errorMessage) =>
+	(apiCall, errorMessage, funcParams = null) =>
 	async (...args) => {
+		if (funcParams) {
+			console.log(`호출 API 정보: ${funcParams}`);
+		}
 		try {
 			const response = await apiCall(...args);
 			return response.data.data;

@@ -12,7 +12,7 @@ import getCelebColumns from './celebColumns';
 const Celeb = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 
-	const fetchCelebrities = useCallback(async () => {
+	const getCelebrities = useCallback(async () => {
 		try {
 			const celebrities = await fetchAllCelebrities();
 			const rowsWithInfo = celebrities.map((celebrity) => ({
@@ -28,8 +28,8 @@ const Celeb = ({ showSnackbar }) => {
 	}, [showSnackbar]);
 
 	useEffect(() => {
-		fetchCelebrities();
-	}, [fetchCelebrities]);
+		getCelebrities();
+	}, [getCelebrities]);
 
 	const handleAddCelebrity = useCallback(() => {
 		const newCelebrity = {
@@ -94,12 +94,12 @@ const Celeb = ({ showSnackbar }) => {
 				}
 
 				showSnackbar('유명인사 정보가 저장되었습니다.');
-				await fetchCelebrities();
+				await getCelebrities();
 			} catch (error) {
 				showSnackbar('유명인사 정보 저장에 실패했습니다.');
 			}
 		},
-		[rows, fetchCelebrities, showSnackbar]
+		[rows, getCelebrities, showSnackbar]
 	);
 
 	const columns = getCelebColumns(handleSaveRow, handleDeleteCelebrity);

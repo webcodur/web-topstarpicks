@@ -36,4 +36,24 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
 	}
 });
 
+// 공통 쿼리 실행 함수
+db.executeQuery = (sql) => {
+	return new Promise((resolve, reject) => {
+		db.all(sql.text, sql.values, (err, rows) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(rows);
+			}
+		});
+	});
+};
+
+// 비동기 핸들러 미들웨어
+db.asyncHandler = (fn) => (req, res, next) => {
+	Promise.resolve(fn(req, res, next)).catch((error) => {
+		res.status(400).json({ error: error.message });
+	});
+};
+
 module.exports = db;

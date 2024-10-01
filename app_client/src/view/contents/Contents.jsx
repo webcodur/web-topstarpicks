@@ -34,13 +34,13 @@ const ContentPage = () => {
 
 			try {
 				const personData = await fetchPersonInfo(celebName);
-				// 여기서 personData가 배열인지 확인하고, 첫 번째 요소를 사용합니다.
 				setPersonInfo(Array.isArray(personData) ? personData[0] : personData);
 
 				const recommendationsData = await fetchRecommendations(
 					celebName,
 					contentName
 				);
+
 				setRecommendations(recommendationsData);
 				contentRefs.current = recommendationsData.map(() => React.createRef());
 			} catch (err) {

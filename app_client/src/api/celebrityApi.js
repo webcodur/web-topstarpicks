@@ -1,5 +1,6 @@
 import { axiosInstance, createApiCall } from './apiUtils';
 
+// 유명인사 직군별 데이터 조회
 export const fetchCelebrities = createApiCall(
 	(profession = 'all') =>
 		axiosInstance.get('/celebrities', {
@@ -8,12 +9,21 @@ export const fetchCelebrities = createApiCall(
 	'전체 인물 정보를 가져오는데 실패했습니다:'
 );
 
+// 유명인사 인물별 개인정보
 export const fetchPersonInfo = createApiCall(
 	(celebName) =>
 		axiosInstance.get('/celebrities/name', {
 			params: { name: celebName },
 		}),
-	'개별 인물 정보를 가져오는데 실패했습니다:'
+	'개별 인물 정보를 가져오는데 실패했습니다:',
+	'fetchPersonInfo'
+);
+
+//
+export const fetchCelebrityNumbers = createApiCall(
+	() => axiosInstance.get('/celebrities/profession-numbers'),
+	'직군별 인원 수 정보를 가져오는데 실패했습니다:',
+	'fetchCelebrityNumbers'
 );
 
 // Admin 관련 API 호출 추가

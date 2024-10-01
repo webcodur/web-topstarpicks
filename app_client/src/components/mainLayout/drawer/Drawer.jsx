@@ -1,52 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { ListItemIcon } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import professionTypes from './professionTypes';
 import { useTranslation } from 'react-i18next';
 import { StyledList, StyledListItemButton } from './DrawerStyles';
+import useCelebNumbers from 'hooks/useCelebNumbers';
+import professionTypes from './professionTypes';
 
-const Drawer = () => {
+const Drawer = React.memo(() => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const [numbers, setNumbers] = useState(null);
-	const [totalCount, setTotalCount] = useState(null);
+	const [celebNumbers, celebTotals] = useCelebNumbers();
 
-	const fetchCelebritiesNumber = async () => {
-		try {
-			const response = await fetch(
-				'http://localhost:4000/api/celebrities/profession-numbers'
+	const getNumberByProfession = useMemo(() => {
+		return (professionName) => {
+			if (professionName === '전체') return celebTotals;
+			const profession = celebNumbers.find(
+				(item) => item.name === professionName
 			);
-			if (!response.ok) throw new Error('네트워크 오류 발생');
-			const res = await response.json();
-			return res.data;
-		} catch (error) {
-			console.error('직군 별 숫자 파악 실패:', error);
-		}
-	};
+			return profession ? profession.profession_count : 0;
+		};
+	}, [celebNumbers, celebTotals]);
 
-	useEffect(() => {
-		(async () => {
-			const result = await fetchCelebritiesNumber();
-			let totalCount = result.reduce(
-				(acc, item) => acc + item.profession_count,
-				0
-			);
-			setTotalCount(totalCount);
-			setNumbers(result);
-		})();
-	}, []);
+	const handleNavigate = useCallback(
+		(to) => {
+			navigate(`/${to}`);
+		},
+		[navigate]
+	);
 
-	const getNumberByProfession = (text) => {
-		if (text === '전체') return totalCount;
-		const profession = numbers.find((item) => item.profession === text);
-		return profession ? profession.profession_count : 0;
-	};
+	if (!celebNumbers || !celebTotals) {
+		return <div>Loading...</div>; // 또는 에러 처리
+	}
 
-	if (!numbers || totalCount === 0) return null;
 	return (
 		<StyledList>
 			{professionTypes.map(({ text, to, icon }) => (
-				<StyledListItemButton key={text} onClick={() => navigate(`/${to}`)}>
+				<StyledListItemButton
+					key={`${text}-${to}`}
+					onClick={() => handleNavigate(to)}>
 					<ListItemIcon>{icon}</ListItemIcon>
 					<span className="menu-text">
 						{t(text)} ({getNumberByProfession(text)})
@@ -55,6 +46,8 @@ const Drawer = () => {
 			))}
 		</StyledList>
 	);
-};
+});
+
+Drawer.displayName = 'Drawer';
 
 export default Drawer;

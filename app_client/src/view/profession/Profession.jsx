@@ -1,12 +1,12 @@
-import React, { useCallback, useRef, useMemo } from 'react';
+import React, { useCallback, useRef, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
-import { calculateAge } from 'utils/date';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
 import CelebImage from './CelebImage';
 import useProfessionData from './useProfessionData';
+import LifespanDisplay from './LifespanDisplay'; // 새로 추가된 import
 import {
 	StyledCard,
 	StyledCardContent,
@@ -14,7 +14,6 @@ import {
 	ButtonContainer,
 	StyledButton,
 } from './ProfessionStyles';
-import { useState } from 'react';
 import { fetchInfluenceIndex } from 'api/celebrityApi';
 
 const Profession = () => {
@@ -49,12 +48,13 @@ const Profession = () => {
 	return (
 		<div ref={containerRef}>
 			<br />
-			<input type="text" value={testName} onChange={handleChange} />
+			{/* 인물 별로 영향력 지표 만들기 테스트 */}
+			{/* <input type="text" value={testName} onChange={handleChange} />
 			<button onClick={api호출}>
 				<b>BUTTON</b>
 			</button>
 			<br />
-			<br />
+			<br /> */}
 			{contentName === '전체' && (
 				<Typography variant="h4" component="h1" gutterBottom>
 					{pageTitle}
@@ -92,20 +92,11 @@ const Profession = () => {
 
 									<Introduction>
 										<Typography variant="body2">{person.profession}</Typography>
-
-										{!person.date_of_death && (
-											<Typography variant="body2">
-												{person.gender}, {calculateAge(person.birth_date)}세
-											</Typography>
-										)}
-
-										{person.date_of_death && (
-											<Typography variant="body2">
-												{person.gender}, {person.birth_date} ~{' '}
-												{person.date_of_death}
-											</Typography>
-										)}
-
+										<Typography variant="body2">{person.gender}</Typography>
+										<LifespanDisplay
+											birthDate={person.birth_date}
+											dateOfDeath={person.date_of_death}
+										/>
 										<Typography variant="body2">{person.biography}</Typography>
 									</Introduction>
 
