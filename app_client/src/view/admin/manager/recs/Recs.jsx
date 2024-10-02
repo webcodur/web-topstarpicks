@@ -7,7 +7,7 @@ import {
 	createRecommendation,
 	updateRecommendation,
 	deleteRecommendation,
-	fetchContentTypeNumber,
+	fetchContentNumbers,
 } from 'api/recommendationApi';
 import getRecsColumns from './recsColumns';
 
@@ -59,7 +59,7 @@ const Recs = ({ showSnackbar }) => {
 
 	const fetchcontentNames = useCallback(async () => {
 		try {
-			const types = await fetchContentTypeNumber();
+			const types = await fetchContentNumbers();
 			setcontentNames(types.filter((item) => item.type !== '전체'));
 		} catch (error) {
 			console.error('Error fetching content types:', error);

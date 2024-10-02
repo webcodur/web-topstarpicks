@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useMemo, useState } from 'react';
+import React, { useCallback, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
@@ -6,7 +6,7 @@ import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
 import CelebImage from './CelebImage';
 import useProfessionData from './useProfessionData';
-import LifespanDisplay from './LifespanDisplay'; // 새로 추가된 import
+import LifespanDisplay from './LifespanDisplay';
 import {
 	StyledCard,
 	StyledCardContent,
@@ -14,7 +14,6 @@ import {
 	ButtonContainer,
 	StyledButton,
 } from './ProfessionStyles';
-import { fetchInfluenceIndex } from 'api/celebrityApi';
 
 const Profession = () => {
 	const [contentName] = useAtom(contentNameAtom);
@@ -34,27 +33,12 @@ const Profession = () => {
 		return profession === '전체' ? '유명인사' : profession;
 	}, [profession]);
 
-	const [testName, setTestName] = useState('test');
-	const handleChange = (e) => {
-		setTestName(e.target.value);
-	};
-	const api호출 = async () => {
-		const asdf = await fetchInfluenceIndex(testName);
-		console.log('asdf', asdf);
-	};
-
 	if (!professionData || professionData.length === 0) return null;
 
 	return (
 		<div ref={containerRef}>
 			<br />
-			{/* 인물 별로 영향력 지표 만들기 테스트 */}
-			{/* <input type="text" value={testName} onChange={handleChange} />
-			<button onClick={api호출}>
-				<b>BUTTON</b>
-			</button>
-			<br />
-			<br /> */}
+
 			{contentName === '전체' && (
 				<Typography variant="h4" component="h1" gutterBottom>
 					{pageTitle}

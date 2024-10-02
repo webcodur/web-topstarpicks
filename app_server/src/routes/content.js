@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../database');
 const SQL = require('sql-template-strings');
 
-// 유명인사 직군 종류
+// 활용 가능한 컨텐츠 종류
 router.get(
 	'/',
 	db.asyncHandler(async (req, res) => {
