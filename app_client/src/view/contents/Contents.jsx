@@ -94,7 +94,7 @@ const ContentPage = () => {
 				)}
 				<PersonInfoText>성별: {personInfo.gender}</PersonInfoText>
 				<PersonInfoText>국적: {personInfo.nationality}</PersonInfoText>
-				<PersonInfoText>직업: {personInfo.profession}</PersonInfoText>
+				<PersonInfoText>직군: {personInfo.profession}</PersonInfoText>
 				<PersonInfoText>약력: {personInfo.biography}</PersonInfoText>
 			</PersonInfoContainer>
 

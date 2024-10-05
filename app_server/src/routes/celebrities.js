@@ -104,8 +104,7 @@ router.get(
       pro.id    
     ORDER BY 
       pro.name;
-  `;
-
+    `;
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
@@ -117,21 +116,35 @@ router.get(
 	'/all',
 	db.asyncHandler(async (req, res) => {
 		const sql = SQL`
-    SELECT * FROM celebrities
-    ORDER BY name
-  `;
+      SELECT 
+        cel.id, 
+        cel.name as name, 
+        cel.gender,
+        cel.nationality,
+        cel.birth_date,
+        cel.biography,
+        cel.img_link,
+        cel.date_of_death,
+        pro.id as profession_id,
+        pro.name as profession_kor,
+        pro.eng_name as profession_eng
+      FROM celebrities cel
+      INNER JOIN profession pro
+      ON pro.id = cel.profession_id
+    `;
+
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
 );
 
-// POST: 새 Celebrity 추가 (Admin 용)
+// POST: 새 Celebrity 추가 (Admin 용) createCelebrity
 router.post(
 	'/',
 	db.asyncHandler(async (req, res) => {
 		const {
 			name,
-			profession,
+			profession_id,
 			gender,
 			nationality,
 			birth_date,
@@ -141,8 +154,8 @@ router.post(
 		} = req.body;
 
 		const sql = SQL`
-    INSERT INTO celebrities (name, profession, gender, nationality, birth_date, date_of_death, biography, img_link)
-    VALUES (${name}, ${profession}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link})
+    INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, date_of_death, biography, img_link)
+    VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link})
   `;
 
 		const result = await db.executeQuery(sql);
@@ -150,13 +163,13 @@ router.post(
 	})
 );
 
-// PUT: Celebrity 정보 수정 (Admin 용)
+// PUT: Celebrity 정보 수정 (Admin 용) updateCelebrity
 router.put(
 	'/:id',
 	db.asyncHandler(async (req, res) => {
 		const {
 			name,
-			profession,
+			profession_id,
 			gender,
 			nationality,
 			birth_date,
@@ -168,7 +181,7 @@ router.put(
 		const sql = SQL`
     UPDATE celebrities 
     SET name = ${name}, 
-        profession = ${profession}, 
+        profession_id = ${profession_id}, 
         gender = ${gender}, 
         nationality = ${nationality}, 
         birth_date = ${birth_date}, 
@@ -188,24 +201,9 @@ router.delete(
 	'/:id',
 	db.asyncHandler(async (req, res) => {
 		const sql = SQL`DELETE FROM celebrities WHERE id = ${req.params.id}`;
-
 		const result = await db.executeQuery(sql);
 		res.json({ message: 'success', data: { changes: result.changes } });
 	})
 );
-
-// 유명인사 영향력 평가지표 받아보기
-router.get('/influenceIndex/:testName', (req, res) => {
-	const { testName } = req.params;
-	// 해당 이름의 인물을 받아서 예수와 비교하여 영향력 지표 생성하기
-	// 구글 트랜드 이용할 것.
-
-	// 옵션사항
-	// - 대상: 전 세계
-	// - 기간: 지난 5년
-	// - 카테고리: 모든 카테고리
-	// - 집계: 웹 검색
-	res.json({ message: 'success', data: { testName, influenceIndex: 1 } });
-});
 
 module.exports = router;

@@ -9,5 +9,5 @@ export const languageAtom = atomWithStorage('language', 'ko');
 
 export const contentNameAtom = atomWithStorage('contentNameAtom', '전체');
 
-export const professionNameAtom = atom('전체');
+export const professionNameAtom = atomWithStorage('professionNameAtom', null);
 export const isAdminAtom = atom(false);

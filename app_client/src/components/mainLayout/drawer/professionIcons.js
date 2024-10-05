@@ -10,7 +10,7 @@ import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import MicIcon from '@mui/icons-material/Mic';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 
-const professionTypes = [
+const professionIcons = [
 	{
 		key: '전체',
 		text: '전체',
@@ -59,4 +59,4 @@ const professionTypes = [
 	},
 ];
 
-export default professionTypes;
+export default professionIcons;

@@ -8,10 +8,11 @@ import {
 	deleteCelebrity,
 } from 'api/celebrityApi';
 import getCelebColumns from './celebColumns';
+import { useProfession } from 'hooks/useProfession';
 
 const Celeb = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
-
+	const professionNames = useProfession();
 	const getCelebrities = useCallback(async () => {
 		try {
 			const celebrities = await fetchAllCelebrities();
@@ -35,7 +36,7 @@ const Celeb = ({ showSnackbar }) => {
 		const newCelebrity = {
 			id: `temp_${Date.now()}`,
 			name: '',
-			profession: '',
+			profession_kor: '',
 			gender: '',
 			nationality: '',
 			birth_date: '',
@@ -55,9 +56,9 @@ const Celeb = ({ showSnackbar }) => {
 					await deleteCelebrity(id);
 				}
 				setRows((prev) => prev.filter((row) => row.id !== id));
-				showSnackbar('유명인사가 삭제되었습니다.');
+				showSnackbar('인물 삭제 성공.');
 			} catch (error) {
-				showSnackbar('유명인사 삭제에 실패했습니다.');
+				showSnackbar('인물 삭제 실패.');
 			}
 		},
 		[showSnackbar]
@@ -85,7 +86,15 @@ const Celeb = ({ showSnackbar }) => {
 			if (!row || (!row.isNew && !row.isEdited)) return;
 
 			try {
-				const { isNew, isEdited, ...celebrityData } = row;
+				let { isNew, isEdited, profession_kor, ...celebrityData } = row;
+
+				const getProfession = (job) => {
+					const found = professionNames.find((ele) => ele.name === job);
+					return found.id;
+				};
+
+				const profession_id = getProfession(profession_kor);
+				celebrityData = { ...celebrityData, profession_id };
 
 				if (isNew) {
 					await createCelebrity(celebrityData);
@@ -99,7 +108,7 @@ const Celeb = ({ showSnackbar }) => {
 				showSnackbar('유명인사 정보 저장에 실패했습니다.');
 			}
 		},
-		[rows, getCelebrities, showSnackbar]
+		[rows, getCelebrities, showSnackbar, professionNames]
 	);
 
 	const columns = getCelebColumns(handleSaveRow, handleDeleteCelebrity);

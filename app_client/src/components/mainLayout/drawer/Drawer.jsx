@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { StyledList, StyledListItemButton } from './DrawerStyles';
 import useCelebNumbers from 'hooks/useCelebNumbers';
-import professionTypes from './professionTypes';
+import professionIcons from './professionIcons';
 
 const Drawer = React.memo(() => {
 	const { t } = useTranslation();
@@ -34,7 +34,7 @@ const Drawer = React.memo(() => {
 
 	return (
 		<StyledList>
-			{professionTypes.map(({ text, to, icon }) => (
+			{professionIcons.map(({ text, to, icon }) => (
 				<StyledListItemButton
 					key={`${text}-${to}`}
 					onClick={() => handleNavigate(to)}>

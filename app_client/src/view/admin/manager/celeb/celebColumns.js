@@ -5,7 +5,7 @@ import { IconButton } from '@mui/material';
 
 const getCelebColumns = (handleSaveRow, handleDeleteCelebrity) => [
 	{ field: 'name', headerName: '이름', width: 130, editable: true },
-	{ field: 'profession', headerName: '직업', width: 130, editable: true },
+	{ field: 'profession_kor', headerName: '직군', width: 130, editable: true },
 	{ field: 'gender', headerName: '성별', width: 90, editable: true },
 	{ field: 'nationality', headerName: '국적', width: 130, editable: true },
 	{ field: 'birth_date', headerName: '출생', width: 130, editable: true },

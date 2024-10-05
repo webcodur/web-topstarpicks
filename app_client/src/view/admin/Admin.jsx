@@ -3,7 +3,7 @@ import { Snackbar } from '@mui/material';
 import { StyledBox } from './AdminStyles';
 
 import Celeb from './manager/celeb/Celeb';
-import Recommendation from './manager/recs/Recs';
+// import Recommendation from './manager/recs/Recs';
 
 const Admin = () => {
 	const [snackbar, setSnackbar] = useState({ open: false, message: '' });
@@ -15,7 +15,7 @@ const Admin = () => {
 	return (
 		<StyledBox>
 			<Celeb showSnackbar={showSnackbar} />
-			<Recommendation showSnackbar={showSnackbar} />
+			{/* <Recommendation showSnackbar={showSnackbar} /> */}
 
 			<Snackbar
 				open={snackbar.open}

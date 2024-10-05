@@ -7,12 +7,9 @@ export const useProfession = () => {
 	const [professionName, setProfessionName] = useAtom(professionNameAtom);
 
 	useEffect(() => {
-		const fetchFunc = () => async () => {
+		const fetchFunc = async () => {
 			try {
 				const professionInfo = await fetchProfession();
-
-				// profession Info => profession name
-
 				setProfessionName(professionInfo);
 			} catch (error) {
 				console.error('Error fetching professionInfo:', error);
@@ -21,5 +18,5 @@ export const useProfession = () => {
 		fetchFunc();
 	}, [setProfessionName]);
 
-	return { professionName };
+	return professionName;
 };
