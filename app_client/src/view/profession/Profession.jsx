@@ -4,7 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
-import CelebImage from './CelebImage';
+import CelebImage from './celebImage/CelebImage';
 import useProfessionData from './useProfessionData';
 import LifespanDisplay from './LifespanDisplay';
 import {
@@ -64,6 +64,7 @@ const Profession = () => {
 									<CelebImage
 										imgLink={person.img_link}
 										name={person.name}
+										rank={person.rank}
 										contentNames={contentNames}
 										oncontentNameClick={(content) =>
 											handleContentClick(person.name, content)
@@ -77,6 +78,10 @@ const Profession = () => {
 									<Introduction>
 										<Typography variant="body2">{person.profession}</Typography>
 										<Typography variant="body2">{person.gender}</Typography>
+										<Typography variant="body2">{person.totalScore}</Typography>
+										<Typography variant="body2">
+											{person.transhistoricity}
+										</Typography>
 										<LifespanDisplay
 											birthDate={person.birth_date}
 											dateOfDeath={person.date_of_death}

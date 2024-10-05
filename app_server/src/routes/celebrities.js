@@ -44,7 +44,23 @@ router.get(
 		let sql = SQL`
     SELECT 
       cel.id, cel.name, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link, pro.name as profession,
-      GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
+      GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
+      inf.political,
+      inf.strategic,
+      inf.tech,
+      inf.social,
+      inf.economic,
+      inf.cultural,
+      inf.transhistoricity,
+      inf.total_score,
+      inf.political_exp,
+      inf.strategic_exp,
+      inf.tech_exp,
+      inf.social_exp,
+      inf.economic_exp,
+      inf.cultural_exp,
+      inf.transhistoricity_exp,
+      inf.rank
     FROM 
       celebrities cel
     LEFT JOIN 
@@ -53,18 +69,20 @@ router.get(
       content con ON rec.content_id = con.id
     LEFT JOIN 
       profession pro ON pro.id = cel.profession_id
-  `;
+    LEFT JOIN
+      celebrity_influence inf ON cel.id = inf.celebrity_id
+    `;
 
 		if (profession) {
 			sql = sql.append(SQL` WHERE pro.name = ${profession}`);
 		}
 
 		sql = sql.append(SQL`
-    GROUP BY 
-      cel.id
-    ORDER BY 
-      cel.name
-  `);
+      GROUP BY 
+        cel.id
+      ORDER BY 
+        cel.name
+    `);
 
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });

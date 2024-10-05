@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import AppBar from './appBar/AppBar';
 import Drawer from './drawer/Drawer';
 import {
@@ -11,6 +11,7 @@ import {
 
 const MainLayout = React.memo(() => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+	const navigate = useNavigate();
 
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen((prev) => !prev);
@@ -19,6 +20,21 @@ const MainLayout = React.memo(() => {
 	const closeMenu = useCallback(() => {
 		// setIsSidebarOpen((prev) => !prev);
 	}, []);
+
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			if (event.ctrlKey && event.key === 'q') {
+				event.preventDefault();
+				navigate('/labs');
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [navigate]);
 
 	return (
 		<RootContainer>
