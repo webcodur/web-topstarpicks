@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box, Grid } from '@mui/material';
-import RadarChartComponent from './RadarChartComponent';
-import BarChartComponent from './BarChartComponent';
+import RadarChart from './RadarChart';
+import BarChart from './BarChart';
 import ScoreSummary from './ScoreSummary';
 import { calculateGrade } from './scoreUtils';
 
@@ -10,22 +10,22 @@ const ScoreModal = ({ person }) => {
 	const grade = calculateGrade(totalScore);
 
 	return (
-		<Box sx={{ width: '100%', maxWidth: 800, margin: 'auto' }}>
+		<Box sx={{ width: '100%', maxWidth: 400, margin: 'auto' }}>
 			<Typography
 				variant="h6"
 				component="h2"
 				gutterBottom
 				align="center"
 				style={{ fontWeight: 'bold' }}>
-				{person.name}의 영향력 지표
+				{person.name}의 영향력 스펙트럼
 			</Typography>
 
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<RadarChartComponent person={person} />
+					<RadarChart person={person} />
 				</Grid>
 				<Grid item xs={12}>
-					<BarChartComponent transhistoricity={person.transhistoricity} />
+					<BarChart transhistoricity={person.transhistoricity} />
 				</Grid>
 				<Grid item xs={12}>
 					<ScoreSummary person={person} totalScore={totalScore} grade={grade} />

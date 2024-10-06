@@ -1,16 +1,15 @@
 import React from 'react';
-import { Typography, Box, Grid } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
 const ScoreSummary = ({ person, totalScore, grade }) => {
-	const categories = [
-		{ key: 'political', label: '정치외교' },
-		{ key: 'strategic', label: '전략안보' },
-		{ key: 'tech', label: '기술과학' },
-		{ key: 'social', label: '사회윤리' },
-		{ key: 'economic', label: '산업경제' },
-		{ key: 'cultural', label: '문화예술' },
-		{ key: 'transhistoricity', label: '통시성' },
-	];
+	// const categoriesDetail = [
+	// 	{ label: '정치·외교', key: 'political' },
+	// 	{ label: '전략·안보', key: 'strategic' },
+	// 	{ label: '기술·과학', key: 'tech' },
+	// 	{ label: '사회·윤리', key: 'social' },
+	// 	{ label: '산업·경제', key: 'economic' },
+	// 	{ label: '문화·예술', key: 'cultural' },
+	// ];
 
 	return (
 		<Box
@@ -20,18 +19,6 @@ const ScoreSummary = ({ person, totalScore, grade }) => {
 				alignItems: 'center',
 				mt: 2,
 			}}>
-			<Typography variant="h6" gutterBottom>
-				개별 항목 점수 (각 10점 만점)
-			</Typography>
-			<Grid container spacing={2} justifyContent="center">
-				{categories.map(({ key, label }) => (
-					<Grid item xs={6} sm={4} key={key}>
-						<Typography variant="body1">
-							{label}: {person[key] || 0}
-						</Typography>
-					</Grid>
-				))}
-			</Grid>
 			<Typography variant="h6" sx={{ mt: 2 }}>
 				총점: {totalScore}/100, 등급: {grade}
 			</Typography>

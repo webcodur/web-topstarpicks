@@ -90,7 +90,7 @@ const Profession = () => {
 										</PersonInfo>
 										<PersonInfo>
 											<Person fontSize="small" />
-											{person.profession}, {person.gender}
+											{person.gender} {person.profession}
 										</PersonInfo>
 										<PersonInfo>
 											<Score fontSize="small" />
