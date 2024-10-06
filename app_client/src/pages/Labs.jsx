@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { assessInfluence } from './api/celebrityApi';
+import { assessInfluence } from 'api/aiApi';
 
 const Labs = () => {
 	const [name, setName] = useState('');
