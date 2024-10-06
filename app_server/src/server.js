@@ -15,13 +15,7 @@ const app = express();
 
 // 미들웨어 설정
 app.use(express.json());
-app.use(
-	cors({
-		origin: 'http://localhost:3002',
-		methods: ['GET', 'POST', 'PUT', 'DELETE'],
-		allowedHeaders: ['Content-Type', 'Authorization'],
-	})
-);
+app.use(cors()); // 모든 출처 허용
 
 // API 라우트 설정
 app.use('/api/celebrities', routes_celebrities);
