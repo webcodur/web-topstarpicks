@@ -94,7 +94,7 @@ const Profession = () => {
 										</PersonInfo>
 										<PersonInfo>
 											<Score fontSize="small" />
-											총점: {person.total_score}
+											영향력: {person.total_score}
 											<Hexagon
 												fontSize="small"
 												sx={{
