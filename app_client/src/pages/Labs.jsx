@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { assessInfluence } from './api/celebrityApi';
 
 const Labs = () => {
 	const [name, setName] = useState('');
@@ -13,21 +13,12 @@ const Labs = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await axios.post(
-				'http://localhost:4000/api/ai/assess-influence',
-				{ name },
-				{
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
-
-			setResult(response.data.data);
+			const data = await assessInfluence(name);
+			setResult(data);
 		} catch (error) {
 			console.error('Error:', error);
 			setResult({
-				error: error.response?.data?.error || '평가 중 오류가 발생했습니다.',
+				error: error.message || '평가 중 오류가 발생했습니다.',
 			});
 		} finally {
 			setIsLoading(false);

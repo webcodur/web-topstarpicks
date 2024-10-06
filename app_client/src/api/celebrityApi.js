@@ -9,6 +9,11 @@ export const fetchCelebrities = createApiCall(
 	'전체 인물 정보를 가져오는데 실패했습니다:'
 );
 
+export const assessInfluence = createApiCall(
+	(name) => axiosInstance.post('/api/ai/assess-influence', { name }),
+	'인물 영향력 평가에 실패했습니다:'
+);
+
 // 유명인사 인물별 개인정보
 export const fetchPersonInfo = createApiCall(
 	(celebName) =>
