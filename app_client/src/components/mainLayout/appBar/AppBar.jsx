@@ -47,7 +47,7 @@ const AppBar = memo(({ toggleSidebar }) => {
 				{/* 중앙 영역: 로고 */}
 				<Box
 					component="img"
-					src="/logo.png" // public 폴더의 logo.png를 직접 참조
+					src="/logo.png"
 					alt={t('app_name')}
 					onClick={handleNavigateHome}
 					sx={{

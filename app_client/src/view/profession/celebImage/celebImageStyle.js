@@ -39,7 +39,8 @@ const borderThickness = '15px';
 export const RankBorder = styled.div`
 	position: relative;
 	padding: ${borderThickness};
-	border-radius: calc(${borderThickness} + 5px);
+	/* border-radius: calc(${borderThickness} + 5px); */
+	border-radius: 5px;
 	background: ${({ rank }) => {
 		switch (rank) {
 			case 'S':

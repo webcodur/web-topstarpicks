@@ -24,7 +24,7 @@ const Profession = () => {
 		modern: 1900,
 	});
 
-	const pageTitle = profession === '전체' ? '유명인사' : profession;
+	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
 
 	const handleModalOpen = (person) => {
 		setSelectedPerson(person);
@@ -45,7 +45,8 @@ const Profession = () => {
 				variant="h4"
 				component="h1"
 				gutterBottom
-				sx={{ mt: 4, mb: 4 }}>
+				align="center"
+				sx={{ mt: 4, mb: 4, fontWeight: 'bold' }}>
 				{contentName === '전체' ? pageTitle : `${pageTitle}들의 ${contentName}`}
 			</Typography>
 

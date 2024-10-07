@@ -1,6 +1,5 @@
-// ProfessionGrid.jsx
 import React, { useMemo } from 'react';
-import { Grid, Typography, Divider } from '@mui/material';
+import { Typography, Divider, Box } from '@mui/material';
 import PersonCard from './PersonCard';
 import { getSortedAndGroupedData, getSortLabel } from './professionUtils';
 
@@ -27,28 +26,38 @@ const ProfessionGrid = ({
 		<>
 			{groupedData.map((group, groupIndex) => (
 				<React.Fragment key={group.key ?? groupIndex}>
-					{/* 영역 분리선 */}
+					{/* 영역 구분선 */}
 					{groupIndex > 0 && sortCriteria && <Divider sx={{ my: 2 }} />}
 
-					{/* 영역 구분 정보 */}
+					{/* 영역 */}
 					{sortCriteria && (
 						<Typography variant="h6" sx={{ my: 2 }}>
 							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
 						</Typography>
 					)}
 
-					{/* 영역 별 인물 정보 */}
-					<Grid container spacing={4}>
+					<Box sx={{ display: 'flex', flexWrap: 'wrap', margin: -2 }}>
 						{group.persons.map((person) => (
-							<Grid item xs={12} sm={6} md={4} lg={2} key={person.id}>
+							<Box
+								key={person.id}
+								sx={{
+									width: {
+										xs: '100%',
+										sm: '50%',
+										md: '33.33%',
+										lg: '25%',
+										xl: '20%',
+									},
+									padding: 2,
+								}}>
 								<PersonCard
 									person={person}
 									contentName={contentName}
 									onModalOpen={onModalOpen}
 								/>
-							</Grid>
+							</Box>
 						))}
-					</Grid>
+					</Box>
 				</React.Fragment>
 			))}
 		</>
