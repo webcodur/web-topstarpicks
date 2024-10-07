@@ -1,7 +1,7 @@
 // Profession.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
 import useProfessionData from './useProfessionData';
@@ -73,9 +73,9 @@ const Profession = () => {
 			/>
 
 			<ScoreModal
+				person={selectedPerson}
 				open={modalOpen}
 				onClose={handleModalClose}
-				person={selectedPerson}
 			/>
 		</div>
 	);

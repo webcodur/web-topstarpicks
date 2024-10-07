@@ -19,7 +19,15 @@ const SortControls = ({
 	};
 
 	return (
-		<Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+		<Box
+			align="center"
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				mb: 4,
+				justifyContent: 'center',
+			}}>
+			{/* 정렬 기능 선택 */}
 			<FormControl sx={{ minWidth: 200, mr: 2 }}>
 				<InputLabel id="sort-select-label">정렬 기준</InputLabel>
 				<Select
@@ -36,6 +44,8 @@ const SortControls = ({
 					<MenuItem value="age">나이/시대</MenuItem>
 				</Select>
 			</FormControl>
+
+			{/* 정렬 기능 선택 */}
 			{sortCriteria && (
 				<StyledButton onClick={handleSortOrderChange}>
 					{sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}

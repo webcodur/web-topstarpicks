@@ -32,6 +32,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 	return (
 		<StyledCard>
 			<StyledCardContent>
+				{/* 초상화 */}
 				<CelebImage
 					imgLink={person.img_link}
 					name={person.name}
@@ -42,17 +43,23 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					}
 				/>
 
+				{/* 이름 */}
 				<PersonName>{person.name || '이름 없음'}</PersonName>
 
 				<Introduction>
+					{/* 국적 */}
 					<PersonInfo>
 						<Public fontSize="small" />
 						{person.nationality || '알 수 없음'}
 					</PersonInfo>
+
+					{/* 성별 / 직군 */}
 					<PersonInfo>
 						<Person fontSize="small" />
 						{person.gender || '알 수 없음'} {person.profession || '알 수 없음'}
 					</PersonInfo>
+
+					{/* 영향력 점수 */}
 					<PersonInfo>
 						<Score fontSize="small" />
 						영향력: {person.total_score || '알 수 없음'}
@@ -67,15 +74,19 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						/>
 					</PersonInfo>
 
+					{/* 생애 및 나이 */}
 					<LifespanDisplay
 						birthDate={person.birth_date}
 						dateOfDeath={person.date_of_death}
 					/>
+
+					{/* 약력 */}
 					<BiographyText>
 						{person.biography || '정보가 없습니다.'}
 					</BiographyText>
 				</Introduction>
 
+				{/* 선택 가능 컨텐츠 종류 */}
 				<ButtonContainer style={{ marginTop: '16px' }}>
 					{contentNames
 						.filter(
