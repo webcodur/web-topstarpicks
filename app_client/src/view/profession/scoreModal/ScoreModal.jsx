@@ -6,6 +6,7 @@ import ScoreSummary from './ScoreSummary';
 import { calculateGrade } from './scoreUtils';
 
 const ScoreModal = ({ person }) => {
+	if (!person) return null;
 	const totalScore = person.total_score;
 	const grade = calculateGrade(totalScore);
 
@@ -28,7 +29,13 @@ const ScoreModal = ({ person }) => {
 					<BarChart transhistoricity={person.transhistoricity} />
 				</Grid>
 				<Grid item xs={12}>
-					<ScoreSummary person={person} totalScore={totalScore} grade={grade} />
+					{totalScore && (
+						<ScoreSummary
+							person={person}
+							totalScore={totalScore}
+							grade={grade}
+						/>
+					)}
 				</Grid>
 			</Grid>
 		</Box>
