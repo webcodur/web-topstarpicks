@@ -25,7 +25,7 @@ async function findCelebrityId(name) {
  * @returns {Promise<Object>} 평가 결과
  */
 async function assessAndSaveInfluence(name) {
-	const promptTemplate = await openai.readPromptFile('influenceAssessment.md');
+	const promptTemplate = await openai.readPromptFile('influenceAssessment.txt');
 	const prompt = promptTemplate.replace('[인물 이름]', name);
 
 	const systemMessage =

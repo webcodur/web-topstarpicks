@@ -21,7 +21,7 @@ async function crawlBooks(url) {
 					book.creator = $li.find('h5').first().text().trim();
 
 					const $img = $li.find('img').first();
-					book.imageUrl = $img.attr('src');
+					book.img_link = $img.attr('src');
 
 					const $sourceLink = $li.find('a:contains("Source")').first();
 					book.recommendation_source = $sourceLink.attr('href');

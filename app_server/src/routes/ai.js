@@ -1,5 +1,5 @@
 const express = require('express');
-const influence = require('../services/influence');
+const influenceService = require('../services/influence');
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.post('/assess-influence', async (req, res) => {
 				.json({ error: '인물 이름이 제공되지 않았습니다.' });
 		}
 
-		const result = await influence.assessAndSaveInfluence(name);
+		const result = await influenceService.assessAndSaveInfluence(name);
 		res.json({ message: 'success', data: result });
 	} catch (error) {
 		console.error('Error:', error);
