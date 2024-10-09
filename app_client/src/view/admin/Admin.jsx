@@ -13,7 +13,8 @@ const Celeb = lazy(() => import('./manager/celeb/Celeb'));
 const Recommendation = lazy(() => import('./manager/recs/Recs'));
 const NewCelebForm = lazy(() => import('./manager/celeb/NewCelebForm'));
 const NewRecsForm = lazy(() => import('./manager/recs/NewRecsForm'));
-const Crawling = lazy(() => import('./Crawling')); // 새로 추가된 컴포넌트
+const Influence = lazy(() => import('./manager/Influence'));
+const Crawling = lazy(() => import('./Crawling'));
 
 const AccordionSection = React.memo(
 	({ expanded, onChange, title, children }) => (
@@ -91,6 +92,13 @@ const Admin = () => {
 				onChange={handleChange('crawling')}
 				title="Crawling Management">
 				{expanded === 'crawling' && <Crawling showSnackbar={showSnackbar} />}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'influence'}
+				onChange={handleChange('influence')}
+				title="Influence Management">
+				{expanded === 'influence' && <Influence showSnackbar={showSnackbar} />}
 			</AccordionSection>
 
 			<Snackbar

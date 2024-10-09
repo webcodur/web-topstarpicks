@@ -25,7 +25,11 @@ const MainLayout = React.memo(() => {
 		const handleKeyDown = (event) => {
 			if (event.ctrlKey && event.key === 'q') {
 				event.preventDefault();
-				navigate('/labs');
+				navigate('/admin');
+			}
+			if (event.ctrlKey && event.key === 'g') {
+				event.preventDefault();
+				navigate('/');
 			}
 		};
 

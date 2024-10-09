@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { assessInfluence } from 'api/aiApi';
 
-const Labs = () => {
+const Influence = () => {
 	const [name, setName] = useState('');
 	const [result, setResult] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -95,4 +95,4 @@ const Labs = () => {
 	);
 };
 
-export default Labs;
+export default Influence;
