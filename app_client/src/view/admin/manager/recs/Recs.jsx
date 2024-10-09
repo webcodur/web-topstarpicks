@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { fetchAllCelebrities } from 'api/celebrityApi';
 import {
 	fetchAllRecommendations,
-	createRecommendation,
 	updateRecommendation,
 	deleteRecommendation,
 	fetchContentNumbers,
@@ -73,26 +71,6 @@ const Recs = ({ showSnackbar }) => {
 		fetchcontentNames();
 	}, [fetchRecommendations, fetchCelebrities, fetchcontentNames]);
 
-	const handleAddRecommendation = useCallback(() => {
-		const newRecommendation = {
-			id: `temp_${Date.now()}`,
-			celebrity_id: '',
-			content_id: '',
-			content_name: '',
-			title: '',
-			creator: '',
-			release_date: '',
-			recommendation_text: '',
-			recommendation_source: '',
-			img_link: '',
-			affiliate_link: '',
-			mediaDescription: '',
-			isNew: true,
-			isEdited: false,
-		};
-		setRows((prev) => [...prev, newRecommendation]);
-	}, []);
-
 	const handleDeleteRecommendation = useCallback(
 		async (id) => {
 			try {
@@ -138,11 +116,7 @@ const Recs = ({ showSnackbar }) => {
 			try {
 				const { isNew, isEdited, ...recommendationData } = row;
 
-				if (isNew) {
-					await createRecommendation(recommendationData);
-				} else {
-					await updateRecommendation(id, recommendationData);
-				}
+				await updateRecommendation(id, recommendationData);
 
 				showSnackbar('추천 정보가 저장되었습니다.');
 				await fetchRecommendations();
@@ -164,22 +138,14 @@ const Recs = ({ showSnackbar }) => {
 	);
 
 	return (
-		<>
-			<Button
-				onClick={handleAddRecommendation}
-				variant="contained"
-				style={{ marginBottom: 10, marginRight: 10 }}>
-				새 추천 정보 추가
-			</Button>
-
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				pageSize={5}
-				processRowUpdate={processRowUpdate}
-				experimentalFeatures={{ newEditingApi: true }}
-			/>
-		</>
+		<DataGrid
+			rows={rows}
+			columns={columns}
+			pageSize={5}
+			processRowUpdate={processRowUpdate}
+			scrollbarSize={0}
+			experimentalFeatures={{ newEditingApi: true }}
+		/>
 	);
 };
 

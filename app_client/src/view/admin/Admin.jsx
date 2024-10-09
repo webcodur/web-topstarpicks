@@ -1,27 +1,34 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, lazy, Suspense } from 'react';
 import {
 	Snackbar,
 	Accordion,
-	AccordionSummary,
 	AccordionDetails,
 	Typography,
+	CircularProgress,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { StyledBox } from './AdminStyles';
+import { StyledBox, StyledAccordionSummary } from './AdminStyles';
 
-import Celeb from './manager/celeb/Celeb';
-import Recommendation from './manager/recs/Recs';
+const Celeb = lazy(() => import('./manager/celeb/Celeb'));
+const Recommendation = lazy(() => import('./manager/recs/Recs'));
+const NewCelebForm = lazy(() => import('./manager/celeb/NewCelebForm'));
+const NewRecsForm = lazy(() => import('./manager/recs/NewRecsForm'));
+const Crawling = lazy(() => import('./Crawling')); // 새로 추가된 컴포넌트
 
 const AccordionSection = React.memo(
 	({ expanded, onChange, title, children }) => (
 		<Accordion expanded={expanded} onChange={onChange}>
-			<AccordionSummary
+			<StyledAccordionSummary
 				expandIcon={<ExpandMoreIcon />}
 				aria-controls={`${title.toLowerCase()}-content`}
 				id={`${title.toLowerCase()}-header`}>
 				<Typography>{title}</Typography>
-			</AccordionSummary>
-			<AccordionDetails>{children}</AccordionDetails>
+			</StyledAccordionSummary>
+			<AccordionDetails>
+				<Suspense fallback={<CircularProgress />}>
+					{expanded && children}
+				</Suspense>
+			</AccordionDetails>
 		</Accordion>
 	)
 );
@@ -45,29 +52,45 @@ const Admin = () => {
 		setSnackbar((prev) => ({ ...prev, open: false }));
 	}, []);
 
-	const memoizedCeleb = useMemo(
-		() => <Celeb showSnackbar={showSnackbar} />,
-		[showSnackbar]
-	);
-	const memoizedRecommendation = useMemo(
-		() => <Recommendation showSnackbar={showSnackbar} />,
-		[showSnackbar]
-	);
-
 	return (
 		<StyledBox>
 			<AccordionSection
 				expanded={expanded === 'celeb'}
 				onChange={handleChange('celeb')}
 				title="Celeb Management">
-				{memoizedCeleb}
+				{expanded === 'celeb' && <Celeb showSnackbar={showSnackbar} />}
 			</AccordionSection>
 
 			<AccordionSection
 				expanded={expanded === 'recommendation'}
 				onChange={handleChange('recommendation')}
 				title="Recommendation Management">
-				{memoizedRecommendation}
+				{expanded === 'recommendation' && (
+					<Recommendation showSnackbar={showSnackbar} />
+				)}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'newCeleb'}
+				onChange={handleChange('newCeleb')}
+				title="Add New Celebrity">
+				{expanded === 'newCeleb' && (
+					<NewCelebForm showSnackbar={showSnackbar} />
+				)}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'newRecs'}
+				onChange={handleChange('newRecs')}
+				title="Add New Recommendation">
+				{expanded === 'newRecs' && <NewRecsForm showSnackbar={showSnackbar} />}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'crawling'}
+				onChange={handleChange('crawling')}
+				title="Crawling Management">
+				{expanded === 'crawling' && <Crawling showSnackbar={showSnackbar} />}
 			</AccordionSection>
 
 			<Snackbar

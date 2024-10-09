@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import {
 	fetchAllCelebrities,
-	createCelebrity,
 	updateCelebrity,
 	deleteCelebrity,
 } from 'api/celebrityApi';
@@ -13,6 +11,7 @@ import { useProfession } from 'hooks/useProfession';
 const Celeb = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 	const professionNames = useProfession();
+
 	const getCelebrities = useCallback(async () => {
 		try {
 			const celebrities = await fetchAllCelebrities();
@@ -31,23 +30,6 @@ const Celeb = ({ showSnackbar }) => {
 	useEffect(() => {
 		getCelebrities();
 	}, [getCelebrities]);
-
-	const handleAddCelebrity = useCallback(() => {
-		const newCelebrity = {
-			id: `temp_${Date.now()}`,
-			name: '',
-			profession_kor: '',
-			gender: '',
-			nationality: '',
-			birth_date: '',
-			date_of_death: '',
-			biography: '',
-			img_link: '',
-			isNew: true,
-			isEdited: false,
-		};
-		setRows((prev) => [...prev, newCelebrity]);
-	}, []);
 
 	const handleDeleteCelebrity = useCallback(
 		async (id) => {
@@ -96,11 +78,7 @@ const Celeb = ({ showSnackbar }) => {
 				const profession_id = getProfession(profession_kor);
 				celebrityData = { ...celebrityData, profession_id };
 
-				if (isNew) {
-					await createCelebrity(celebrityData);
-				} else {
-					await updateCelebrity(id, celebrityData);
-				}
+				await updateCelebrity(id, celebrityData);
 
 				showSnackbar('유명인사 정보가 저장되었습니다.');
 				await getCelebrities();
@@ -114,21 +92,13 @@ const Celeb = ({ showSnackbar }) => {
 	const columns = getCelebColumns(handleSaveRow, handleDeleteCelebrity);
 
 	return (
-		<>
-			<Button
-				onClick={handleAddCelebrity}
-				variant="contained"
-				style={{ marginBottom: 10, marginRight: 10 }}>
-				새 유명인사 추가
-			</Button>
-
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				pageSize={5}
-				processRowUpdate={processRowUpdate}
-			/>
-		</>
+		<DataGrid
+			rows={rows}
+			columns={columns}
+			pageSize={5}
+			processRowUpdate={processRowUpdate}
+			scrollbarSize={0}
+		/>
 	);
 };
 
