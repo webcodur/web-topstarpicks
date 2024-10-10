@@ -18,7 +18,6 @@ import {
 
 const PersonCard = ({ person, contentName, onModalOpen }) => {
 	const navigate = useNavigate();
-
 	const handleContentClick = (personName, content) => {
 		navigate(
 			`/${person.profession}/${formatNameForUrl(personName)}/${content}`

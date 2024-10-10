@@ -78,24 +78,6 @@ export const AffiliateLink = styled(Link)`
 	color: red;
 `;
 
-export const TableOfContents = styled.div`
-	text-align: center;
-	background-color: ${(props) => props.theme.palette.background.paper};
-	padding: 20px;
-	border-radius: 4px;
-	margin-bottom: 30px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-export const TOCItem = styled.div`
-	cursor: pointer;
-	text-align: center;
-	padding: 8px 0;
-	&:hover {
-		color: ${(props) => props.theme.palette.primary.main};
-	}
-`;
-
 export const FloatingMenuButton = styled.div`
 	position: fixed;
 	bottom: 20px;
@@ -117,6 +99,43 @@ export const FloatingMenu = styled.div`
 
 export const FloatingMenuItem = styled.div`
 	cursor: pointer;
+	padding: 8px 0;
+	&:hover {
+		color: ${(props) => props.theme.palette.primary.main};
+	}
+`;
+
+export const TableOfContents = styled.div`
+	background-color: ${(props) => props.theme.palette.background.paper};
+	padding: 20px;
+	border-radius: 4px;
+	margin-bottom: 30px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const TOCHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+`;
+
+export const TOCTitle = styled.h2`
+	margin: 0;
+	flex-grow: 1;
+	text-align: center;
+`;
+
+export const TOCContent = styled.div`
+	max-height: ${(props) => (props.$isExpanded ? 'none' : '0')};
+	overflow: hidden;
+	transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+	opacity: ${(props) => (props.$isExpanded ? '1' : '0')};
+`;
+
+export const TOCItem = styled.div`
+	cursor: pointer;
+	text-align: center;
 	padding: 8px 0;
 	&:hover {
 		color: ${(props) => props.theme.palette.primary.main};

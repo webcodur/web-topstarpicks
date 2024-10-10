@@ -36,6 +36,7 @@ const ProfessionGrid = ({
 						</Typography>
 					)}
 
+					{/* 인물 */}
 					<Box sx={{ display: 'flex', flexWrap: 'wrap', margin: -2 }}>
 						{group.persons.map((person) => (
 							<Box

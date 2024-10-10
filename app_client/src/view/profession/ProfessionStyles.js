@@ -3,6 +3,7 @@ import { Card, CardContent, Button, Typography } from '@mui/material';
 
 export const StyledCard = styled(Card)`
 	height: 100%;
+	/* height: 1100px; */
 	display: flex;
 	flex-direction: column;
 	background-color: ${(props) => props.theme.palette.background.paper};
@@ -10,7 +11,6 @@ export const StyledCard = styled(Card)`
 	border-radius: 16px;
 	overflow: hidden;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-
 	&:hover {
 		transform: translateY(-5px);
 		box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
@@ -18,10 +18,10 @@ export const StyledCard = styled(Card)`
 `;
 
 export const StyledCardContent = styled(CardContent)`
-	flex-grow: 1;
+	/* flex-grow: 1;
 	display: flex;
 	flex-direction: column;
-	padding: 24px;
+	padding: 24px; */
 `;
 
 export const Introduction = styled.div`
@@ -37,10 +37,22 @@ export const ButtonContainer = styled.div`
 	margin-top: 16px;
 `;
 
+// export const BiographyText = styled(Typography)`
+// 	font-size: 0.9rem;
+// 	margin-top: 16px;
+// 	line-height: 1.6;
+// `;
+
 export const BiographyText = styled(Typography)`
 	font-size: 0.9rem;
 	margin-top: 16px;
 	line-height: 1.6;
+	max-height: 7.2em; // 4줄의 높이 (1.6 * 4 + 추가 여백)
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 4; // 최대 4줄까지 표시
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
 `;
 
 export const PersonName = styled(Typography)`
