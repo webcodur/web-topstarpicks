@@ -22,11 +22,13 @@ const FloatingMenuComponent = ({
 
 		{isOpen && (
 			<FloatingMenu>
-				{recommendations.map((recommendation, index) => (
-					<FloatingMenuItem key={index} onClick={() => onItemClick(index)}>
-						{index + 1}. {recommendation.title}
-					</FloatingMenuItem>
-				))}
+				<div className="floating-menu-content">
+					{recommendations.map((recommendation, index) => (
+						<FloatingMenuItem key={index} onClick={() => onItemClick(index)}>
+							{index + 1}. {recommendation.title}
+						</FloatingMenuItem>
+					))}
+				</div>
 			</FloatingMenu>
 		)}
 	</>

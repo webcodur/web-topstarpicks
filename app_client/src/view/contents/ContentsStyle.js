@@ -85,18 +85,6 @@ export const FloatingMenuButton = styled.div`
 	z-index: 1000;
 `;
 
-export const FloatingMenu = styled.div`
-	position: fixed;
-	top: 50%;
-	right: 20px;
-	transform: translateY(-50%);
-	background-color: ${(props) => props.theme.palette.background.paper};
-	padding: 20px;
-	border-radius: 4px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	z-index: 999;
-`;
-
 export const FloatingMenuItem = styled.div`
 	cursor: pointer;
 	padding: 8px 0;
@@ -139,5 +127,23 @@ export const TOCItem = styled.div`
 	padding: 8px 0;
 	&:hover {
 		color: ${(props) => props.theme.palette.primary.main};
+	}
+`;
+
+export const FloatingMenu = styled.div`
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	max-height: calc(100vh - 40px);
+	background-color: ${(props) => props.theme.palette.background.paper};
+	padding: 20px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 999;
+	overflow-y: auto;
+
+	.floating-menu-content {
+		display: flex;
+		flex-direction: column;
 	}
 `;
