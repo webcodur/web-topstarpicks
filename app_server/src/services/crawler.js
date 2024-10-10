@@ -54,7 +54,7 @@ async function crawlBooks(url) {
 				return false;
 			}
 		});
-
+		console.log('크롤링 books', books);
 		return books;
 	} catch (error) {
 		console.error('크롤링 오류:', error);

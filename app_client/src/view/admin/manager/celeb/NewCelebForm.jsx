@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import { createCelebrity } from 'api/celebrityApi';
+import { useProfession } from 'hooks/useProfession';
 
 const NewCelebForm = ({ showSnackbar }) => {
+	const professionNames = useProfession();
+
+	const getProfession = (job) => {
+		const found = professionNames.find((ele) => ele.name === job);
+		return found.id;
+	};
+
 	const [formData, setFormData] = useState({
 		name: '',
 		profession_kor: '',
@@ -21,7 +29,14 @@ const NewCelebForm = ({ showSnackbar }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			await createCelebrity(formData);
+			const newCeleb = {
+				...formData,
+				profession_id: getProfession(formData.profession_kor),
+			};
+
+			console.log('newCeleb', newCeleb);
+
+			await createCelebrity(newCeleb);
 			showSnackbar('새 유명인사가 추가되었습니다.');
 			setFormData({
 				name: '',

@@ -34,7 +34,8 @@ export const fetchAllCelebrities = createApiCall(
 
 export const createCelebrity = createApiCall(
 	(celebrityData) => axiosInstance.post('/celebrities', celebrityData),
-	'유명인사 정보 생성에 실패했습니다:'
+	'유명인사 정보 생성에 실패했습니다:',
+	'createCelebrity'
 );
 
 export const updateCelebrity = createApiCall(
