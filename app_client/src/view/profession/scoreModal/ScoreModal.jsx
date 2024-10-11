@@ -23,25 +23,30 @@ const ScoreModal = ({ person, open, onClose }) => {
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
 					width: '100%',
-					maxWidth: 400,
+					maxWidth: 600, // Increased from 400
 					bgcolor: 'background.paper',
 					border: '2px solid #000',
 					boxShadow: 24,
-					p: 4,
+					p: 6, // Increased from 4
+					borderRadius: '10px', // Added for smoother look
 				}}>
 				<Typography
 					id="score-modal-title"
-					variant="h5"
+					variant="h4" // Changed from h5
 					align="center"
-					style={{ fontWeight: 'bold' }}>
+					style={{ fontWeight: 'bold', marginBottom: '20px' }}>
 					영향력 스펙트럼
 				</Typography>
 
-				<Typography variant="h6" align="center" style={{ fontWeight: 'bold' }}>
+				<Typography
+					variant="h5"
+					align="center"
+					style={{ fontWeight: 'bold', marginBottom: '30px' }}>
 					- {person.name} -
 				</Typography>
 
-				<Grid container spacing={2}>
+				<Grid container spacing={4}>
+					{' '}
 					<Grid item xs={12}>
 						<RadarChart person={person} />
 					</Grid>
