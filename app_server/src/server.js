@@ -10,7 +10,6 @@ const routes_content = require('./routes/content');
 const routes_profession = require('./routes/profession');
 const routes_ai = require('./routes/ai');
 const routes_crawl = require('./routes/crawl');
-const routes_openai_api_check = require('./routes/openai_api_check');
 
 // Express 애플리케이션 생성
 const app = express();
@@ -26,7 +25,6 @@ app.use('/api/content', routes_content);
 app.use('/api/profession', routes_profession);
 app.use('/api/ai', routes_ai);
 app.use('/api/crawl', routes_crawl);
-app.use('/api/openai_api_check', routes_openai_api_check);
 
 // 글로벌 에러 핸들링 미들웨어
 app.use((err, req, res, next) => {

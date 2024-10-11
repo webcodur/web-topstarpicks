@@ -1,6 +1,7 @@
 const OpenAI = require('openai');
 const fs = require('fs').promises;
 const path = require('path');
+const axios = require('axios');
 
 // OpenAI API 클라이언트 초기화
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -38,7 +39,18 @@ async function getChatCompletion(prompt, systemMessage) {
 	});
 }
 
+async function getAvailableModels() {
+	try {
+		const models = await openai.models.list();
+		return models.data.map((model) => model.id);
+	} catch (error) {
+		console.error('사용 가능한 모델 조회 중 오류 발생:', error);
+		throw new Error('모델 목록을 가져올 수 없습니다');
+	}
+}
+
 module.exports = {
 	readPromptFile,
 	getChatCompletion,
+	getAvailableModels,
 };
