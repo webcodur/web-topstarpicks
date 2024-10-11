@@ -14,6 +14,7 @@ const Recommendation = lazy(() => import('./manager/recs/Recs'));
 const NewCelebForm = lazy(() => import('./manager/celeb/NewCelebForm'));
 const NewRecsForm = lazy(() => import('./manager/recs/NewRecsForm'));
 const Influence = lazy(() => import('./manager/Influence'));
+const OpenaiApiCheck = lazy(() => import('./manager/OpenaiApiCheck'));
 const Crawling = lazy(() => import('./Crawling'));
 
 const AccordionSection = React.memo(
@@ -58,47 +59,51 @@ const Admin = () => {
 			<AccordionSection
 				expanded={expanded === 'celeb'}
 				onChange={handleChange('celeb')}
-				title="Celeb Management">
+				title="셀럽 관리자">
 				{expanded === 'celeb' && <Celeb showSnackbar={showSnackbar} />}
 			</AccordionSection>
-
 			<AccordionSection
 				expanded={expanded === 'recommendation'}
 				onChange={handleChange('recommendation')}
-				title="Recommendation Management">
+				title="추천정보 관리자">
 				{expanded === 'recommendation' && (
 					<Recommendation showSnackbar={showSnackbar} />
 				)}
 			</AccordionSection>
-
 			<AccordionSection
 				expanded={expanded === 'newCeleb'}
 				onChange={handleChange('newCeleb')}
-				title="Add New Celebrity">
+				title="새 셀럽 추가">
 				{expanded === 'newCeleb' && (
 					<NewCelebForm showSnackbar={showSnackbar} />
 				)}
 			</AccordionSection>
-
 			<AccordionSection
 				expanded={expanded === 'newRecs'}
 				onChange={handleChange('newRecs')}
-				title="Add New Recommendation">
+				title="새 추천정보 추가">
 				{expanded === 'newRecs' && <NewRecsForm showSnackbar={showSnackbar} />}
 			</AccordionSection>
-
 			<AccordionSection
 				expanded={expanded === 'crawling'}
 				onChange={handleChange('crawling')}
-				title="Crawling Management">
+				title="추천정보 크롤링">
 				{expanded === 'crawling' && <Crawling showSnackbar={showSnackbar} />}
 			</AccordionSection>
-
 			<AccordionSection
 				expanded={expanded === 'influence'}
 				onChange={handleChange('influence')}
-				title="Influence Management">
+				title="영향력 지표 생성기">
 				{expanded === 'influence' && <Influence showSnackbar={showSnackbar} />}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'openaiApiCheck'}
+				onChange={handleChange('openaiApiCheck')}
+				title="OpenAI API 확인">
+				{expanded === 'openaiApiCheck' && (
+					<OpenaiApiCheck showSnackbar={showSnackbar} />
+				)}
 			</AccordionSection>
 
 			<Snackbar

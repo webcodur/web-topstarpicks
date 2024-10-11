@@ -27,8 +27,8 @@ importers:
         specifier: ^4.9.2
         version: 4.9.2
       openai:
-        specifier: ^4.67.1
-        version: 4.67.1(encoding@0.1.13)
+        specifier: ^4.67.3
+        version: 4.67.3(encoding@0.1.13)
       sql-template-strings:
         specifier: ^2.2.2
         version: 2.2.2
@@ -702,8 +702,8 @@ packages:
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
-  openai@4.67.1:
-    resolution: {integrity: sha512-2YbRFy6qaYRJabK2zLMn4txrB2xBy0KP5g/eoqeSPTT31mIJMnkT75toagvfE555IKa2RdrzJrZwdDsUipsAMw==}
+  openai@4.67.3:
+    resolution: {integrity: sha512-HT2tZgjLgRqbLQNKmYtjdF/4TQuiBvg1oGvTDhwpSEQzxo6/oM1us8VQ53vBK2BiKvCxFuq6gKGG70qfwrNhKg==}
     hasBin: true
     peerDependencies:
       zod: ^3.23.8
@@ -1768,7 +1768,7 @@ snapshots:
     dependencies:
       wrappy: 1.0.2
 
-  openai@4.67.1(encoding@0.1.13):
+  openai@4.67.3(encoding@0.1.13):
     dependencies:
       '@types/node': 18.19.54
       '@types/node-fetch': 2.6.11
