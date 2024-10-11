@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box, Grid, Modal } from '@mui/material';
-import RadarChart from './RadarChart';
-import BarChart from './BarChart';
+import RadarChart from './raderChart/RadarChart';
+import BarChart from './barChart/BarChart';
 import ScoreSummary from './ScoreSummary';
 import { calculateGrade } from './scoreUtils';
 
@@ -31,12 +31,14 @@ const ScoreModal = ({ person, open, onClose }) => {
 				}}>
 				<Typography
 					id="score-modal-title"
-					variant="h6"
-					component="h2"
-					gutterBottom
+					variant="h5"
 					align="center"
 					style={{ fontWeight: 'bold' }}>
-					{person.name}의 영향력 스펙트럼
+					영향력 스펙트럼
+				</Typography>
+
+				<Typography variant="h6" align="center" style={{ fontWeight: 'bold' }}>
+					- {person.name} -
 				</Typography>
 
 				<Grid container spacing={2}>

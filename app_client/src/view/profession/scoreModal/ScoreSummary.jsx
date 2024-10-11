@@ -1,16 +1,7 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
 
-const ScoreSummary = ({ person, totalScore, grade }) => {
-	// const categoriesDetail = [
-	// 	{ label: '정치·외교', key: 'political' },
-	// 	{ label: '전략·안보', key: 'strategic' },
-	// 	{ label: '기술·과학', key: 'tech' },
-	// 	{ label: '사회·윤리', key: 'social' },
-	// 	{ label: '산업·경제', key: 'economic' },
-	// 	{ label: '문화·예술', key: 'cultural' },
-	// ];
-
+const ScoreSummary = ({ totalScore, grade }) => {
 	return (
 		<Box
 			sx={{
@@ -20,7 +11,7 @@ const ScoreSummary = ({ person, totalScore, grade }) => {
 				mt: 2,
 			}}>
 			<Typography variant="h6" sx={{ mt: 2 }}>
-				총점: {totalScore}/100, 등급: {grade}
+				총점: {totalScore}/100, {grade}등급
 			</Typography>
 		</Box>
 	);

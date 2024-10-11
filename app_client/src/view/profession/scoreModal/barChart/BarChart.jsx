@@ -10,18 +10,14 @@ import {
 	Legend,
 	ResponsiveContainer,
 } from 'recharts';
+import { prepareBarData } from './barDataUtils';
+import { barChartStyles } from './barChartStyles';
 
 const BarChartComponent = ({ transhistoricity }) => {
-	const barData = [{ name: '통시성', score: transhistoricity || 0 }];
+	const barData = prepareBarData(transhistoricity);
 
 	return (
-		<Box
-			sx={{
-				height: 200,
-				width: '100%',
-				display: 'flex',
-				justifyContent: 'center',
-			}}>
+		<Box sx={barChartStyles.container}>
 			<ResponsiveContainer width="100%" height="100%">
 				<BarChart
 					data={barData}
@@ -36,12 +32,7 @@ const BarChartComponent = ({ transhistoricity }) => {
 					<YAxis type="number" domain={[0, 40]} ticks={[0, 10, 20, 30, 40]} />
 					<Tooltip />
 					<Legend />
-					<Bar
-						dataKey="score"
-						fill="#82ca9d"
-						name="통시성 (max 40)"
-						maxBarSize={30}
-					/>
+					<Bar dataKey="score" name="통시성 (max 40)" {...barChartStyles.bar} />
 				</BarChart>
 			</ResponsiveContainer>
 		</Box>
