@@ -1,5 +1,11 @@
-import React from 'react';
-import { Box, Tooltip, Typography } from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import {
+	Box,
+	Tooltip,
+	Typography,
+	useTheme,
+	useMediaQuery,
+} from '@mui/material';
 import {
 	Radar,
 	RadarChart,
@@ -7,132 +13,149 @@ import {
 	PolarAngleAxis,
 	PolarRadiusAxis,
 	ResponsiveContainer,
-	Tooltip as RechartsTooltip,
-	Legend,
 } from 'recharts';
-import { prepareRadarData } from './radarDataUtils';
-import { radarChartStyles } from './radarChartStyles';
-import PublicIcon from '@mui/icons-material/Public';
-import SecurityIcon from '@mui/icons-material/Security';
-import ScienceIcon from '@mui/icons-material/Science';
-import PeopleIcon from '@mui/icons-material/People';
-import BusinessIcon from '@mui/icons-material/Business';
-import PaletteIcon from '@mui/icons-material/Palette';
 
-const RadarChartComponent = ({ person }) => {
-	const radarData = prepareRadarData(person);
+import { categories } from './categoryData';
 
-	const categories1 = [
-		{ name: '문화·예술', value: person.cultural_exp, icon: <PaletteIcon /> },
-		{ name: '정치·외교', value: person.political_exp, icon: <PublicIcon /> },
-		{ name: '전략·안보', value: person.strategic_exp, icon: <SecurityIcon /> },
-	];
+const ImprovedRadarChartComponent = ({ person }) => {
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+	const [activeCategory, setActiveCategory] = useState(null);
 
-	const categories2 = [
-		{ name: '산업·경제', value: person.economic_exp, icon: <BusinessIcon /> },
-		{ name: '사회·윤리', value: person.social_exp, icon: <PeopleIcon /> },
-		{ name: '기술·과학', value: person.tech_exp, icon: <ScienceIcon /> },
-	];
+	const chartStyles = {
+		container: {
+			border: `1px solid ${theme.palette.divider}`,
+			borderRadius: theme.shape.borderRadius,
+			margin: theme.spacing(1),
+			padding: theme.spacing(2),
+			backgroundColor: theme.palette.background.paper,
+		},
+		radar: {
+			stroke: theme.palette.primary.main,
+			fill: theme.palette.primary.main,
+			fillOpacity: 0.4,
+		},
+	};
+
+	const handleCategoryHover = useCallback(
+		(category) => {
+			if (!isMobile) {
+				setActiveCategory(category);
+			}
+		},
+		[isMobile]
+	);
+
+	const handleCategoryClick = useCallback(
+		(category) => {
+			if (isMobile) {
+				setActiveCategory((prev) => (prev === category ? null : category));
+			}
+		},
+		[isMobile]
+	);
 
 	return (
-		<Box sx={radarChartStyles.container}>
+		<Box sx={chartStyles.container}>
 			<Box
 				sx={{
 					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
+					flexWrap: 'wrap',
 					justifyContent: 'center',
-					gap: '15px',
+					gap: 1,
 				}}>
-				{categories1.map((category, index) => (
+				{categories(person).map((category, index) => (
 					<Tooltip
 						key={index}
-						title={<Typography fontSize="1rem">{category.value}</Typography>}
+						title={
+							<Typography>
+								{category.type}: {category.score}점, {category.exp}
+							</Typography>
+						}
 						arrow>
 						<Box
 							sx={{
+								position: 'relative',
 								display: 'flex',
 								flexDirection: 'column',
 								alignItems: 'center',
 								justifyContent: 'center',
-								border: '1px solid #ddd',
-								borderRadius: '8px',
-								padding: '6px',
-								boxSizing: 'border-box',
-							}}>
-							{React.cloneElement(category.icon, { fontSize: 'small' })}
+								border: `2px solid ${theme.palette.divider}`,
+								borderRadius: theme.shape.borderRadius,
+								cursor: 'pointer',
+								overflow: 'hidden',
+								width: '70px',
+								height: '70px',
+								transition: 'all 0.3s ease',
+								'&:hover': {
+									borderColor: theme.palette.primary.main,
+									boxShadow: `0 0 8px ${theme.palette.primary.main}`,
+								},
+							}}
+							onMouseEnter={() => handleCategoryHover(category.type)}
+							onMouseLeave={() => handleCategoryHover(null)}
+							onClick={() => handleCategoryClick(category.type)}>
+							<Box
+								sx={{
+									position: 'absolute',
+									bottom: 0,
+									left: 0,
+									width: '100%',
+									height: `${category.score * 10}%`,
+									backgroundColor: theme.palette.primary.light,
+									opacity: 0.2,
+									transition: 'height 0.3s ease',
+								}}
+							/>
+							{React.cloneElement(category.icon, {
+								color: activeCategory === category.type ? 'warning' : 'primary',
+								style: {
+									position: 'relative',
+									zIndex: 1,
+									fontSize: '2rem',
+									marginBottom: theme.spacing(0.5),
+								},
+							})}
 							<Typography
-								variant="body2"
-								sx={{ mt: 0.5, textAlign: 'center', fontSize: '0.75rem' }}>
-								{category.name}
+								variant="caption"
+								sx={{
+									textAlign: 'center',
+									color:
+										activeCategory === category.type
+											? theme.palette.warning.main
+											: theme.palette.text.primary,
+									zIndex: 1,
+									fontWeight: 'bold',
+								}}>
+								{category.type}
 							</Typography>
 						</Box>
 					</Tooltip>
 				))}
 			</Box>
 
-			<Box sx={{ width: '100%', height: 300 }}>
-				<ResponsiveContainer width="100%" height="100%">
-					<RadarChart cx="50%" cy="50%" outerRadius="50%" data={radarData}>
-						<PolarGrid gridType="polygon" />
-						<PolarAngleAxis dataKey="subject" tick={radarChartStyles.tick} />
+			<Box sx={{ width: '100%', height: 400 }}>
+				<ResponsiveContainer>
+					<RadarChart data={categories(person)} outerRadius="65%">
+						<PolarGrid stroke={theme.palette.divider} />
+						<PolarAngleAxis
+							dataKey="type"
+							tick={{ fill: theme.palette.text.primary, fontSize: 12 }}
+						/>
 						<PolarRadiusAxis
-							angle={30}
 							domain={[0, 10]}
-							tick={radarChartStyles.tick}
+							tick={{ fill: theme.palette.text.secondary }}
 						/>
 						<Radar
 							name="분야별 영향력"
 							dataKey="score"
-							{...radarChartStyles.radar}
+							{...chartStyles.radar}
 						/>
-						<RechartsTooltip
-							contentStyle={{
-								backgroundColor: 'rgba(255, 255, 255, 0.8)',
-								borderRadius: '5px',
-							}}
-						/>
-						<Legend wrapperStyle={{ fontSize: '16px' }} />
 					</RadarChart>
 				</ResponsiveContainer>
-			</Box>
-
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-					gap: '15px',
-				}}>
-				{categories2.map((category, index) => (
-					<Tooltip
-						key={index}
-						title={<Typography fontSize="1rem">{category.value}</Typography>}
-						arrow>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
-								justifyContent: 'center',
-								border: '1px solid #ddd',
-								borderRadius: '8px',
-								padding: '6px',
-								boxSizing: 'border-box',
-							}}>
-							{React.cloneElement(category.icon, { fontSize: 'small' })}
-							<Typography
-								variant="body2"
-								sx={{ mt: 0.5, textAlign: 'center', fontSize: '0.75rem' }}>
-								{category.name}
-							</Typography>
-						</Box>
-					</Tooltip>
-				))}
 			</Box>
 		</Box>
 	);
 };
 
-export default RadarChartComponent;
+export default ImprovedRadarChartComponent;
