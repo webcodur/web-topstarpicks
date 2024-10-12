@@ -53,6 +53,8 @@ const RadarChartComponent = ({ person }) => {
 				}}>
 				{categories(person).map((category, index) => (
 					<Tooltip
+						enterTouchDelay={0}
+						leaveTouchDelay={3000}
 						key={index}
 						title={
 							<Typography>

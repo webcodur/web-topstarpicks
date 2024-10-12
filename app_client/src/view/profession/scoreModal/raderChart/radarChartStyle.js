@@ -53,6 +53,6 @@ export const getRadarChartStyles = (theme) => ({
 	},
 	chartContainer: {
 		width: '100%',
-		height: 400,
+		height: 300,
 	},
 });

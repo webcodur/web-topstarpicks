@@ -38,9 +38,9 @@ const ScoreModal = ({ person, open, onClose }) => {
 	if (!person) return null;
 	const totalScore = person.total_score;
 	const grade = calculateGrade(totalScore);
-	person.grade = grade; // Add grade to person object for TotalScoreComponent
+	person.grade = grade;
 
-	const handleTabChange = (event, newValue) => {
+	const handleTabChange = (_, newValue) => {
 		setTabValue(newValue);
 	};
 
@@ -52,10 +52,12 @@ const ScoreModal = ({ person, open, onClose }) => {
 			aria-describedby="score-modal-description">
 			<ModalContent>
 				<FlexCenter>
-					<Title id="score-modal-title" variant="h6" align="center">
-						{person.name}의 영향력 점수
+					<Title id="score-modal-title" align="center">
+						{person.name}의 영향력
 					</Title>
 					<Tooltip
+						enterTouchDelay={0}
+						leaveTouchDelay={3000}
 						title={
 							<Typography fontSize="1rem">
 								영향력 스펙트럼은 chatGPT를 통해 인물별 영향력 지표를 시각화한

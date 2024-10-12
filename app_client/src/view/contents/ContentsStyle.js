@@ -39,21 +39,6 @@ export const StyledTitle = styled.h2`
 	text-align: center;
 `;
 
-export const QuoteContainer = styled.div`
-	background-color: ${(props) =>
-		props.theme.palette.mode === 'dark'
-			? props.theme.palette.grey[800]
-			: props.theme.palette.grey[100]};
-	padding: 20px;
-	border-radius: 4px;
-	margin-bottom: 20px;
-`;
-
-export const QuoteText = styled.p`
-	color: ${(props) => props.theme.palette.text.secondary};
-	font-style: italic;
-`;
-
 export const StyledImage = styled.img`
 	width: 400px;
 	object-fit: cover;
@@ -146,4 +131,26 @@ export const FloatingMenu = styled.div`
 		display: flex;
 		flex-direction: column;
 	}
+`;
+
+export const QuoteContainer = styled.div`
+	max-width: 400px;
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+`;
+
+export const SourceLink = styled(Link)`
+	color: orange;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
+`;
+
+export const QuoteText = styled.span`
+	margin-left: 5px;
 `;

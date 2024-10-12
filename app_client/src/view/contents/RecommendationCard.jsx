@@ -9,6 +9,7 @@ import {
 	StyledBookImage,
 	ImageContainer,
 	AffiliateLink,
+	SourceLink,
 } from './ContentsStyle';
 
 const RecommendationCard = forwardRef(
@@ -38,16 +39,10 @@ const RecommendationCard = forwardRef(
 
 				{recommendation.reason.length > 1 && (
 					<QuoteContainer>
-						<QuoteText>
-							"{recommendation.reason}" - {personInfo.name}
-						</QuoteText>
-						<p>
-							<Link
-								style={{ color: 'orange' }}
-								to={recommendation.recommendation_source}>
-								출처
-							</Link>
-						</p>
+						<SourceLink to={recommendation.recommendation_source}>
+							원문
+						</SourceLink>{' '}
+						|<QuoteText>{recommendation.reason}</QuoteText>
 					</QuoteContainer>
 				)}
 
