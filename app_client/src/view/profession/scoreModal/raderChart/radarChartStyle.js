@@ -1,0 +1,58 @@
+export const getRadarChartStyles = (theme) => ({
+	container: {
+		border: `1px solid ${theme.palette.divider}`,
+		borderRadius: theme.shape.borderRadius,
+		// margin: theme.spacing(1),
+		padding: theme.spacing(1),
+		paddingTop: theme.spacing(2),
+		paddingBottom: theme.spacing(0),
+		backgroundColor: theme.palette.background.paper,
+	},
+	radar: {
+		stroke: theme.palette.primary.main,
+		fill: theme.palette.primary.main,
+		fillOpacity: 0.4,
+	},
+	categoryBox: {
+		position: 'relative',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		justifyContent: 'center',
+		border: `2px solid ${theme.palette.divider}`,
+		borderRadius: theme.shape.borderRadius,
+		cursor: 'pointer',
+		overflow: 'hidden',
+		width: '70px',
+		height: '70px',
+		transition: 'all 0.3s ease',
+		'&:hover': {
+			borderColor: theme.palette.primary.main,
+			boxShadow: `0 0 8px ${theme.palette.primary.main}`,
+		},
+	},
+	categoryFill: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		width: '100%',
+		backgroundColor: theme.palette.primary.light,
+		opacity: 0.2,
+		transition: 'height 0.3s ease',
+	},
+	categoryIcon: {
+		position: 'relative',
+		zIndex: 1,
+		fontSize: '2rem',
+		marginBottom: theme.spacing(0.5),
+	},
+	categoryText: {
+		textAlign: 'center',
+		zIndex: 1,
+		fontWeight: 'bold',
+	},
+	chartContainer: {
+		width: '100%',
+		height: 400,
+	},
+});

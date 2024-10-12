@@ -6,9 +6,10 @@ export const ModalContent = styled.div`
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 90%;
-	max-width: 600px;
-	height: 90%;
+	width: 340px;
+	/* width: 90%; */
+	/* max-width: 600px; */
+	/* height: 90%; */
 	max-height: 800px;
 	background-color: ${(props) => props.theme.palette.background.paper};
 	border: 2px solid #000;

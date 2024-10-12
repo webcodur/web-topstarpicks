@@ -1,20 +1,17 @@
 import React from 'react';
-import { Box, Typography, useTheme, Tooltip } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import {
 	BarChart,
 	Bar,
 	XAxis,
 	YAxis,
 	CartesianGrid,
-	Tooltip as RechartsTooltip,
 	ResponsiveContainer,
 	LabelList,
 } from 'recharts';
-import { prepareBarData, getTranshistoricityDescription } from './barDataUtils';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import InfoIcon from '@mui/icons-material/Info';
+import { prepareBarData } from './barDataUtils';
 
-const ImprovedBarChartComponent = ({ transhistoricity }) => {
+const BarChartComponent = ({ transhistoricity, exp }) => {
 	const theme = useTheme();
 	const barData = prepareBarData(transhistoricity);
 	const chartStyles = {
@@ -28,9 +25,22 @@ const ImprovedBarChartComponent = ({ transhistoricity }) => {
 		title: {
 			fontWeight: 'bold',
 			marginBottom: theme.spacing(2),
+			textAlign: 'center',
+		},
+		contentWrapper: {
+			display: 'flex',
+			gap: '25px',
+		},
+		chartContainer: {
+			width: '50%',
+			height: '300px',
+			display: 'flex',
+			flexDirection: 'column',
+		},
+		descriptionContainer: {
+			width: '40%',
 			display: 'flex',
 			alignItems: 'center',
-			justifyContent: 'center',
 		},
 		bar: {
 			fill: theme.palette.primary.main,
@@ -41,71 +51,65 @@ const ImprovedBarChartComponent = ({ transhistoricity }) => {
 		},
 		chartMargin: {
 			top: 20,
-			right: 30,
-			left: 20,
+			right: 20,
+			left: 10,
 			bottom: 5,
 		},
-		tooltip: {
-			backgroundColor: theme.palette.background.paper,
-			border: `1px solid ${theme.palette.divider}`,
-			borderRadius: theme.shape.borderRadius,
-			boxShadow: theme.shadows[3],
-		},
-		score: {
-			marginTop: theme.spacing(2),
-			fontWeight: 'bold',
-		},
-	};
-
-	const CustomTooltip = ({ active, payload }) => {
-		if (active && payload && payload.length) {
-			return (
-				<Box sx={chartStyles.tooltip}>
-					<Typography variant="body2">
-						{getTranshistoricityDescription(payload[0].value)}
-					</Typography>
-				</Box>
-			);
-		}
-		return null;
 	};
 
 	return (
 		<Box sx={chartStyles.container}>
-			<Box sx={chartStyles.title}>
-				<Typography variant="h6" align="center">
-					통시성 점수{' '}
-				</Typography>
-				<AccessTimeIcon sx={{ color: theme.palette.primary.main, ml: 1 }} />
-				<Tooltip title="시대를 넘어서며 세상에 영향을 준 정도" arrow>
-					<InfoIcon sx={{ color: theme.palette.primary.main, ml: 1 }} />
-				</Tooltip>
+			<Box sx={chartStyles.contentWrapper}>
+				<Box sx={chartStyles.chartContainer}>
+					<Typography variant="body2">
+						<b>통시성:</b> 시대를 넘어 세상에 영향을 준 정도
+					</Typography>
+					<ResponsiveContainer width="100%" height="100%">
+						<BarChart
+							data={barData}
+							margin={chartStyles.chartMargin}
+							layout="horizontal">
+							<CartesianGrid
+								strokeDasharray="3 3"
+								stroke={theme.palette.divider}
+							/>
+							<XAxis
+								dataKey="name"
+								tick={chartStyles.axisLabel}
+								axisLine={{ stroke: theme.palette.text.secondary }}
+								tickLine={{ stroke: theme.palette.text.secondary }}
+							/>
+							<YAxis
+								type="number"
+								domain={[0, 40]}
+								ticks={[0, 10, 20, 30, 40]}
+								tick={chartStyles.axisLabel}
+								axisLine={{ stroke: theme.palette.text.secondary }}
+								tickLine={{ stroke: theme.palette.text.secondary }}
+							/>
+							<Bar
+								dataKey="score"
+								name="통시성"
+								{...chartStyles.bar}
+								barSize={40}>
+								<LabelList
+									dataKey="score"
+									position="insideRight"
+									fill={theme.palette.background.paper}
+									fontSize={12}
+								/>
+							</Bar>
+						</BarChart>
+					</ResponsiveContainer>
+				</Box>
+				<Box sx={chartStyles.descriptionContainer}>
+					<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+						<Typography variant="body2">{exp}</Typography>
+					</Box>
+				</Box>
 			</Box>
-			<ResponsiveContainer width="100%" height={300}>
-				<BarChart data={barData} margin={chartStyles.chartMargin}>
-					<CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} />
-					<XAxis dataKey="name" tick={chartStyles.axisLabel} />
-					<YAxis
-						type="number"
-						domain={[0, 40]}
-						ticks={[0, 10, 20, 30, 40]}
-						tick={chartStyles.axisLabel}
-					/>
-					<RechartsTooltip content={<CustomTooltip />} />
-					<Bar dataKey="score" name="통시성" {...chartStyles.bar}>
-						<LabelList
-							dataKey="score"
-							position="top"
-							fill={theme.palette.text.primary}
-						/>
-					</Bar>
-				</BarChart>
-			</ResponsiveContainer>
-			<Typography variant="body2" align="center" sx={chartStyles.description}>
-				{getTranshistoricityDescription(transhistoricity)}
-			</Typography>
 		</Box>
 	);
 };
 
-export default ImprovedBarChartComponent;
+export default BarChartComponent;
