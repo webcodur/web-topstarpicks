@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import CategorySelect from './CategorySelect';
 import SettingsModal from './SettingsModal';
 import AdminLoginModal from './AdminLoginModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 // AppBar 컴포넌트: 애플리케이션의 상단 바를 구성하는 메인 컴포넌트
 const AppBar = memo(({ toggleSidebar }) => {
@@ -20,9 +20,6 @@ const AppBar = memo(({ toggleSidebar }) => {
 	// 설정 모달 열기/닫기 핸들러
 	const handleOpenSettings = () => setOpenSettings(true);
 	const handleCloseSettings = () => setOpenSettings(false);
-
-	// 홈으로 이동하는 핸들러
-	const handleNavigateHome = () => navigate('/');
 
 	// 관리자 로그인 모달 열기/닫기 핸들러
 	const handleOpenAdminLogin = () => setOpenAdminLogin(true);
@@ -45,19 +42,21 @@ const AppBar = memo(({ toggleSidebar }) => {
 				</Box>
 
 				{/* 중앙 영역: 로고 */}
-				<Box
-					component="img"
-					src="/logo.png"
-					alt={t('app_name')}
-					onClick={handleNavigateHome}
-					sx={{
-						height: '40px', // 로고의 높이를 조절합니다
-						cursor: 'pointer',
-						position: 'absolute',
-						left: '50%',
-						transform: 'translateX(-50%)',
-					}}
-				/>
+				<Link to="/" style={{ textDecoration: 'none' }}>
+					<Box
+						component="img"
+						src="/logo.png"
+						alt={t('app_name')}
+						sx={{
+							height: '40px',
+							cursor: 'pointer',
+							position: 'absolute',
+							left: '50%',
+							top: '10px',
+							transform: 'translateX(-50%)',
+						}}
+					/>
+				</Link>
 
 				{/* 오른쪽 영역: 설정, 관리자, 프로필 아이콘 */}
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>

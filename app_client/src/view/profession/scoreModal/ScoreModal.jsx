@@ -1,9 +1,11 @@
 import React from 'react';
-import { Typography, Box, Grid, Modal } from '@mui/material';
+import { Modal, Tooltip, IconButton } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import RadarChart from './raderChart/RadarChart';
 import BarChart from './barChart/BarChart';
 import ScoreSummary from './ScoreSummary';
 import { calculateGrade } from './scoreUtils';
+import { ModalContent, FlexCenter, Title } from './ScoreModalStyles';
 
 const ScoreModal = ({ person, open, onClose }) => {
 	if (!person) return null;
@@ -16,54 +18,34 @@ const ScoreModal = ({ person, open, onClose }) => {
 			onClose={onClose}
 			aria-labelledby="score-modal-title"
 			aria-describedby="score-modal-description">
-			<Box
-				sx={{
-					position: 'absolute',
-					top: '50%',
-					left: '50%',
-					transform: 'translate(-50%, -50%)',
-					width: '100%',
-					maxWidth: 600, // Increased from 400
-					bgcolor: 'background.paper',
-					border: '2px solid #000',
-					boxShadow: 24,
-					p: 6, // Increased from 4
-					borderRadius: '10px', // Added for smoother look
-				}}>
-				<Typography
-					id="score-modal-title"
-					variant="h4" // Changed from h5
-					align="center"
-					style={{ fontWeight: 'bold', marginBottom: '20px' }}>
-					영향력 스펙트럼
-				</Typography>
+			<ModalContent>
+				<FlexCenter>
+					<Title id="score-modal-title" variant="h6" align="center">
+						{person.name}의 영향력 점수
+					</Title>
+					<Tooltip
+						title="영향력 스펙트럼은 chatGPT를 통해 인물별 영향력 지표를 시각화한 것입니다."
+						arrow>
+						<IconButton size="small">
+							<InfoIcon />
+						</IconButton>
+					</Tooltip>
+				</FlexCenter>
 
-				<Typography
-					variant="h5"
-					align="center"
-					style={{ fontWeight: 'bold', marginBottom: '30px' }}>
-					- {person.name} -
-				</Typography>
+				<RadarChart person={person} />
 
-				<Grid container spacing={4}>
-					{' '}
-					<Grid item xs={12}>
-						<RadarChart person={person} />
-					</Grid>
-					<Grid item xs={12}>
-						<BarChart transhistoricity={person.transhistoricity} />
-					</Grid>
-					<Grid item xs={12}>
-						{totalScore && (
-							<ScoreSummary
-								person={person}
-								totalScore={totalScore}
-								grade={grade}
-							/>
-						)}
-					</Grid>
-				</Grid>
-			</Box>
+				<div style={{ display: 'flex' }}>
+					<BarChart transhistoricity={person.transhistoricity} />
+
+					{totalScore && (
+						<ScoreSummary
+							person={person}
+							totalScore={totalScore}
+							grade={grade}
+						/>
+					)}
+				</div>
+			</ModalContent>
 		</Modal>
 	);
 };

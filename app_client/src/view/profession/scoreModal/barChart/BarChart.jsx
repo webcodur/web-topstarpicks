@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
 	BarChart,
 	Bar,
@@ -7,7 +7,6 @@ import {
 	YAxis,
 	CartesianGrid,
 	Tooltip,
-	Legend,
 	ResponsiveContainer,
 } from 'recharts';
 import { prepareBarData } from './barDataUtils';
@@ -18,12 +17,20 @@ const BarChartComponent = ({ transhistoricity }) => {
 
 	return (
 		<Box sx={barChartStyles.container}>
-			<ResponsiveContainer width="100%" height="100%">
+			<Typography align="center" gutterBottom>
+				통시성 점수 (max 40)
+			</Typography>
+			<ResponsiveContainer width="100%" height={250}>
 				<BarChart
 					data={barData}
 					margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
 					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="name" tick={barChartStyles.axisLabel} />
+					<XAxis
+						dataKey="name"
+						tick={barChartStyles.axisLabel}
+						interval={0}
+						width={100}
+					/>
 					<YAxis
 						type="number"
 						domain={[0, 40]}
@@ -36,10 +43,12 @@ const BarChartComponent = ({ transhistoricity }) => {
 							borderRadius: '5px',
 						}}
 					/>
-					<Legend wrapperStyle={{ fontSize: '16px' }} />
-					<Bar dataKey="score" name="통시성 (max 40)" {...barChartStyles.bar} />
+					<Bar dataKey="score" name="통시성" {...barChartStyles.bar} />
 				</BarChart>
 			</ResponsiveContainer>
+			<Typography variant="body2" align="center" sx={{ mt: 2 }}>
+				총점: {transhistoricity}/100
+			</Typography>
 		</Box>
 	);
 };

@@ -1,19 +1,24 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
 
-const ScoreSummary = ({ totalScore, grade }) => {
+const ScoreSummary = ({ person, totalScore, grade }) => {
 	return (
-		<Box
-			sx={{
+		<div
+			style={{
+				fontColor: 'red',
+				textAlign: 'center',
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				mt: 2,
+				justifyContent: 'center',
+				fontWeight: 'bold',
+				border: '1px solid lightgray',
+				borderRadius: '10px',
+				padding: '10px',
+				margin: '10px',
 			}}>
-			<Typography variant="h6" sx={{ mt: 2 }}>
-				총점: {totalScore}/100, {grade}등급
-			</Typography>
-		</Box>
+			<p sx={{ mt: 2 }}>총계: {totalScore}/100</p>
+			<p sx={{ mt: 2 }}>등급: {grade} RANK</p>
+		</div>
 	);
 };
 

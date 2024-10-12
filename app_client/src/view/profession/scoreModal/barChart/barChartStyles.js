@@ -1,16 +1,22 @@
 export const barChartStyles = {
 	container: {
-		height: 250, // Increased from 200
+		height: 300,
 		width: '100%',
+		maxWidth: 200,
 		display: 'flex',
+		flexDirection: 'column',
 		justifyContent: 'center',
+		border: '1px solid lightgray',
+		padding: '15px',
+		borderRadius: '10px',
+		margin: '10px auto',
 	},
 	bar: {
-		fill: '#4CAF50', // Changed to a more vibrant green
-		maxBarSize: 40, // Increased from 30
+		fill: '#4CAF50',
+		maxBarSize: 30,
 	},
 	axisLabel: {
-		fontSize: 18, // Added for consistency with radar chart
+		fontSize: 14,
 		fontWeight: 'bold',
 	},
 };
