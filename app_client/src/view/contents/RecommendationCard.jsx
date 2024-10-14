@@ -39,14 +39,17 @@ const RecommendationCard = forwardRef(
 
 				{recommendation.reason.length > 1 && (
 					<QuoteContainer>
+						<b>추천사 / 독서경위</b>:
+						<QuoteText>{recommendation.reason}</QuoteText>
 						<SourceLink to={recommendation.recommendation_source}>
-							원문
-						</SourceLink>{' '}
-						|<QuoteText>{recommendation.reason}</QuoteText>
+							{' '}
+							(소스)
+						</SourceLink>
 					</QuoteContainer>
 				)}
 
 				<p>{recommendation.mediaDescription}</p>
+				<br />
 
 				{recommendation.affiliate_link && (
 					<AffiliateLink

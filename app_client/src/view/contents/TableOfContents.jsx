@@ -20,6 +20,7 @@ const TableOfContentsComponent = ({ recommendations, onItemClick }) => {
 		<TableOfContents>
 			<TOCHeader onClick={toggleExpand}>
 				<TOCTitle>목차</TOCTitle>
+				<p style={{ color: 'gray' }}>{isExpanded ? '열림' : '접힘'}</p>
 				<IconButton size="small">
 					{isExpanded ? <ExpandLess /> : <ExpandMore />}
 				</IconButton>

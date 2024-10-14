@@ -52,6 +52,9 @@ export const StyledBookImage = styled.img`
 `;
 
 export const ImageContainer = styled.div`
+	border: 1px solid lightGray;
+	border-radius: 10px;
+	padding: 5px;
 	margin-bottom: ${(props) => props.theme.spacing(2)};
 `;
 
@@ -84,6 +87,7 @@ export const TableOfContents = styled.div`
 	border-radius: 4px;
 	margin-bottom: 30px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
 `;
 
 export const TOCHeader = styled.div`
