@@ -20,6 +20,8 @@ const ModalTitle = styled(Typography)`
 	font-size: 1.5rem;
 	font-weight: 600;
 	margin-bottom: 16px;
+	text-align: center;
+	font-family: 'Song Myung';
 `;
 
 const CloseButton = styled(IconButton)`
@@ -35,7 +37,7 @@ const BiographyModal = ({ isOpen, onClose, biography, name }) => {
 				<CloseButton onClick={onClose}>
 					<CloseIcon />
 				</CloseButton>
-				<ModalTitle>{name}의 약력</ModalTitle>
+				<ModalTitle>{name} </ModalTitle>
 				<Typography>{biography || '정보가 없습니다.'}</Typography>
 			</ModalContent>
 		</Modal>

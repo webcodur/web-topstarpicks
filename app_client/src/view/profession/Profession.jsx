@@ -46,9 +46,12 @@ const Profession = () => {
 				component="h1"
 				gutterBottom
 				align="center"
-				sx={{ mt: 4, mb: 4, fontWeight: 'bold' }}>
+				sx={{ mt: 4, mb: 4, fontFamily: 'Song Myung', fontSize: '40px' }}>
 				{contentName === '전체' ? pageTitle : `${pageTitle}들의 ${contentName}`}
 			</Typography>
+			<hr />
+			<br />
+			<br />
 
 			<SortControls
 				sortCriteria={sortCriteria}

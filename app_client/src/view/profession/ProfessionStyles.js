@@ -38,23 +38,21 @@ export const ButtonContainer = styled.div`
 `;
 
 export const PersonName = styled(Typography)`
-	font-size: 1.3rem; // 크기를 약간 줄임
+	text-align: center;
+	font-size: 1.3rem;
 	font-weight: 600;
-	margin-top: 16px; // 이미지와의 간격을 위해 상단 마진 추가
+	margin-top: 16px;
 	margin-bottom: 8px;
+	font-family: 'Song Myung', Times, serif;
 	color: ${(props) => props.theme.palette.text.primary};
 `;
 
 export const StyledButton = styled(Button)`
-	border: none;
-	border-radius: 4px; // 네모난 모서리로 변경
-	padding: 6px 12px;
-	margin-bottom: 8px;
-	margin-right: 8px;
+	border-radius: 10px;
+	height: 55px;
 	color: ${(props) => props.theme.palette.text.primary};
 	background-color: ${(props) => props.theme.palette.action.hover};
-	transition: all 0.1s ease; // 즉시 적용되는 애니메이션
-
+	transition: all 0.1s ease;
 	&:hover {
 		background-color: ${(props) => props.theme.palette.primary.light};
 		color: ${(props) => props.theme.palette.common.white};
