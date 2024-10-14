@@ -1,9 +1,15 @@
 import { axiosInstance, createApiCall } from './apiUtils';
 
-export const openaiCheck = async () => {
+export const openaiModelCheck = async () => {
 	const result = await axiosInstance.get('/ai', {});
 	return result;
 };
+
+export const openaiChatTest = createApiCall(
+	(testText) => axiosInstance.post('/ai/chat', { testText }),
+	'chat test 실패:',
+	'openaiChatTest'
+);
 
 // 영향력 평가
 export const assessInfluence = createApiCall(

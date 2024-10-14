@@ -37,12 +37,8 @@ async function refineBookData(books, batchSize = 50, rateLimit = 50) {
 		for (const book of batch) {
 			try {
 				const prompt = promptForm + '\n\n' + JSON.stringify(book);
-				const chatCompletion = await openai.getChatCompletion(
-					prompt,
-					systemMsg
-				);
-				const response = JSON.parse(chatCompletion.choices[0].message.content);
-				result.push(response);
+				const aiResponse = await openai.getChatCompletion(prompt, systemMsg);
+				result.push(aiResponse);
 
 				// API 요청 제한을 준수하기 위한 지연
 				await delay(delayBetweenRequests);

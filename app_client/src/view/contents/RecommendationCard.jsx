@@ -23,10 +23,13 @@ const RecommendationCard = forwardRef(
 
 				<div>
 					<p style={{ fontSize: '20px' }}>
-						{recommendation.creator && <span>{recommendation.creator}</span>} (
-						{recommendation.release_date &&
-							new Date(recommendation.release_date).toLocaleDateString()}
-						)
+						{recommendation.creator && <span>{recommendation.creator}</span>}
+						{recommendation.release_date && (
+							<>
+								{' - '}
+								{new Date(recommendation.release_date).toLocaleDateString()}
+							</>
+						)}
 					</p>
 					<br />
 				</div>

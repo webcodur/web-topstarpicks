@@ -113,16 +113,12 @@ router.get('/', async (req, res) => {
 		const trimmed = trimProperties(crawled);
 		const reduced = reduceQuotes(trimmed);
 		const refined = await crawlRefiner.refineBookData(reduced);
-
-		console.log('링크 삽입 전', refined);
 		refined.forEach((ele, index) => {
 			ele.img_link = crawled[index].img_link;
 			ele.recommendation_source = crawled[index].recommendation_source;
 		});
 
-		console.log('링크 삽입 후', refined);
-
-		// 각 책을 upsert
+		// 각 책 upsert
 		const results = await Promise.all(
 			refined.map((book) => upsertBook(book, celeb_id, content_id))
 		);

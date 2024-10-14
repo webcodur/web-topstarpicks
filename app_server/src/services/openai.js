@@ -1,10 +1,9 @@
-const OpenAI = require('openai');
 const fs = require('fs').promises;
 const path = require('path');
 const axios = require('axios');
 
-// OpenAI API 클라이언트 초기화
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const OpenAI = require('openai');
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 /**
  * 프롬프트 파일을 읽는 함수
@@ -22,14 +21,14 @@ async function readPromptFile(filename) {
 }
 
 /**
- * OpenAI API를 사용하여 채팅 완료 요청을 보내는 함수
+ * OpenAI API를 사용하여 json 응답을 요청하고 받아내는 함수
  * @param {string} prompt - 사용자 프롬프트
  * @param {string} systemMessage - 시스템 메시지
  * @returns {Promise<Object>} 채팅 완료 결과
  */
 async function getChatCompletion(prompt, systemMessage) {
-	return openai.chat.completions.create({
-		model: 'gpt-4',
+	const response = await client.chat.completions.create({
+		model: 'gpt-4o',
 		messages: [
 			{ role: 'system', content: systemMessage },
 			{ role: 'user', content: prompt },
@@ -37,6 +36,18 @@ async function getChatCompletion(prompt, systemMessage) {
 		temperature: 0,
 		max_tokens: 1000,
 	});
+
+	const rawResponse = response.choices[0].message.content;
+
+	const jsonString = rawResponse
+		.replace(/^aiResponse \(influence\),\s*/, '')
+		.replace(/^`+json\s*/, '') // 시작 부분의 백틱과 'json' 제거
+		.replace(/`+$/, '') // 끝 부분의 백틱 제거
+		.trim();
+
+	const parsedResponse = JSON.parse(jsonString);
+
+	return parsedResponse;
 }
 
 async function getAvailableModels() {

@@ -30,16 +30,11 @@ async function assessAndSaveInfluence(name) {
 
 	const systemMessage =
 		'You are a highly knowledgeable AI assistant specialized in historical analysis and influence assessment. Provide accurate, factual information based on historical records and avoid speculation or unsupported claims. Always respond in valid JSON format.';
-	const chatCompletion = await openai.getChatCompletion(prompt, systemMessage);
 
-	const rawResult = JSON.parse(chatCompletion.choices[0].message.content);
+	const aiResponse = await openai.getChatCompletion(prompt, systemMessage);
+	if (aiResponse.error) throw new Error(aiResponse.error);
 
-	if (rawResult.error) {
-		throw new Error(rawResult.error);
-	}
-
-	const result = assessment.processResult(rawResult);
-
+	const result = assessment.processResult(aiResponse);
 	const celebrityId = await findCelebrityId(name);
 	let query;
 
