@@ -21,6 +21,7 @@ export const PersonInfoText = styled.p`
 `;
 
 export const PersonName = styled.h1`
+	font-family: 'song myung';
 	text-align: center;
 `;
 
@@ -37,6 +38,7 @@ export const StyledCardContent = styled(CardContent)`
 export const StyledTitle = styled.h2`
 	margin-bottom: 24px;
 	text-align: center;
+	font-family: 'song myung';
 `;
 
 export const StyledImage = styled.img`
@@ -88,19 +90,6 @@ export const TableOfContents = styled.div`
 	margin-bottom: 30px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
-`;
-
-export const TOCHeader = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	cursor: pointer;
-`;
-
-export const TOCTitle = styled.h2`
-	margin: 0;
-	flex-grow: 1;
-	text-align: center;
 `;
 
 export const TOCContent = styled.div`
@@ -165,4 +154,24 @@ export const SourceLink = styled(Link)`
 
 export const QuoteText = styled.span`
 	margin-left: 5px;
+`;
+
+export const TOCHeader = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+`;
+
+export const TOCTitle = styled.h2`
+	font-family: 'song myung';
+	margin: 0;
+	text-align: center;
+`;
+
+export const TOCControls = styled.div`
+	display: flex;
+	align-items: center;
+	position: absolute;
+	right: 0;
 `;

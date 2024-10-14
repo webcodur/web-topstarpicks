@@ -12,7 +12,12 @@ const unitBycontentName = {
 
 const Title = ({ name, contentName, length }) => {
 	return (
-		<h1 style={{ textAlign: 'center ', marginBottom: '35px' }}>
+		<h1
+			style={{
+				textAlign: 'center ',
+				marginBottom: '35px',
+				fontFamily: 'Song Myung',
+			}}>
 			{name}
 			{get이가(name)} 추천하는 {contentName} {length}
 			{unitBycontentName[contentName]}

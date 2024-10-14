@@ -1,11 +1,7 @@
 import React from 'react';
-import { Fab } from '@mui/material';
+import { Fab, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import {
-	FloatingMenuButton,
-	FloatingMenu,
-	FloatingMenuItem,
-} from './ContentsStyle';
+import { FloatingMenuButton } from './ContentsStyle';
 
 const FloatingMenuComponent = ({
 	isOpen,
@@ -20,17 +16,20 @@ const FloatingMenuComponent = ({
 			</Fab>
 		</FloatingMenuButton>
 
-		{isOpen && (
-			<FloatingMenu>
-				<div className="floating-menu-content">
-					{recommendations.map((recommendation, index) => (
-						<FloatingMenuItem key={index} onClick={() => onItemClick(index)}>
-							{index + 1}. {recommendation.title}
-						</FloatingMenuItem>
-					))}
-				</div>
-			</FloatingMenu>
-		)}
+		<Drawer anchor="right" open={isOpen} onClose={onToggle}>
+			<List>
+				{recommendations.map((recommendation, index) => (
+					<ListItem
+						key={index}
+						onClick={() => {
+							onItemClick(index);
+							onToggle();
+						}}>
+						<ListItemText primary={`${index + 1}. ${recommendation.title}`} />
+					</ListItem>
+				))}
+			</List>
+		</Drawer>
 	</>
 );
 

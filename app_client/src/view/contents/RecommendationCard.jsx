@@ -21,11 +21,16 @@ const RecommendationCard = forwardRef(
 					NO {index + 1}: &nbsp; {recommendation.title}
 				</StyledTitle>
 
-				<p>
-					{recommendation.creator},{' '}
-					{new Date(recommendation.release_date).toLocaleDateString()}
-				</p>
-				<br />
+				<div>
+					<p style={{ fontSize: '20px' }}>
+						{recommendation.creator && <span>{recommendation.creator}</span>} (
+						{recommendation.release_date &&
+							new Date(recommendation.release_date).toLocaleDateString()}
+						)
+					</p>
+					<br />
+				</div>
+
 				<ImageContainer>
 					<StyledBookImage
 						src={
