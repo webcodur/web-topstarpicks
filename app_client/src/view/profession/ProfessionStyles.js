@@ -65,17 +65,13 @@ export const PersonInfo = styled(Typography)`
 	font-size: 0.9rem;
 	margin-bottom: 4px;
 	display: flex;
-	align-items: center;
-
 	svg {
-		margin-right: 8px;
+		margin-right: 10px;
 	}
 `;
 
 export const BiographyContainer = styled.div`
-	display: flex;
-	align-items: flex-start;
-	margin-top: 16px;
+	position: relative;
 `;
 
 export const BiographyText = styled(Typography)`
@@ -87,17 +83,17 @@ export const BiographyText = styled(Typography)`
 	-webkit-line-clamp: 4;
 	-webkit-box-orient: vertical;
 	text-overflow: ellipsis;
-	flex-grow: 1;
 `;
 
 export const ReadMoreButton = styled(Button)`
 	padding: 0;
-	margin-left: 8px;
+	margin-left: 4px;
 	min-width: auto;
 	font-size: 0.9rem;
 	text-transform: none;
 	color: ${(props) => props.theme.palette.primary.main};
-	align-self: flex-start;
+	vertical-align: baseline;
+	display: inline;
 	&:hover {
 		background-color: transparent;
 		text-decoration: underline;

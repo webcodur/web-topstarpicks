@@ -7,7 +7,7 @@ import { contentNameAtom } from 'store/atom';
 import useProfessionData from './useProfessionData';
 import SortControls from './SortControls';
 import AgeBoundaries from './AgeBoundaries';
-import ProfessionGrid from './ProfessionGrid';
+import ProfessionGrid from './professionGrid/ProfessionGrid';
 import ScoreModal from './scoreModal/ScoreModal';
 
 const Profession = () => {

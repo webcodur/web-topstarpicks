@@ -1,29 +1,8 @@
 import React, { useMemo } from 'react';
-import { Typography, Divider, Box } from '@mui/material';
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
-import PersonCard from './PersonCard';
-import { getSortedAndGroupedData, getSortLabel } from './professionUtils';
-
-const StencilTypography = styled(Typography)`
-	text-align: center;
-	font-family: fantasy;
-	font-weight: bold;
-	color: black;
-	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
-		1px 1px 0 #fff;
-	letter-spacing: 2px;
-	text-transform: uppercase;
-	font-size: 1.5rem;
-
-	@media (min-width: 600px) {
-		font-size: 2rem;
-	}
-
-	@media (min-width: 960px) {
-		font-size: 2.5rem;
-	}
-`;
+import { Divider, Box } from '@mui/material';
+import PersonCard from './personCard/PersonCard';
+import { getSortedAndGroupedData, getSortLabel } from 'utils/professionUtils';
+import { StencilTypography } from './ProfessionGridStyles';
 
 const ProfessionGrid = ({
 	professionData,
