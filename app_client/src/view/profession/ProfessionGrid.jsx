@@ -1,7 +1,29 @@
 import React, { useMemo } from 'react';
 import { Typography, Divider, Box } from '@mui/material';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import PersonCard from './PersonCard';
 import { getSortedAndGroupedData, getSortLabel } from './professionUtils';
+
+const StencilTypography = styled(Typography)`
+	text-align: center;
+	font-family: fantasy;
+	font-weight: bold;
+	color: black;
+	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+		1px 1px 0 #fff;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	font-size: 1.5rem;
+
+	@media (min-width: 600px) {
+		font-size: 2rem;
+	}
+
+	@media (min-width: 960px) {
+		font-size: 2.5rem;
+	}
+`;
 
 const ProfessionGrid = ({
 	professionData,
@@ -26,21 +48,16 @@ const ProfessionGrid = ({
 		<>
 			{groupedData.map((group, groupIndex) => (
 				<React.Fragment key={group.key ?? groupIndex}>
-					{/* 영역 구분선 */}
 					{groupIndex > 0 && sortCriteria && <Divider sx={{ my: 2 }} />}
 					<br />
 					<br />
 
-					{/* 영역 */}
 					{sortCriteria && (
-						<Typography
-							variant="h4"
-							sx={{ my: 2, textAlign: 'center', fontFamily: 'fantasy' }}>
+						<StencilTypography variant="h4" sx={{ my: 2 }}>
 							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
-						</Typography>
+						</StencilTypography>
 					)}
 
-					{/* 인물 */}
 					<Box sx={{ display: 'flex', flexWrap: 'wrap', margin: -2 }}>
 						{group.persons.map((person) => (
 							<Box

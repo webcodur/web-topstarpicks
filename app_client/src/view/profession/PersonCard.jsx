@@ -21,6 +21,7 @@ import {
 	PersonInfo,
 	BiographyText,
 	ReadMoreButton,
+	BiographyContainer,
 } from './ProfessionStyles';
 
 const MAX_BIOGRAPHY_LENGTH = 70; // 변경된 최대 글자 수
@@ -98,41 +99,24 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						dateOfDeath={person.date_of_death}
 					/>
 
-					<PersonInfo
-						style={{
-							display: 'inline-flex',
-							alignItems: 'flex-start',
-							flexWrap: 'wrap',
-						}}>
+					<PersonInfo component="div">
 						<Description
 							fontSize="small"
 							style={{ marginRight: '8px', marginTop: '4px' }}
 						/>
-						<BiographyText style={{ flex: '1 1 auto' }}>
-							{isExpanded
-								? person.biography
-								: truncatedBiography || '정보가 없습니다.'}
+						<BiographyContainer>
+							<BiographyText component="div">
+								{isExpanded
+									? person.biography
+									: truncatedBiography || '정보가 없습니다.'}
+							</BiographyText>
 							{person.biography &&
-								person.biography.length > MAX_BIOGRAPHY_LENGTH &&
-								!isExpanded && (
-									<ReadMoreButton
-										onClick={handleReadMoreClick}
-										style={{
-											marginLeft: '4px',
-											padding: '0',
-											minWidth: 'auto',
-										}}>
-										더 보기
+								person.biography.length > MAX_BIOGRAPHY_LENGTH && (
+									<ReadMoreButton onClick={handleReadMoreClick}>
+										{isExpanded ? '접기' : '더 보기'}
 									</ReadMoreButton>
 								)}
-						</BiographyText>
-						{isExpanded && (
-							<ReadMoreButton
-								onClick={handleReadMoreClick}
-								style={{ marginLeft: '4px', padding: '0', minWidth: 'auto' }}>
-								접기
-							</ReadMoreButton>
-						)}
+						</BiographyContainer>
 					</PersonInfo>
 				</Introduction>
 
