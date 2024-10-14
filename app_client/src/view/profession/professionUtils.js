@@ -49,6 +49,9 @@ export const getAgeCategory = (birthYear, periods) => {
  */
 const createSortFunction = (criteria, periods) => {
 	const sortFunctions = {
+		// 이름순 정렬: 알파벳 순서
+		name: (a, b) => a.name.localeCompare(b.name),
+
 		// 국적순 정렬: 알파벳 순서, 없으면 '알 수 없음'으로 처리
 		nationality: (a, b) =>
 			(a.nationality || UNKNOWN).localeCompare(b.nationality || UNKNOWN),
@@ -69,7 +72,6 @@ const createSortFunction = (criteria, periods) => {
 
 	return sortFunctions[criteria] || (() => 0);
 };
-
 /**
  * 그룹 키 생성 함수를 반환합니다.
  *
@@ -132,9 +134,10 @@ export const getSortedAndGroupedData = (
 	const sortFunction = createSortFunction(sortCriteria, periods);
 
 	// 데이터 정렬
-	const sortedData = [...data].sort((a, b) =>
-		sortOrder === 'asc' ? sortFunction(a, b) : sortFunction(b, a)
-	);
+	const sortedData = [...data].sort((a, b) => {
+		const result = sortFunction(a, b);
+		return sortOrder === 'asc' ? result : -result;
+	});
 
 	// 정렬 기준이 없으면 전체 데이터를 하나의 그룹으로 반환
 	if (!sortCriteria) return [{ key: 'all', persons: sortedData }];

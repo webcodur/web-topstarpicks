@@ -27,7 +27,7 @@ const SortControls = ({
 				mb: 4,
 				justifyContent: 'center',
 			}}>
-			{/* 정렬 기능 선택 */}
+			{/* 정렬 기준 선택 */}
 			<FormControl sx={{ minWidth: 200, mr: 2 }}>
 				<InputLabel id="sort-select-label">정렬 기준</InputLabel>
 				<Select
@@ -36,21 +36,17 @@ const SortControls = ({
 					value={sortCriteria}
 					label="정렬 기준"
 					onChange={handleSortChange}>
-					<MenuItem value="">
-						<em>없음</em>
-					</MenuItem>
+					<MenuItem value="name">이름</MenuItem>
 					<MenuItem value="nationality">국적</MenuItem>
 					<MenuItem value="rank">랭크</MenuItem>
 					<MenuItem value="age">나이/시대</MenuItem>
 				</Select>
 			</FormControl>
 
-			{/* 정렬 기능 선택 */}
-			{sortCriteria && (
-				<StyledButton onClick={handleSortOrderChange}>
-					{sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
-				</StyledButton>
-			)}
+			{/* 정렬 방향 선택*/}
+			<StyledButton onClick={handleSortOrderChange}>
+				{sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
+			</StyledButton>
 		</Box>
 	);
 };

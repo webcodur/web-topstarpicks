@@ -28,10 +28,12 @@ const ProfessionGrid = ({
 				<React.Fragment key={group.key ?? groupIndex}>
 					{/* 영역 구분선 */}
 					{groupIndex > 0 && sortCriteria && <Divider sx={{ my: 2 }} />}
+					<br />
+					<br />
 
 					{/* 영역 */}
 					{sortCriteria && (
-						<Typography variant="h6" sx={{ my: 2 }}>
+						<Typography variant="h6" sx={{ my: 2, textAlign: 'center' }}>
 							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
 						</Typography>
 					)}

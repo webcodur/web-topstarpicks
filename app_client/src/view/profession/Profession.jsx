@@ -16,8 +16,8 @@ const Profession = () => {
 	const professionData = useProfessionData(profession, contentName);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPerson, setSelectedPerson] = useState(null);
-	const [sortCriteria, setSortCriteria] = useState('');
-	const [sortOrder, setSortOrder] = useState('asc');
+	const [sortCriteria, setSortCriteria] = useState('rank');
+	const [sortOrder, setSortOrder] = useState('desc');
 	const [eraBoundaries, setEraBoundaries] = useState({
 		ancient: 500,
 		medieval: 1500,
@@ -56,7 +56,6 @@ const Profession = () => {
 				sortOrder={sortOrder}
 				setSortOrder={setSortOrder}
 			/>
-
 			{sortCriteria === 'age' && (
 				<AgeBoundaries
 					eraBoundaries={eraBoundaries}
