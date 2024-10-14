@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	ImageContainer,
 	StyledImage,
@@ -80,14 +81,15 @@ const CelebImage = ({
 				{showOverlay && (
 					<OverlayContainer>
 						{contentNames.map((content) => (
-							<OverlayButton
+							<Link
 								key={content}
+								to={`/content/${encodeURIComponent(content)}`}
 								onClick={(e) => {
 									e.stopPropagation();
 									oncontentNameClick(content);
 								}}>
-								{content}
-							</OverlayButton>
+								<OverlayButton>{content}</OverlayButton>
+							</Link>
 						))}
 					</OverlayContainer>
 				)}

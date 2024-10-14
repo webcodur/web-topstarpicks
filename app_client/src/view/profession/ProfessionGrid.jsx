@@ -33,7 +33,9 @@ const ProfessionGrid = ({
 
 					{/* 영역 */}
 					{sortCriteria && (
-						<Typography variant="h6" sx={{ my: 2, textAlign: 'center' }}>
+						<Typography
+							variant="h4"
+							sx={{ my: 2, textAlign: 'center', fontFamily: 'fantasy' }}>
 							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
 						</Typography>
 					)}

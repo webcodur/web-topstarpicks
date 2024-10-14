@@ -37,24 +37,6 @@ export const ButtonContainer = styled.div`
 	margin-top: 16px;
 `;
 
-// export const BiographyText = styled(Typography)`
-// 	font-size: 0.9rem;
-// 	margin-top: 16px;
-// 	line-height: 1.6;
-// `;
-
-export const BiographyText = styled(Typography)`
-	font-size: 0.9rem;
-	margin-top: 16px;
-	line-height: 1.6;
-	max-height: 7.2em; // 4줄의 높이 (1.6 * 4 + 추가 여백)
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-line-clamp: 4; // 최대 4줄까지 표시
-	-webkit-box-orient: vertical;
-	text-overflow: ellipsis;
-`;
-
 export const PersonName = styled(Typography)`
 	font-size: 1.3rem; // 크기를 약간 줄임
 	font-weight: 600;
@@ -87,5 +69,30 @@ export const PersonInfo = styled(Typography)`
 
 	svg {
 		margin-right: 8px;
+	}
+`;
+
+export const BiographyText = styled(Typography)`
+	font-size: 0.9rem;
+	margin-top: 16px;
+	line-height: 1.6;
+	max-height: 7.2em;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+`;
+
+export const ReadMoreButton = styled(Button)`
+	padding: 0;
+	margin-top: 4px;
+	min-width: auto;
+	font-size: 0.9rem;
+	text-transform: none;
+	color: ${(props) => props.theme.palette.primary.main};
+	&:hover {
+		background-color: transparent;
+		text-decoration: underline;
 	}
 `;

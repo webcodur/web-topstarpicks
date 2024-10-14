@@ -178,7 +178,7 @@ export const getSortedAndGroupedData = (
 export const getSortLabel = (criteria, value, periods) => {
 	const labels = {
 		nationality: (value) => `국적: ${value}`,
-		rank: (value) => `${value} 랭크`,
+		rank: (value) => `${value} rank`,
 		age: (value) => {
 			const ageLabelMap = {
 				[AGES.ANCIENT]: `시대: 고대 (~ ${periods.ancient}년)`,
@@ -194,5 +194,6 @@ export const getSortLabel = (criteria, value, periods) => {
 		},
 	};
 
-	return labels[criteria]?.(value) || '';
+	const result = labels[criteria]?.(value) || '';
+	return result ? `- ${result} -` : '';
 };
