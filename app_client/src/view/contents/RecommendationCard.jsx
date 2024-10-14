@@ -10,6 +10,7 @@ import {
 	ImageContainer,
 	AffiliateLink,
 	SourceLink,
+	MediaDescContainer,
 } from './ContentsStyle';
 
 const RecommendationCard = forwardRef(
@@ -48,7 +49,9 @@ const RecommendationCard = forwardRef(
 					</QuoteContainer>
 				)}
 
-				<p>{recommendation.mediaDescription}</p>
+				<MediaDescContainer>
+					<b>내용</b>: {recommendation.mediaDescription}
+				</MediaDescContainer>
 				<br />
 
 				{recommendation.affiliate_link && (

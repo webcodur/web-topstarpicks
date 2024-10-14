@@ -138,7 +138,15 @@ export const FloatingMenu = styled.div`
 `;
 
 export const QuoteContainer = styled.div`
-	max-width: 400px;
+	/* max-width: 400px; */
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	padding: 10px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+`;
+
+export const MediaDescContainer = styled.div`
 	border: 1px solid lightgray;
 	border-radius: 10px;
 	padding: 10px;
