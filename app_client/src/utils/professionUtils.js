@@ -5,8 +5,9 @@ const UNKNOWN = '알 수 없음';
 const AGES = {
 	ANCIENT: 0, // 고대
 	MEDIEVAL: 1, // 중세
-	MODERN: 2, // 근대
-	CONTEMPORARY: 3, // 현대
+	EARLY_MODERN: 2, // 근세
+	MODERN: 3, // 근대
+	CONTEMPORARY: 4, // 현대
 };
 
 /**
@@ -28,6 +29,7 @@ export const getAgeCategory = (birthYear, periods) => {
 	const categories = [
 		{ limit: periods.ancient, category: AGES.ANCIENT },
 		{ limit: periods.medieval, category: AGES.MEDIEVAL },
+		{ limit: periods.early_modern, category: AGES.EARLY_MODERN },
 		{ limit: periods.modern, category: AGES.MODERN },
 		{ limit: Infinity, category: AGES.CONTEMPORARY },
 	];
@@ -181,16 +183,15 @@ export const getSortLabel = (criteria, value, periods) => {
 		rank: (value) => `${value} rank`,
 		age: (value) => {
 			const ageLabelMap = {
-				[AGES.ANCIENT]: `시대: 고대 (~ ${periods.ancient}년)`,
-				[AGES.MEDIEVAL]: `시대: 중세 (${periods.ancient + 1}년 ~ ${
-					periods.medieval
-				}년)`,
-				[AGES.MODERN]: `시대: 근대 (${periods.medieval + 1}년 ~ ${
-					periods.modern
-				}년)`,
-				[AGES.CONTEMPORARY]: `시대: 현대 (${periods.modern + 1}년 ~)`,
+				[AGES.ANCIENT]: `고대 (~ ${periods.ancient})`,
+				[AGES.MEDIEVAL]: `중세 (${periods.ancient + 1} ~ ${periods.medieval})`,
+				[AGES.EARLY_MODERN]: `근세 (${periods.medieval + 1} ~ ${
+					periods.early_modern
+				})`,
+				[AGES.MODERN]: `근대 (${periods.early_modern + 1} ~ ${periods.modern})`,
+				[AGES.CONTEMPORARY]: `현대 (${periods.modern + 1} ~)`,
 			};
-			return ageLabelMap[value] || '시대: 알 수 없음';
+			return ageLabelMap[value] || '알 수 없음';
 		},
 	};
 

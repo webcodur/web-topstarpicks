@@ -1,3 +1,5 @@
+import { TextField } from '@mui/material';
+
 import React from 'react';
 import { Select, MenuItem } from '@mui/material';
 import { GridActionsCellItem } from '@mui/x-data-grid';
@@ -66,6 +68,30 @@ const getRecsColumns = (
 		headerName: '추천 이유',
 		width: 200,
 		editable: true,
+		renderCell: (params) => (
+			<div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+				{params.value}
+			</div>
+		),
+		renderEditCell: (params) => (
+			<TextField
+				fullWidth
+				multiline
+				rows={10}
+				value={params.value}
+				onChange={(e) => {
+					const updatedRow = {
+						...params.row,
+						recommendation_text: e.target.value,
+					};
+					params.api.setEditCellValue({
+						id: params.id,
+						field: params.field,
+						value: e.target.value,
+					});
+				}}
+			/>
+		),
 	},
 	{
 		field: 'recommendation_source',

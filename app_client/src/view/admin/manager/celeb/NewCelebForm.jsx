@@ -35,8 +35,6 @@ const NewCelebForm = ({ showSnackbar }) => {
 				profession_id: getProfession(formData.profession_kor),
 			};
 
-			console.log('newCeleb', newCeleb);
-
 			await createCelebrity(newCeleb);
 			showSnackbar('새 유명인사가 추가되었습니다.');
 			setFormData({

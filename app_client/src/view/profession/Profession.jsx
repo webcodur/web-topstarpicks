@@ -19,9 +19,10 @@ const Profession = () => {
 	const [sortCriteria, setSortCriteria] = useState('rank');
 	const [sortOrder, setSortOrder] = useState('desc');
 	const [eraBoundaries, setEraBoundaries] = useState({
-		ancient: 500,
-		medieval: 1500,
-		modern: 1900,
+		ancient: 476,
+		medieval: 1453,
+		early_modern: 1789,
+		modern: 1945,
 	});
 
 	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
