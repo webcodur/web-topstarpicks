@@ -143,25 +143,32 @@ router.get(
 router.post(
 	'/',
 	db.asyncHandler(async (req, res) => {
-		const {
-			name,
-			profession_id,
-			gender,
-			nationality,
-			birth_date,
-			date_of_death,
-			biography,
-			img_link,
-			vid_link,
-		} = req.body;
+		try {
+			const {
+				name,
+				profession_id,
+				gender,
+				nationality,
+				birth_date,
+				date_of_death,
+				biography,
+				img_link,
+				vid_link,
+			} = req.body;
 
-		const sql = SQL`
-    INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, date_of_death, biography, img_link, vid_link)
-    VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link} ${vid_link})
-  `;
+			const sql = SQL`
+        INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, date_of_death, biography, img_link, vid_link)
+        VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link}, ${vid_link})
+      `;
 
-		const result = await db.executeQuery(sql);
-		res.json({ message: 'success', data: { id: result.lastID } });
+			const result = await db.executeQuery(sql);
+			res.json({ message: 'success', data: { id: result.lastID } });
+		} catch (error) {
+			console.error('Error creating celebrity:', error);
+			res
+				.status(500)
+				.json({ message: 'Error creating celebrity', error: error.message });
+		}
 	})
 );
 
