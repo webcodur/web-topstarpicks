@@ -59,6 +59,7 @@ const Profession = () => {
 				sortOrder={sortOrder}
 				setSortOrder={setSortOrder}
 			/>
+
 			{sortCriteria === 'age' && (
 				<AgeBoundaries
 					eraBoundaries={eraBoundaries}

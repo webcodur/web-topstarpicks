@@ -15,6 +15,8 @@ const CelebImage = ({
 	rank,
 	contentNames,
 	oncontentNameClick,
+	getContentLink,
+	person,
 }) => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
@@ -71,23 +73,11 @@ const CelebImage = ({
 			mousePosition={mousePosition}>
 			<ImageContainer onClick={handleImageInteraction}>
 				{rank && <RankScore>{rank}</RankScore>}
-				<StyledImage
-					src={
-						imgLink ||
-						`https://via.placeholder.com/150?text=${encodeURIComponent(name)}`
-					}
-					alt={name}
-				/>
+				<StyledImage src={imgLink} alt={name} />
 				{showOverlay && (
 					<OverlayContainer>
 						{contentNames.map((content) => (
-							<Link
-								key={content}
-								to={`/content/${encodeURIComponent(content)}`}
-								onClick={(e) => {
-									e.stopPropagation();
-									oncontentNameClick(content);
-								}}>
+							<Link key={content} to={getContentLink(person.name, content)}>
 								<OverlayButton>{content}</OverlayButton>
 							</Link>
 						))}

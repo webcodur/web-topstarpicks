@@ -72,6 +72,8 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					imgLink={person.img_link}
 					name={person.name}
 					rank={person.rank}
+					getContentLink={getContentLink}
+					person={person}
 					contentNames={contentNames}
 					oncontentNameClick={(content) => (
 						<Link to={getContentLink(person.name, content)}>{content}</Link>
