@@ -110,8 +110,8 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 
 					{/* LifespanDisplay 컴포넌트: 생년월일과 사망일을 표시합니다. */}
 					<LifespanDisplay
-						birthDate={person.birth_date}
-						dateOfDeath={person.date_of_death}
+						BIRTH={person.birth_date}
+						DEATH={person.date_of_death}
 					/>
 
 					{/* 전기 정보*/}

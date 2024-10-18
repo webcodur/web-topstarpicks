@@ -99,7 +99,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						fullWidth
 						label="출생일"
 						name="birth_date"
-						type="date"
+						type="text"
 						value={formData.birth_date}
 						onChange={handleChange}
 						InputLabelProps={{ shrink: true }}
@@ -110,7 +110,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						fullWidth
 						label="사망일"
 						name="date_of_death"
-						type="date"
+						type="text"
 						value={formData.date_of_death}
 						onChange={handleChange}
 						InputLabelProps={{ shrink: true }}

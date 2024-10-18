@@ -1,16 +1,28 @@
 export const calculateAge = (birthdate) => {
 	const today = new Date();
-	const birthDate = new Date(birthdate);
+	const birthYear = parseInt(birthdate.split('-')[0]);
 
-	let age = today.getFullYear() - birthDate.getFullYear();
+	// 기원전 날짜 처리
+	if (birthYear <= 0) return null;
 
-	// 올해의 생일이 지났는지 확인
+	let age = today.getFullYear() - birthYear;
+	const [, birthMonth, birthDay] = birthdate.split('-').map(Number);
 	const isBirthdayPassed =
-		today >=
-		new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+		today >= new Date(today.getFullYear(), birthMonth - 1, birthDay);
 
-	// 생일이 지나지 않았으면 나이에서 1년을 뺌
 	if (!isBirthdayPassed) age--;
 
 	return age;
+};
+
+export const formatYear = (dateString) => {
+	if (dateString.startsWith('-')) {
+		// 기원전 날짜
+		const year = dateString.split('-')[1]; // '-0356-07-01' -> '0356'
+		return `BC ${parseInt(year, 10)}`;
+	} else {
+		// 기원후 날짜
+		const year = dateString.split('-')[0]; // '2023-01-01' -> '2023'
+		return `${parseInt(year, 10)}`;
+	}
 };
