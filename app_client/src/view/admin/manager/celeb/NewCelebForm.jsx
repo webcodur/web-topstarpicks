@@ -20,6 +20,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 		date_of_death: '',
 		biography: '',
 		img_link: '',
+		vid_link: '',
 	});
 
 	const handleChange = (e) => {
@@ -47,6 +48,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 				date_of_death: '',
 				biography: '',
 				img_link: '',
+				vid_link: '',
 			});
 		} catch (error) {
 			showSnackbar('유명인사 추가에 실패했습니다.');
@@ -133,6 +135,15 @@ const NewCelebForm = ({ showSnackbar }) => {
 						label="이미지 링크"
 						name="img_link"
 						value={formData.img_link}
+						onChange={handleChange}
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<TextField
+						fullWidth
+						label="비디오 링크"
+						name="vid_link"
+						value={formData.vid_link}
 						onChange={handleChange}
 					/>
 				</Grid>

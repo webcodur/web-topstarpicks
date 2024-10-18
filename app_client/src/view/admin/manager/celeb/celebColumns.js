@@ -18,6 +18,12 @@ const getCelebColumns = (handleSaveRow, handleDeleteCelebrity) => [
 		editable: true,
 	},
 	{
+		field: 'vid_link',
+		headerName: '비디오 링크',
+		width: 200,
+		editable: true,
+	},
+	{
 		field: 'actions',
 		headerName: '작업',
 		width: 120,

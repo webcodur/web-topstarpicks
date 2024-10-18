@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { Button } from '@mui/material';
 
 export const StyledImage = styled.img`
 	position: absolute;
@@ -8,30 +7,23 @@ export const StyledImage = styled.img`
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	cursor: pointer;
 `;
 
-export const OverlayContainer = styled.div`
+export const StyledVideo = styled.video`
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.4);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
+	object-fit: cover;
 `;
 
-export const OverlayButton = styled(Button)`
-	margin: 5px;
-	color: white;
-	border: 1px solid white;
-	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
-	}
+export const ImageContainer = styled.div`
+	position: relative;
+	width: 100%;
+	padding-top: 180%;
+	overflow: hidden;
+	border-radius: 5px;
 `;
 
 const borderThickness = '15px';
@@ -39,7 +31,6 @@ const borderThickness = '15px';
 export const RankBorder = styled.div`
 	position: relative;
 	padding: ${borderThickness};
-	/* border-radius: calc(${borderThickness} + 5px); */
 	border-radius: 5px;
 	background: ${({ rank }) => {
 		switch (rank) {
@@ -74,23 +65,6 @@ export const RankBorder = styled.div`
 	}};
 	background-blend-mode: overlay;
 	background-size: cover;
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-	&:hover {
-		box-shadow: ${({ mousePosition }) => `
-      ${(mousePosition.x - 0.5) * 20}px ${
-			(mousePosition.y - 0.5) * 20
-		}px 20px rgba(0,0,0,0.3)
-    `};
-	}
-`;
-
-export const ImageContainer = styled.div`
-	position: relative;
-	width: 100%;
-	padding-top: 180%;
-	overflow: hidden;
-	border-radius: 5px;
 `;
 
 export const RankScore = styled.div`

@@ -77,15 +77,7 @@ const ContentPage = () => {
 			{/* 셀럽 정보 */}
 			<PersonInfoContainer>
 				<ImageContainer>
-					<StyledImage
-						src={
-							personInfo.img_link ||
-							`https://via.placeholder.com/150?text=${encodeURIComponent(
-								personInfo.name
-							)}`
-						}
-						alt={personInfo.name}
-					/>
+					<StyledImage src={personInfo.img_link} alt={personInfo.name} />
 				</ImageContainer>
 				<PersonName>{personInfo.name}</PersonName>
 				<PersonInfoText>출생: {personInfo.birth_date}</PersonInfoText>

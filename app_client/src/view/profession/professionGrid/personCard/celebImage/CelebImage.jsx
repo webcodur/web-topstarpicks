@@ -1,26 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
 	ImageContainer,
 	StyledImage,
-	OverlayContainer,
-	OverlayButton,
+	StyledVideo,
 	RankBorder,
 	RankScore,
 } from './celebImageStyle';
 
-const CelebImage = ({
-	imgLink,
-	name,
-	rank,
-	contentNames,
-	oncontentNameClick,
-	getContentLink,
-	person,
-}) => {
-	const [showOverlay, setShowOverlay] = useState(false);
+const CelebImage = ({ imgLink, vidLink, name, rank }) => {
 	const [isMobile, setIsMobile] = useState(false);
-	const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
+	const [isHovering, setIsHovering] = useState(false);
+	const videoRef = useRef(null);
 
 	useEffect(() => {
 		const checkMobile = () => {
@@ -33,55 +23,59 @@ const CelebImage = ({
 		return () => window.removeEventListener('resize', checkMobile);
 	}, []);
 
-	const handleMouseMove = useCallback((e) => {
-		const rect = e.currentTarget.getBoundingClientRect();
-		const x = (e.clientX - rect.left) / rect.width;
-		const y = (e.clientY - rect.top) / rect.height;
-		setMousePosition({ x, y });
-	}, []);
-
 	const handleMouseEnter = useCallback(() => {
-		if (!isMobile) {
-			setShowOverlay(true);
+		if (!isMobile && vidLink) {
+			setIsHovering(true);
+			if (videoRef.current) {
+				videoRef.current.play();
+			}
 		}
-	}, [isMobile]);
+	}, [isMobile, vidLink]);
 
 	const handleMouseLeave = useCallback(() => {
-		if (!isMobile) {
-			setShowOverlay(false);
-			setMousePosition({ x: 0.5, y: 0.5 });
+		if (!isMobile && vidLink) {
+			setIsHovering(false);
+			if (videoRef.current) {
+				videoRef.current.pause();
+				videoRef.current.currentTime = 0;
+			}
 		}
-	}, [isMobile]);
+	}, [isMobile, vidLink]);
 
-	const handleImageInteraction = useCallback(() => {
-		if (isMobile) {
-			setShowOverlay((prev) => !prev);
+	const handleClick = useCallback(() => {
+		if (isMobile && vidLink) {
+			setIsHovering((prev) => !prev);
+			if (videoRef.current) {
+				if (videoRef.current.paused) {
+					videoRef.current.play();
+				} else {
+					videoRef.current.pause();
+				}
+			}
 		}
-	}, [isMobile]);
-
-	const transform = `perspective(1000px) rotateX(${
-		(mousePosition.y - 0.5) * 10
-	}deg) rotateY(${(mousePosition.x - 0.5) * 10}deg)`;
+	}, [isMobile, vidLink]);
 
 	return (
-		<RankBorder
-			rank={rank}
-			onMouseMove={handleMouseMove}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
-			style={{ transform }}
-			mousePosition={mousePosition}>
-			<ImageContainer onClick={handleImageInteraction}>
+		<RankBorder rank={rank}>
+			<ImageContainer
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+				onClick={handleClick}>
 				{rank && <RankScore>{rank}</RankScore>}
-				<StyledImage src={imgLink} alt={name} />
-				{showOverlay && (
-					<OverlayContainer>
-						{contentNames.map((content) => (
-							<Link key={content} to={getContentLink(person.name, content)}>
-								<OverlayButton>{content}</OverlayButton>
-							</Link>
-						))}
-					</OverlayContainer>
+				<StyledImage
+					src={imgLink}
+					alt={name}
+					style={{ opacity: isHovering && vidLink ? 0 : 1 }}
+				/>
+				{vidLink && (
+					<StyledVideo
+						ref={videoRef}
+						src={vidLink}
+						loop
+						muted
+						playsInline
+						style={{ opacity: isHovering ? 1 : 0 }}
+					/>
 				)}
 			</ImageContainer>
 		</RankBorder>

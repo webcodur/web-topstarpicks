@@ -70,6 +70,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				{/* CelebImage 컴포넌트: 인물 이미지와 관련 정보를 표시합니다. */}
 				<CelebImage
 					imgLink={person.img_link}
+					vidLink={person.vid_link}
 					name={person.name}
 					rank={person.rank}
 					getContentLink={getContentLink}
