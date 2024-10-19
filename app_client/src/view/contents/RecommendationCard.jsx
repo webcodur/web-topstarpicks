@@ -22,14 +22,13 @@ const RecommendationCard = forwardRef(
 				</StyledTitle>
 
 				<div>
-					<p style={{ fontSize: '20px' }}>
-						{recommendation.creator && <span>{recommendation.creator}</span>}
-						{recommendation.release_date && (
-							<>
-								{' - '}
-								{new Date(recommendation.release_date).toLocaleDateString()}
-							</>
-						)}
+					<p style={{ fontSize: '17px' }}>
+						{recommendation.creator || '작가 미상'}
+						{' ('}
+						{recommendation.release_date
+							? new Date(recommendation.release_date).toLocaleDateString()
+							: '작성일 미상'}
+						{')'}
 					</p>
 					<br />
 				</div>
