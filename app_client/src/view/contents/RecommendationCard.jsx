@@ -54,23 +54,15 @@ const RecommendationCard = forwardRef(
 						padding: theme.spacing(3),
 					}}>
 					<NavigationContainer>
-						{index > 0 ? (
-							<IconButton onClick={onPrevious}>
-								<ChevronLeft />
-							</IconButton>
-						) : (
-							<div style={{ width: 48, height: 48 }} /> // Placeholder to maintain layout
-						)}
+						<IconButton onClick={onPrevious} disabled={index === 0}>
+							<ChevronLeft />
+						</IconButton>
 						<StyledTitle>
 							NO {index + 1}: &nbsp; {recommendation.title}
 						</StyledTitle>
-						{index < totalCount - 1 ? (
-							<IconButton onClick={onNext}>
-								<ChevronRight />
-							</IconButton>
-						) : (
-							<div style={{ width: 48, height: 48 }} /> // Placeholder to maintain layout
-						)}
+						<IconButton onClick={onNext} disabled={index === totalCount - 1}>
+							<ChevronRight />
+						</IconButton>
 					</NavigationContainer>
 
 					{/* Rest of the component remains the same */}

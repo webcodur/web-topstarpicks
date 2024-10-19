@@ -97,21 +97,12 @@ const ContentPage = () => {
 			/>
 
 			{/* 추천 컨텐츠 항목 */}
-			{/* {recommendations.map((recommendation, index) => (
-				<RecommendationCard
-					key={index}
-					recommendation={recommendation}
-					index={index}
-					personInfo={personInfo}
-					ref={contentRefs.current[index]}
-				/>
-			))} */}
-
 			{recommendations.map((recommendation, index) => (
 				<RecommendationCard
 					key={index}
 					recommendation={recommendation}
 					index={index}
+					totalCount={recommendations.length}
 					personInfo={personInfo}
 					ref={contentRefs.current[index]}
 					onPrevious={() => scrollToContent(index - 1)}
