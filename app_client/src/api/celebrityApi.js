@@ -6,7 +6,8 @@ export const fetchCelebrities = createApiCall(
 		axiosInstance.get('/celebrities', {
 			params: profession !== 'all' ? { profession } : {},
 		}),
-	'전체 인물 정보를 가져오는데 실패했습니다:'
+	'직군별 인물 정보를 가져오는데 실패했습니다:',
+	'fetchCelebrities'
 );
 
 // 유명인사 인물별 개인정보
@@ -15,7 +16,7 @@ export const fetchPersonInfo = createApiCall(
 		axiosInstance.get('/celebrities/name', {
 			params: { name: celebName },
 		}),
-	'개별 인물 정보를 가져오는데 실패했습니다:',
+	'특정 인물 정보를 가져오는데 실패했습니다:',
 	'fetchPersonInfo'
 );
 

@@ -58,6 +58,7 @@ const Recs = ({ showSnackbar }) => {
 	const fetchcontentNames = useCallback(async () => {
 		try {
 			const types = await fetchContentNumbers();
+			console.log('types', types);
 			setcontentNames(types.filter((item) => item.type !== '전체'));
 		} catch (error) {
 			console.error('Error fetching content types:', error);

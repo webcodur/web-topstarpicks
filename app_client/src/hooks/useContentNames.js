@@ -6,15 +6,11 @@ export const useContentNames = () => {
 
 	useEffect(() => {
 		const fetchFunc = async () => {
-			try {
-				const contentInfo = await fetchContent();
-				setContentNames([
-					{ id: 999, name: '전체', eng_name: 'all' },
-					...contentInfo,
-				]);
-			} catch (error) {
-				console.error('Error fetching contentInfo:', error);
-			}
+			const contentInfo = await fetchContent();
+			setContentNames([
+				{ id: 999, name: '전체', eng_name: 'all' },
+				...contentInfo,
+			]);
 		};
 		fetchFunc();
 	}, [setContentNames]);
