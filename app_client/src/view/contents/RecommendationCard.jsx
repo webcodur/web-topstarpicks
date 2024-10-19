@@ -67,7 +67,7 @@ const RecommendationCard = forwardRef(
 						to={recommendation.affiliate_link}
 						target="_blank"
 						rel="noopener noreferrer">
-						구매 링크
+						yes24 링크
 					</AffiliateLink>
 				)}
 			</StyledCardContent>

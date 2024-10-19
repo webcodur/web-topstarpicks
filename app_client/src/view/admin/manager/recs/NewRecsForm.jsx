@@ -51,8 +51,8 @@ const NewRecsForm = ({ showSnackbar }) => {
 				title: '',
 				creator: '',
 				release_date: '',
-				recommendation_text: '',
-				recommendation_source: '',
+				// recommendation_text: '',
+				// recommendation_source: '',
 				img_link: '',
 				affiliate_link: '',
 				mediaDescription: '',
@@ -70,7 +70,8 @@ const NewRecsForm = ({ showSnackbar }) => {
 
 	const clearField = () => {
 		setFormData({
-			celebrity_id: '',
+			// celebrity_id: '',
+			...formData,
 			content_id: 1,
 			title: '',
 			creator: '',
