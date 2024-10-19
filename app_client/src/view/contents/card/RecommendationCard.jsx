@@ -13,7 +13,7 @@ import {
 	SourceLink,
 	MediaDescContainer,
 	NavigationContainer,
-} from './ContentsStyle';
+} from './RecommendationCardStyle';
 
 const RecommendationCard = forwardRef(
 	(

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fab, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { FloatingMenuButton } from './ContentsStyle';
+import { FloatingMenuButton } from './floatingMenuStyle';
 
 const FloatingMenuComponent = ({
 	isOpen,

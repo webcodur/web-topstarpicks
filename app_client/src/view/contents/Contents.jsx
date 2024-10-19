@@ -4,9 +4,9 @@ import { CircularProgress } from '@mui/material';
 import { parseNameFromUrl } from 'utils/urlUtils';
 import { fetchPersonInfo } from 'api/celebrityApi';
 import { fetchRecommendations } from 'api/recommendationApi';
-import TableOfContents from './TableOfContents';
-import FloatingMenu from './FloatingMenu';
-import RecommendationCard from './RecommendationCard';
+import TableOfContents from './tableOfContents/TableOfContents';
+import FloatingMenu from './floatingMenu/FloatingMenu';
+import RecommendationCard from './card/RecommendationCard';
 import Title from './Title';
 
 import {

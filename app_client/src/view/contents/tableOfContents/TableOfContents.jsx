@@ -6,7 +6,7 @@ import {
 	TOCContent,
 	TOCTitle,
 	TOCControls,
-} from './ContentsStyle';
+} from './TableOfContentsStyle';
 import { IconButton } from '@mui/material';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
 
