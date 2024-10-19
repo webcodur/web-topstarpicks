@@ -126,23 +126,6 @@ export const FloatingMenu = styled.div`
 	}
 `;
 
-export const QuoteContainer = styled.div`
-	/* max-width: 400px; */
-	border: 1px solid lightgray;
-	border-radius: 10px;
-	padding: 10px;
-	margin-top: 10px;
-	margin-bottom: 15px;
-`;
-
-export const MediaDescContainer = styled.div`
-	border: 1px solid lightgray;
-	border-radius: 10px;
-	padding: 10px;
-	margin-top: 10px;
-	margin-bottom: 15px;
-`;
-
 export const SourceLink = styled(Link)`
 	color: orange;
 	text-decoration: none;
@@ -174,4 +157,36 @@ export const TOCControls = styled.div`
 	align-items: center;
 	position: absolute;
 	right: 0;
+`;
+
+export const NavigationContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin-bottom: ${(props) => props.theme.spacing(2)};
+`;
+
+export const QuoteContainer = styled.div`
+	border: 1px solid ${(props) => props.theme.palette.divider};
+	border-radius: ${(props) => props.theme.shape.borderRadius}px;
+	padding: ${(props) => props.theme.spacing(2)};
+	margin-top: ${(props) => props.theme.spacing(2)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
+	background-color: ${(props) =>
+		props.theme.palette.mode === 'dark'
+			? props.theme.palette.grey[900]
+			: props.theme.palette.grey[50]};
+`;
+
+export const MediaDescContainer = styled.div`
+	border: 1px solid ${(props) => props.theme.palette.divider};
+	border-radius: ${(props) => props.theme.shape.borderRadius}px;
+	padding: ${(props) => props.theme.spacing(2)};
+	margin-top: ${(props) => props.theme.spacing(2)};
+	margin-bottom: ${(props) => props.theme.spacing(2)};
+	background-color: ${(props) =>
+		props.theme.palette.mode === 'dark'
+			? props.theme.palette.grey[900]
+			: props.theme.palette.grey[50]};
 `;

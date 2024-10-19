@@ -1,6 +1,8 @@
 import React, { forwardRef } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { IconButton, Paper } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
-	StyledCard,
 	StyledCardContent,
 	StyledTitle,
 	QuoteContainer,
@@ -10,11 +12,16 @@ import {
 	AffiliateLink,
 	SourceLink,
 	MediaDescContainer,
+	NavigationContainer,
 } from './ContentsStyle';
 
 const RecommendationCard = forwardRef(
-	({ recommendation, index, personInfo }, ref) => {
-		// 개행 문자를 <br /> 태그로 변환하는 함수
+	(
+		{ recommendation, index, totalCount, personInfo, onPrevious, onNext },
+		ref
+	) => {
+		const theme = useTheme();
+
 		const formatText = (text) => {
 			return text.split('\n').map((line, i) => (
 				<React.Fragment key={i}>
@@ -25,12 +32,48 @@ const RecommendationCard = forwardRef(
 		};
 
 		return (
-			<StyledCard ref={ref}>
-				<StyledCardContent>
-					<StyledTitle>
-						NO {index + 1}: &nbsp; {recommendation.title}
-					</StyledTitle>
+			<Paper
+				ref={ref}
+				elevation={3}
+				sx={{
+					backgroundColor: theme.palette.background.paper,
+					marginBottom: theme.spacing(4),
+					borderRadius: theme.shape.borderRadius,
+					overflow: 'hidden',
+					transition: 'box-shadow 0.3s ease-in-out',
+					'&:hover': {
+						boxShadow: theme.shadows[6],
+					},
+				}}>
+				<StyledCardContent
+					sx={{
+						backgroundColor:
+							theme.palette.mode === 'dark'
+								? theme.palette.grey[800]
+								: theme.palette.grey[100],
+						padding: theme.spacing(3),
+					}}>
+					<NavigationContainer>
+						{index > 0 ? (
+							<IconButton onClick={onPrevious}>
+								<ChevronLeft />
+							</IconButton>
+						) : (
+							<div style={{ width: 48, height: 48 }} /> // Placeholder to maintain layout
+						)}
+						<StyledTitle>
+							NO {index + 1}: &nbsp; {recommendation.title}
+						</StyledTitle>
+						{index < totalCount - 1 ? (
+							<IconButton onClick={onNext}>
+								<ChevronRight />
+							</IconButton>
+						) : (
+							<div style={{ width: 48, height: 48 }} /> // Placeholder to maintain layout
+						)}
+					</NavigationContainer>
 
+					{/* Rest of the component remains the same */}
 					<div>
 						<p style={{ fontSize: '17px' }}>
 							{recommendation.creator || '작가 미상'}
@@ -88,7 +131,7 @@ const RecommendationCard = forwardRef(
 						</AffiliateLink>
 					)}
 				</StyledCardContent>
-			</StyledCard>
+			</Paper>
 		);
 	}
 );
