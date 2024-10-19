@@ -1,26 +1,7 @@
-// ContentsStyle.js
 import styled from '@emotion/styled';
-import { CardContent } from '@mui/material';
+import { CardContent, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { keyframes } from '@emotion/react';
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
-export const StyledCardContent = styled(CardContent)`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
-
-export const StyledTitle = styled.h2`
-	margin-bottom: 24px;
-	text-align: center;
-	font-family: 'Song Myung', serif;
-	animation: ${fadeIn} 0.5s ease-in-out;
-`;
 
 export const StyledBookImage = styled.img`
 	max-width: 200px;
@@ -69,7 +50,7 @@ export const QuoteText = styled.span`
 
 export const NavigationContainer = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	width: 100%;
 	margin-bottom: ${(props) => props.theme.spacing(2)};
@@ -85,10 +66,9 @@ export const QuoteContainer = styled.div`
 		props.theme.palette.mode === 'dark'
 			? props.theme.palette.grey[900]
 			: props.theme.palette.grey[50]};
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	transition: box-shadow 0.3s ease;
 
 	&:hover {
-		transform: translateY(-5px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
 `;
@@ -103,10 +83,54 @@ export const MediaDescContainer = styled.div`
 		props.theme.palette.mode === 'dark'
 			? props.theme.palette.grey[900]
 			: props.theme.palette.grey[50]};
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	transition: box-shadow 0.3s ease;
 
 	&:hover {
-		transform: translateY(-5px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+export const CardWrapper = styled.div`
+	position: relative;
+	margin-bottom: 60px; // Increased margin between cards
+`;
+
+export const StyledCardContent = styled(CardContent)`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+export const StyledTitle = styled.h2`
+	margin-bottom: 24px;
+	text-align: center;
+	font-family: 'Song Myung', serif;
+	animation: ${fadeIn} 0.5s ease-in-out;
+`;
+
+export const NavigationButton = styled(IconButton)`
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	${(props) => (props.direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
+	background-color: ${(props) => props.theme.palette.primary.main};
+	color: ${(props) => props.theme.palette.primary.contrastText};
+	opacity: 0.7;
+	transition: opacity 0.3s ease, background-color 0.3s ease;
+
+	&:hover {
+		opacity: 1;
+		background-color: ${(props) => props.theme.palette.primary.dark};
+	}
+
+	&:disabled {
+		opacity: 0.3;
+		background-color: ${(props) =>
+			props.theme.palette.action.disabledBackground};
 	}
 `;

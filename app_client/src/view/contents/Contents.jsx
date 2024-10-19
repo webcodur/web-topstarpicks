@@ -103,7 +103,6 @@ const ContentPage = () => {
 					recommendation={recommendation}
 					index={index}
 					totalCount={recommendations.length}
-					personInfo={personInfo}
 					ref={contentRefs.current[index]}
 					onPrevious={() => scrollToContent(index - 1)}
 					onNext={() => scrollToContent(index + 1)}
