@@ -1,7 +1,7 @@
 import React from 'react';
 import { calculateAge, formatYear } from 'utils/date';
 import { CalendarToday } from '@mui/icons-material';
-import { PersonInfo } from '../../ProfessionStyles';
+import { PersonInfo } from './ProfessionStyles';
 
 const LifespanDisplay = ({ BIRTH, DEATH }) => {
 	// 생년월일과 사망일 모두 없는 경우

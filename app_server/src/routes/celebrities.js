@@ -15,7 +15,7 @@ router.get(
 
 		const sql = SQL`
     SELECT 
-      cel.id, cel.name, pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link, cel.vid_link,
+      cel.id, cel.name, pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
     FROM 
       celebrities cel
@@ -43,7 +43,7 @@ router.get(
 		const { profession } = req.query;
 		let sql = SQL`
     SELECT 
-      cel.id, cel.name, cel.gender, cel.nationality, cel.birth_date, cel.date_of_death, cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
+      cel.id, cel.name, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
       inf.political,
       inf.strategic,
@@ -125,7 +125,7 @@ router.get(
         cel.biography,
         cel.img_link,
         cel.vid_link,
-        cel.date_of_death,
+        cel.death_date,
         pro.id as profession_id,
         pro.name as profession_kor,
         pro.eng_name as profession_eng
@@ -150,15 +150,15 @@ router.post(
 				gender,
 				nationality,
 				birth_date,
-				date_of_death,
+				death_date,
 				biography,
 				img_link,
 				vid_link,
 			} = req.body;
 
 			const sql = SQL`
-        INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, date_of_death, biography, img_link, vid_link)
-        VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${date_of_death}, ${biography}, ${img_link}, ${vid_link})
+        INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, death_date, biography, img_link, vid_link)
+        VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link})
       `;
 
 			const result = await db.executeQuery(sql);
@@ -182,7 +182,7 @@ router.put(
 			gender,
 			nationality,
 			birth_date,
-			date_of_death,
+			death_date,
 			biography,
 			img_link,
 		} = req.body;
@@ -194,7 +194,7 @@ router.put(
         gender = ${gender}, 
         nationality = ${nationality}, 
         birth_date = ${birth_date}, 
-        date_of_death = ${date_of_death}, 
+        death_date = ${death_date}, 
         biography = ${biography}, 
         img_link = ${img_link}
     WHERE id = ${req.params.id}

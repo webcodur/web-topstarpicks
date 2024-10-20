@@ -9,7 +9,7 @@ const getCelebColumns = (handleSaveRow, handleDeleteCelebrity) => [
 	{ field: 'gender', headerName: '성별', width: 90, editable: true },
 	{ field: 'nationality', headerName: '국적', width: 130, editable: true },
 	{ field: 'birth_date', headerName: '출생', width: 130, editable: true },
-	{ field: 'date_of_death', headerName: '사망', width: 130, editable: true },
+	{ field: 'death_date', headerName: '사망', width: 130, editable: true },
 	{ field: 'biography', headerName: '약력', width: 200, editable: true },
 	{
 		field: 'img_link',

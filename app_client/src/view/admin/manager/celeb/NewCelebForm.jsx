@@ -17,7 +17,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 		gender: '',
 		nationality: '',
 		birth_date: '',
-		date_of_death: '',
+		death_date: '',
 		biography: '',
 		img_link: '',
 		vid_link: '',
@@ -43,7 +43,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 				gender: '',
 				nationality: '',
 				birth_date: '',
-				date_of_death: '',
+				death_date: '',
 				biography: '',
 				img_link: '',
 				vid_link: '',
@@ -109,9 +109,9 @@ const NewCelebForm = ({ showSnackbar }) => {
 					<TextField
 						fullWidth
 						label="사망일"
-						name="date_of_death"
+						name="death_date"
 						type="text"
-						value={formData.date_of_death}
+						value={formData.death_date}
 						onChange={handleChange}
 						InputLabelProps={{ shrink: true }}
 					/>

@@ -81,8 +81,8 @@ const ContentPage = () => {
 				</ImageContainer>
 				<PersonName>{personInfo.name}</PersonName>
 				<PersonInfoText>출생: {personInfo.birth_date}</PersonInfoText>
-				{personInfo.date_of_death && (
-					<PersonInfoText>사망: {personInfo.date_of_death}</PersonInfoText>
+				{personInfo.death_date && (
+					<PersonInfoText>사망: {personInfo.death_date}</PersonInfoText>
 				)}
 				<PersonInfoText>성별: {personInfo.gender}</PersonInfoText>
 				<PersonInfoText>국적: {personInfo.nationality}</PersonInfoText>

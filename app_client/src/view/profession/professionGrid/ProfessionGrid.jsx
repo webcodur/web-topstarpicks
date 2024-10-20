@@ -26,7 +26,7 @@ const ProfessionGrid = ({
 	return (
 		<>
 			{groupedData.map((group, groupIndex) => (
-				<React.Fragment key={group.key ?? groupIndex}>
+				<React.Fragment key={`group-${group.key}-${groupIndex}`}>
 					{groupIndex > 0 && sortCriteria && <Divider sx={{ my: 2 }} />}
 					<br />
 					<br />
@@ -40,7 +40,7 @@ const ProfessionGrid = ({
 					<Box sx={{ display: 'flex', flexWrap: 'wrap', margin: -2 }}>
 						{group.persons.map((person) => (
 							<Box
-								key={person.id}
+								key={`person-${person.id}`}
 								sx={{
 									width: {
 										xs: '100%',

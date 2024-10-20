@@ -22,7 +22,7 @@ import {
 	BiographyText,
 	ReadMoreButton,
 	BiographyContainer,
-} from '../../ProfessionStyles';
+} from './ProfessionStyles';
 
 // 전기 텍스트의 최대 길이를 정의
 const MAX_BIOGRAPHY_LENGTH = 60;
@@ -92,10 +92,10 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						{person.nationality || NO_DATA}
 					</PersonInfo>
 
-					{/* 성별 | 직업 정보 */}
+					{/* 직업 정보 */}
 					<PersonInfo>
 						<Person fontSize="small" />
-						{person.gender || NO_DATA} {person.profession || NO_DATA}
+						{person.profession || NO_DATA}
 					</PersonInfo>
 
 					{/* 영향력 */}
@@ -116,7 +116,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					{/* 생년월일 - 사망일 */}
 					<LifespanDisplay
 						BIRTH={person.birth_date}
-						DEATH={person.date_of_death}
+						DEATH={person.death_date}
 					/>
 
 					{/* 전기 정보 */}

@@ -2,7 +2,8 @@
 import React from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
-import { StyledButton } from './ProfessionStyles';
+// import { StyledButton } from './ProfessionStyles';
+import { Card, CardContent, Button, Typography } from '@mui/material';
 
 const SortControls = ({
 	sortCriteria,
@@ -46,9 +47,18 @@ const SortControls = ({
 			</FormControl>
 
 			{/* 정렬 방향 선택*/}
-			<StyledButton onClick={handleSortOrderChange}>
+			<CardContent
+				onClick={handleSortOrderChange}
+				style={{
+					backgroundColor: 'lightgray',
+					border: '1px solid lightgray',
+					borderRadius: '10px',
+					padding: '5px',
+					paddingTop: '10px',
+					cursor: 'pointer',
+				}}>
 				{sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
-			</StyledButton>
+			</CardContent>
 		</Box>
 	);
 };
