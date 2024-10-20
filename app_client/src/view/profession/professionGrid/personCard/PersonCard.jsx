@@ -24,27 +24,27 @@ import {
 	BiographyContainer,
 } from '../../ProfessionStyles';
 
-// 전기 텍스트의 최대 길이를 정의합니다.
+// 전기 텍스트의 최대 길이를 정의
 const MAX_BIOGRAPHY_LENGTH = 60;
 const NO_DATA = '';
 
-// PersonCard 컴포넌트: 개인 정보를 카드 형태로 표시합니다.
+// PersonCard 컴포넌트: 개인 정보를 카드 형태로 표시
 const PersonCard = ({ person, contentName, onModalOpen }) => {
-	// 전기 모달의 열림/닫힘 상태를 관리합니다.
+	// 전기 모달의 열림/닫힘 상태
 	const [isBiographyModalOpen, setIsBiographyModalOpen] = useState(false);
-	// 전기 텍스트의 확장/축소 상태를 관리합니다.
+	// 전기 텍스트 확장/축소 상태
 	const [isExpanded, setIsExpanded] = useState(false);
 
-	// 추천 컨텐츠 이름을 배열로 변환합니다.
+	// 추천 컨텐츠 이름을 배열로 변환
 	const contentNames = person.recommended_content_names
 		? person.recommended_content_names.split(',')
 		: [];
 
-	// 컨텐츠 링크를 생성하는 함수입니다.
+	// 컨텐츠 링크를 생성하는 함수
 	const getContentLink = (personName, content) =>
 		`/${person.profession}/${formatNameForUrl(personName)}/${content}`;
 
-	// '더 보기' 버튼 클릭 핸들러입니다.
+	// '더 보기' 버튼 클릭 핸들러
 	const handleReadMoreClick = () => {
 		if (person.biography && person.biography.length > MAX_BIOGRAPHY_LENGTH) {
 			setIsBiographyModalOpen(true);
@@ -53,17 +53,18 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 		}
 	};
 
-	// 전기 모달을 닫는 핸들러입니다.
+	// 전기 모달을 닫는 핸들러
 	const handleCloseModal = () => {
 		setIsBiographyModalOpen(false);
 	};
 
-	// 전기 텍스트를 최대 길이로 자릅니다.
+	// 전기 텍스트를 최대 길이로 절단
 	const truncatedBiography =
 		person.biography && person.biography.length > MAX_BIOGRAPHY_LENGTH
 			? `${person.biography.slice(0, MAX_BIOGRAPHY_LENGTH)}...`
 			: person.biography;
 
+	// 개인 인물 카드
 	return (
 		<StyledCard>
 			<StyledCardContent>
@@ -81,6 +82,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					)}
 				/>
 
+				{/* 이름 */}
 				<PersonName>{person.name || NO_DATA}</PersonName>
 
 				<Introduction>
@@ -90,13 +92,13 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						{person.nationality || NO_DATA}
 					</PersonInfo>
 
-					{/* 성별과 직업 정보 */}
+					{/* 성별 | 직업 정보 */}
 					<PersonInfo>
 						<Person fontSize="small" />
 						{person.gender || NO_DATA} {person.profession || NO_DATA}
 					</PersonInfo>
 
-					{/* 영향력 점수*/}
+					{/* 영향력 */}
 					<PersonInfo>
 						<Score fontSize="small" />
 						영향력: {person.total_score || NO_DATA}
@@ -111,13 +113,13 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						/>
 					</PersonInfo>
 
-					{/* LifespanDisplay 컴포넌트: 생년월일과 사망일을 표시합니다. */}
+					{/* 생년월일 - 사망일 */}
 					<LifespanDisplay
 						BIRTH={person.birth_date}
 						DEATH={person.date_of_death}
 					/>
 
-					{/* 전기 정보*/}
+					{/* 전기 정보 */}
 					<PersonInfo component="div">
 						<Description fontSize="small" />
 						<BiographyContainer>
@@ -136,7 +138,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					</PersonInfo>
 				</Introduction>
 
-				{/* 컨텐츠 버튼을 표시합니다. */}
+				{/* 컨텐츠 버튼 */}
 				<ButtonContainer style={{ marginTop: '16px' }}>
 					{contentNames
 						.filter(

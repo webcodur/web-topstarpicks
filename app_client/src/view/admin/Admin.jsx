@@ -16,6 +16,7 @@ const NewRecsForm = lazy(() => import('./manager/recs/NewRecsForm'));
 const Influence = lazy(() => import('./manager/Influence'));
 const OpenaiApiCheck = lazy(() => import('./manager/OpenaiApiCheck'));
 const Crawling = lazy(() => import('./Crawling'));
+const AnimationTest = lazy(() => import('components/ui/AnimationTest'));
 
 const AccordionSection = React.memo(
 	({ expanded, onChange, title, children }) => (
@@ -103,6 +104,15 @@ const Admin = () => {
 				title="OpenAI API 확인">
 				{expanded === 'openaiApiCheck' && (
 					<OpenaiApiCheck showSnackbar={showSnackbar} />
+				)}
+			</AccordionSection>
+
+			<AccordionSection
+				expanded={expanded === 'animater'}
+				onChange={handleChange('animater')}
+				title="animater 확인">
+				{expanded === 'animater' && (
+					<AnimationTest showSnackbar={showSnackbar} />
 				)}
 			</AccordionSection>
 
