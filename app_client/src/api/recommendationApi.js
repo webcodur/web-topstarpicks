@@ -8,11 +8,6 @@ export const fetchRecommendations = createApiCall(
 	'추천 정보를 가져오는데 실패했습니다:'
 );
 
-export const fetchContentNumbers = createApiCall(
-	() => axiosInstance.get('/recommendations/number'),
-	'컨텐츠 타입별 개수정보를 가져오는데 실패했습니다:'
-);
-
 // Admin 관련 API 호출 추가
 export const fetchAllRecommendations = createApiCall(
 	() => axiosInstance.get('/recommendations/all'),

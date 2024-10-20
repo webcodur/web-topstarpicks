@@ -36,30 +36,6 @@ router.get(
 	})
 );
 
-// 컨텐츠 타입별 개수 조회
-router.get(
-	'/number',
-	db.asyncHandler(async (req, res) => {
-		const sql = SQL`
-    SELECT con.name, COUNT(*) as count
-    FROM recommendations as rec
-    INNER JOIN content as con
-    ON con.id = rec.content_id
-    GROUP BY con.name
-
-    UNION ALL
-
-    SELECT '전체' as type, COUNT(*) as count
-    FROM recommendations as rec
-    INNER JOIN content as con
-    ON con.id = rec.content_id;
-  `;
-
-		const rows = await db.executeQuery(sql);
-		res.json({ message: 'success', data: rows });
-	})
-);
-
 // GET: 모든 추천 정보 조회 (관리자용)
 router.get(
 	'/all',

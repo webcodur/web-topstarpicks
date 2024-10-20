@@ -117,15 +117,16 @@ export const NavigationButton = styled(IconButton)`
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
-	${(props) => (props.direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
-	background-color: ${(props) => props.theme.palette.primary.main};
+	${(props) => (props.direction === 'left' ? 'left: 5px;' : 'right: 5px;')}
+	background-color: lightgray;
 	color: ${(props) => props.theme.palette.primary.contrastText};
 	opacity: 0.7;
 	transition: opacity 0.3s ease, background-color 0.3s ease;
+	padding: 2px;
 
 	&:hover {
 		opacity: 1;
-		background-color: ${(props) => props.theme.palette.primary.dark};
+		background-color: lightslategray;
 	}
 
 	&:disabled {

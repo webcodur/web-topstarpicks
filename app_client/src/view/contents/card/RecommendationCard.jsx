@@ -108,13 +108,12 @@ const RecommendationCard = forwardRef(
 									style={{ transitionDelay: '600ms' }}>
 									<QuoteContainer>
 										<div style={{ textAlign: 'center', margin: '10px' }}>
-											<b>추천사 / 콘텐츠 수용 경로</b>
+											<b>추천사 / 콘텐츠 수용 경로</b>{' '}
+											<SourceLink to={recommendation.recommendation_source}>
+												(소스)
+											</SourceLink>
 										</div>
 										<QuoteText>{formatText(recommendation.reason)}</QuoteText>
-										<SourceLink to={recommendation.recommendation_source}>
-											{' '}
-											(소스)
-										</SourceLink>
 									</QuoteContainer>
 								</Fade>
 							)}

@@ -5,7 +5,6 @@ import {
 	fetchAllRecommendations,
 	updateRecommendation,
 	deleteRecommendation,
-	fetchContentNumbers,
 } from 'api/recommendationApi';
 import getRecsColumns from './recsColumns';
 
@@ -27,7 +26,6 @@ const contentIdMap = Object.keys(categoriesMap).reduce((acc, key, index) => {
 const Recs = ({ showSnackbar }) => {
 	const [rows, setRows] = useState([]);
 	const [celebrities, setCelebrities] = useState([]);
-	const [contentNames, setcontentNames] = useState([]);
 
 	const fetchRecommendations = useCallback(async () => {
 		try {
@@ -55,22 +53,10 @@ const Recs = ({ showSnackbar }) => {
 		}
 	}, [showSnackbar]);
 
-	const fetchcontentNames = useCallback(async () => {
-		try {
-			const types = await fetchContentNumbers();
-			console.log('types', types);
-			setcontentNames(types.filter((item) => item.type !== '전체'));
-		} catch (error) {
-			console.error('Error fetching content types:', error);
-			showSnackbar('컨텐츠 타입 정보를 불러오는 데 실패했습니다.');
-		}
-	}, [showSnackbar]);
-
 	useEffect(() => {
 		fetchRecommendations();
 		fetchCelebrities();
-		fetchcontentNames();
-	}, [fetchRecommendations, fetchCelebrities, fetchcontentNames]);
+	}, [fetchRecommendations, fetchCelebrities]);
 
 	const handleDeleteRecommendation = useCallback(
 		async (id) => {
