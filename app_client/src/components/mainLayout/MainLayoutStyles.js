@@ -30,6 +30,7 @@ export const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledDrawer = styled(Box)(({ theme, open }) => ({
+	zIndex: 2,
 	flexShrink: 0,
 	whiteSpace: 'nowrap',
 	boxSizing: 'border-box',
@@ -49,5 +50,5 @@ export const StyledDrawer = styled(Box)(({ theme, open }) => ({
 		height: '100%',
 		transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
 	},
-	zIndex: 1,
+	// zIndex: 1,
 }));
