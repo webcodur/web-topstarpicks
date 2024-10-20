@@ -69,15 +69,15 @@ export const RankBorder = styled.div`
 
 export const RankScore = styled.div`
 	position: absolute;
-	top: 10px;
-	left: 10px;
+	top: 5px;
+	left: 5px;
 	background-color: rgba(0, 0, 0, 0.7);
 	color: white;
-	padding: 5px 10px;
+	padding: 4px 7px;
 	border-radius: 5px;
 	z-index: 1;
 	font-family: 'Permanent Marker', cursive;
-	font-size: 34px;
+	font-size: 20px;
 	transform: rotate(-5deg);
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 `;
