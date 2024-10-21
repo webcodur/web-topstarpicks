@@ -4,6 +4,7 @@ import { CircularProgress } from '@mui/material';
 import { parseNameFromUrl } from 'utils/urlUtils';
 import { fetchPersonInfo } from 'api/celebrityApi';
 import { fetchRecommendations } from 'api/recommendationApi';
+import { getCountryName } from 'utils/countryUtils';
 import TableOfContents from './tableOfContents/TableOfContents';
 import FloatingMenu from './floatingMenu/FloatingMenu';
 import RecommendationCard from './card/RecommendationCard';
@@ -28,8 +29,6 @@ const ContentPage = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const contentRefs = useRef([]);
 
-	const countryNames = new Intl.DisplayNames(['ko'], { type: 'region' });
-
 	useEffect(() => {
 		const fetchData = async () => {
 			const celebName = parseNameFromUrl(personName);
@@ -38,7 +37,7 @@ const ContentPage = () => {
 				const personData = await fetchPersonInfo(celebName);
 				const processPersonData = (data) => ({
 					...data,
-					nationality: countryNames.of(data.nationality),
+					nationality: getCountryName(data.nationality),
 				});
 
 				const processedPersonData = Array.isArray(personData)
@@ -67,7 +66,7 @@ const ContentPage = () => {
 		};
 
 		fetchData();
-	}, [personName, contentName, countryNames]);
+	}, [personName, contentName]);
 
 	const scrollToContent = useCallback((index) => {
 		if (contentRefs.current[index] && contentRefs.current[index].current) {

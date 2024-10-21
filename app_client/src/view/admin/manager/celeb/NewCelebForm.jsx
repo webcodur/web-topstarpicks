@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid } from '@mui/material';
+import {
+	TextField,
+	Button,
+	Grid,
+	Autocomplete,
+	Typography,
+} from '@mui/material';
 import { createCelebrity } from 'api/celebrityApi';
 import { useProfession } from 'hooks/useProfession';
+import { useCountries } from 'hooks/useCountries';
 
 const NewCelebForm = ({ showSnackbar }) => {
 	const professionNames = useProfession();
+	const countries = useCountries();
 
 	const getProfession = (job) => {
 		const found = professionNames.find((ele) => ele.name === job);
-		return found.id;
+		return found ? found.id : null;
 	};
 
 	const [formData, setFormData] = useState({
 		name: '',
+		prename: '',
+		postname: '',
 		profession_kor: '',
 		gender: '',
 		nationality: '',
@@ -23,8 +33,14 @@ const NewCelebForm = ({ showSnackbar }) => {
 		vid_link: '',
 	});
 
+	const [open, setOpen] = useState(false);
+
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const handleCountryChange = (event, value) => {
+		setFormData({ ...formData, nationality: value ? value.code : '' });
 	};
 
 	const handleSubmit = async (e) => {
@@ -39,6 +55,8 @@ const NewCelebForm = ({ showSnackbar }) => {
 			showSnackbar('새 유명인사가 추가되었습니다.');
 			setFormData({
 				name: '',
+				prename: '',
+				postname: '',
 				profession_kor: '',
 				gender: '',
 				nationality: '',
@@ -55,8 +73,19 @@ const NewCelebForm = ({ showSnackbar }) => {
 
 	return (
 		<form onSubmit={handleSubmit}>
+			<br />
 			<Grid container spacing={2}>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={4} sm={4}>
+					<TextField
+						fullWidth
+						label="prename"
+						name="prename"
+						value={formData.prename}
+						onChange={handleChange}
+					/>
+				</Grid>
+
+				<Grid item xs={4} sm={4}>
 					<TextField
 						fullWidth
 						label="이름"
@@ -66,7 +95,18 @@ const NewCelebForm = ({ showSnackbar }) => {
 						required
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+
+				<Grid item xs={4} sm={4}>
+					<TextField
+						fullWidth
+						label="postname"
+						name="postname"
+						value={formData.postname}
+						onChange={handleChange}
+					/>
+				</Grid>
+
+				<Grid item xs={4} sm={4}>
 					<TextField
 						fullWidth
 						label="직군"
@@ -76,7 +116,8 @@ const NewCelebForm = ({ showSnackbar }) => {
 						required
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+
+				<Grid item xs={4} sm={4}>
 					<TextField
 						fullWidth
 						label="성별"
@@ -85,16 +126,48 @@ const NewCelebForm = ({ showSnackbar }) => {
 						onChange={handleChange}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TextField
-						fullWidth
-						label="국적"
-						name="nationality"
-						value={formData.nationality}
-						onChange={handleChange}
+
+				<Grid item xs={4} sm={4}>
+					<Autocomplete
+						options={countries}
+						getOptionLabel={(option) => `${option.name} (${option.code})`}
+						renderInput={(params) => (
+							<TextField
+								{...params}
+								label="국적"
+								helperText="국가명이나 국가 코드를 입력하세요"
+							/>
+						)}
+						onChange={handleCountryChange}
+						value={
+							countries.find(
+								(country) => country.code === formData.nationality
+							) || null
+						}
+						isOptionEqualToValue={(option, value) => option.code === value.code}
+						filterOptions={(options, { inputValue }) => {
+							const filterValue = inputValue.toLowerCase();
+							return options.filter(
+								(option) =>
+									option.name.toLowerCase().includes(filterValue) ||
+									option.code.toLowerCase().includes(filterValue)
+							);
+						}}
+						onOpen={() => setOpen(true)}
+						onClose={() => setOpen(false)}
+						open={open}
+						renderOption={(props, option) => (
+							<li {...props}>
+								<Typography variant="body1">{option.name}</Typography>
+								<Typography variant="caption" color="textSecondary">
+									&nbsp;({option.code})
+								</Typography>
+							</li>
+						)}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+
+				<Grid item xs={6} sm={6}>
 					<TextField
 						fullWidth
 						label="출생일"
@@ -105,7 +178,8 @@ const NewCelebForm = ({ showSnackbar }) => {
 						InputLabelProps={{ shrink: true }}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+
+				<Grid item xs={6} sm={6}>
 					<TextField
 						fullWidth
 						label="사망일"
@@ -116,6 +190,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						InputLabelProps={{ shrink: true }}
 					/>
 				</Grid>
+
 				<Grid item xs={12}>
 					<TextField
 						fullWidth
@@ -127,6 +202,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						rows={4}
 					/>
 				</Grid>
+
 				<Grid item xs={12}>
 					<TextField
 						fullWidth
@@ -136,6 +212,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						onChange={handleChange}
 					/>
 				</Grid>
+
 				<Grid item xs={12}>
 					<TextField
 						fullWidth
@@ -145,6 +222,7 @@ const NewCelebForm = ({ showSnackbar }) => {
 						onChange={handleChange}
 					/>
 				</Grid>
+
 				<Grid item xs={12}>
 					<Button type="submit" variant="contained" color="primary">
 						유명인사 추가
