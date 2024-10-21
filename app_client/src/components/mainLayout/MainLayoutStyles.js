@@ -30,11 +30,16 @@ export const MainContent = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledDrawer = styled(Box)(({ theme, open }) => ({
-	zIndex: 2,
+	position: 'fixed', // 변경: 'absolute'에서 'fixed'로
+	top: 64, // AppBar의 높이. 실제 AppBar 높이에 맞게 조정하세요.
+	left: 0,
+	bottom: 0,
+	zIndex: theme.zIndex.drawer,
 	flexShrink: 0,
 	whiteSpace: 'nowrap',
 	boxSizing: 'border-box',
 	overflowX: 'hidden',
+	overflowY: 'auto', // 내용이 많을 경우 스크롤 가능하도록
 	transition: theme.transitions.create('width', {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.enteringScreen,
@@ -46,9 +51,6 @@ export const StyledDrawer = styled(Box)(({ theme, open }) => ({
 			: theme.palette.grey[900],
 	borderRight: `1px solid ${theme.palette.divider}`,
 	[theme.breakpoints.down('md')]: {
-		position: 'absolute',
-		height: '100%',
 		transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
 	},
-	// zIndex: 1,
 }));
