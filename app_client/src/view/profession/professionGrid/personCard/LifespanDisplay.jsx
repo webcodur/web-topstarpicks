@@ -9,7 +9,7 @@ const LifespanDisplay = ({ BIRTH, DEATH }) => {
 		return (
 			<PersonInfo>
 				<CalendarToday fontSize="small" />
-				생애: ??? ~ ???
+				??? ~ ???
 			</PersonInfo>
 		);
 	}
@@ -20,7 +20,7 @@ const LifespanDisplay = ({ BIRTH, DEATH }) => {
 		return (
 			<PersonInfo>
 				<CalendarToday fontSize="small" />
-				나이: {age !== null ? `${age}세` : '알 수 없음'}
+				{age !== null ? `${age}세` : '알 수 없음'}
 			</PersonInfo>
 		);
 	}
@@ -32,7 +32,7 @@ const LifespanDisplay = ({ BIRTH, DEATH }) => {
 	return (
 		<PersonInfo>
 			<CalendarToday fontSize="small" />
-			생애: {birthYear} - {deathYear}
+			{birthYear} - {deathYear}
 		</PersonInfo>
 	);
 };

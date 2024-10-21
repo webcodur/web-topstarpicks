@@ -3,7 +3,7 @@ import { Typography } from '@mui/material';
 
 export const StencilTypography = styled(Typography)`
 	text-align: center;
-	font-family: fantasy;
+	font-family: 'Black Han Sans', sans-serif;
 	font-weight: bold;
 	color: black;
 	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,

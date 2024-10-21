@@ -56,10 +56,13 @@ const RecommendationCard = forwardRef(
 										? theme.palette.grey[800]
 										: theme.palette.grey[100],
 								padding: theme.spacing(3),
+								fontColor: 'black',
+								fontWeight: '600',
+								fontFamily: 'Noto Serif KR',
 							}}>
 							<NavigationContainer>
 								<StyledTitle>
-									NO {index + 1}: &nbsp; {recommendation.title}
+									NO {index + 1}: &nbsp;{recommendation.title}
 								</StyledTitle>
 							</NavigationContainer>
 
@@ -68,7 +71,7 @@ const RecommendationCard = forwardRef(
 								timeout={500}
 								style={{ transitionDelay: '200ms' }}>
 								<div>
-									<p style={{ fontSize: '17px' }}>
+									<p style={{ fontSize: '17px', fontFamily: 'Noto Serif KR' }}>
 										{recommendation.creator || '작가 미상'}
 										{' ('}
 										{recommendation.release_date
@@ -81,6 +84,12 @@ const RecommendationCard = forwardRef(
 									<br />
 								</div>
 							</Fade>
+
+							{/* // font-family: 'Grandiflora One', cursive;
+								// font-family: 'Noto Serif KR', serif;
+								// font-family: 'Gowun Batang', serif;
+								// font-family: 'Black Han Sans', sans-serif;
+								// font-family: 'Song Myung', serif; */}
 
 							{recommendation.img_link.length > 0 && (
 								<Fade

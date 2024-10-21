@@ -15,7 +15,8 @@ router.get(
 
 		const sql = SQL`
     SELECT 
-      cel.id, cel.name, pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link,
+      cel.id, cel.name, cel.postname, cel.prename,
+      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
     FROM 
       celebrities cel
@@ -43,8 +44,11 @@ router.get(
 		const { profession } = req.query;
 		let sql = SQL`
     SELECT 
-      cel.id, cel.name, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
+      cel.id, cel.name, cel.prename, cel.postname,
+      cel.gender, cel.nationality, cel.birth_date, cel.death_date, 
+      cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
+
       inf.political,
       inf.strategic,
       inf.tech,
@@ -119,6 +123,8 @@ router.get(
       SELECT 
         cel.id, 
         cel.name as name, 
+        cel.prename, 
+        cel.postname, 
         cel.gender,
         cel.nationality,
         cel.birth_date,
@@ -146,6 +152,8 @@ router.post(
 		try {
 			const {
 				name,
+				prename,
+				postname,
 				profession_id,
 				gender,
 				nationality,
@@ -157,8 +165,8 @@ router.post(
 			} = req.body;
 
 			const sql = SQL`
-        INSERT INTO celebrities (name, profession_id, gender, nationality, birth_date, death_date, biography, img_link, vid_link)
-        VALUES (${name}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link})
+        INSERT INTO celebrities (name, prename, postname, profession_id, gender, nationality, birth_date, death_date, biography, img_link, vid_link)
+        VALUES (${name}, ${prename}, ${postname}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link})
       `;
 
 			const result = await db.executeQuery(sql);
@@ -178,6 +186,8 @@ router.put(
 	db.asyncHandler(async (req, res) => {
 		const {
 			name,
+			prename,
+			postname,
 			profession_id,
 			gender,
 			nationality,
@@ -190,6 +200,8 @@ router.put(
 		const sql = SQL`
     UPDATE celebrities 
     SET name = ${name}, 
+        prename = ${prename}, 
+        postname = ${postname}, 
         profession_id = ${profession_id}, 
         gender = ${gender}, 
         nationality = ${nationality}, 

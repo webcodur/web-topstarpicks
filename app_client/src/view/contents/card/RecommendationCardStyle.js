@@ -107,7 +107,6 @@ export const StyledCardContent = styled(CardContent)`
 `;
 
 export const StyledTitle = styled.h2`
-	margin-bottom: 24px;
 	text-align: center;
 	font-family: 'Song Myung', serif;
 	animation: ${fadeIn} 0.5s ease-in-out;

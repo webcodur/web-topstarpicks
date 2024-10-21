@@ -7,13 +7,14 @@ export const StyledCard = styled(Card)`
 	display: flex;
 	flex-direction: column;
 	background-color: ${(props) => props.theme.palette.background.paper};
-	transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+	transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 	border-radius: 16px;
 	overflow: hidden;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 	&:hover {
-		transform: translateY(-5px);
-		box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+		transform: translateY(-2px);
+		/* box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); */
+		box-shadow: 0 6px 25px gray;
 	}
 `;
 
@@ -37,13 +38,20 @@ export const ButtonContainer = styled.div`
 	margin-top: 16px;
 `;
 
+export const PersonPreName = styled(Typography)`
+	text-align: center;
+	font-size: 1.2rem;
+	margin-top: 16px;
+	font-family: 'Noto Serif KR', serif;
+	color: ${(props) => props.theme.palette.text.primary};
+`;
+
 export const PersonName = styled(Typography)`
 	text-align: center;
 	font-size: 1.3rem;
-	font-weight: 600;
-	margin-top: 16px;
+	font-weight: 800;
 	margin-bottom: 8px;
-	font-family: 'Song Myung', Times, serif;
+	font-family: 'Gowun Batang', serif;
 	color: ${(props) => props.theme.palette.text.primary};
 `;
 
@@ -60,7 +68,6 @@ export const StyledButton = styled(Button)`
 `;
 
 export const PersonInfo = styled(Typography)`
-	font-size: 0.9rem;
 	margin-bottom: 4px;
 	display: flex;
 	svg {

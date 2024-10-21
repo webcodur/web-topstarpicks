@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-	Public,
-	Person,
-	Score,
-	Hexagon,
-	Description,
-} from '@mui/icons-material';
+import { Score, Hexagon, Description } from '@mui/icons-material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import CelebImage from './celebImage/CelebImage';
 import LifespanDisplay from './LifespanDisplay';
@@ -17,6 +11,7 @@ import {
 	Introduction,
 	ButtonContainer,
 	StyledButton,
+	PersonPreName,
 	PersonName,
 	PersonInfo,
 	BiographyText,
@@ -83,25 +78,20 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				/>
 
 				{/* 이름 */}
-				<PersonName>{person.name || NO_DATA}</PersonName>
+				<PersonPreName>
+					{person.prename}
+					{person.prename && <br />}
+				</PersonPreName>
+
+				<PersonName>
+					{person.name} {person.postname}
+				</PersonName>
 
 				<Introduction>
-					{/* 국적 */}
-					<PersonInfo>
-						<Public fontSize="small" />
-						{person.nationality || NO_DATA}
-					</PersonInfo>
-
-					{/* 직업 정보 */}
-					<PersonInfo>
-						<Person fontSize="small" />
-						{person.profession || NO_DATA}
-					</PersonInfo>
-
 					{/* 영향력 */}
 					<PersonInfo>
 						<Score fontSize="small" />
-						영향력: {person.total_score || NO_DATA}
+						{person.total_score || NO_DATA}점
 						<Hexagon
 							fontSize="small"
 							sx={{
@@ -124,7 +114,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						<Description fontSize="small" />
 						<BiographyContainer>
 							<BiographyText component="span">
-								{isExpanded ? person.biography : truncatedBiography || NO_DATA}
+								{isExpanded ? person.biography : truncatedBiography}
 								{person.biography &&
 									person.biography.length > MAX_BIOGRAPHY_LENGTH && (
 										<ReadMoreButton
