@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { parseNameFromUrl } from 'utils/urlUtils';
@@ -28,7 +28,6 @@ const ContentPage = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const contentRefs = useRef([]);
 
-	// Intl.DisplayNames 인스턴스 생성
 	const countryNames = new Intl.DisplayNames(['ko'], { type: 'region' });
 
 	useEffect(() => {
@@ -70,9 +69,14 @@ const ContentPage = () => {
 		fetchData();
 	}, [personName, contentName, countryNames]);
 
-	const scrollToContent = (index) => {
-		contentRefs.current[index].current.scrollIntoView({ behavior: 'smooth' });
-	};
+	const scrollToContent = useCallback((index) => {
+		if (contentRefs.current[index] && contentRefs.current[index].current) {
+			contentRefs.current[index].current.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start',
+			});
+		}
+	}, []);
 
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen);
@@ -90,7 +94,6 @@ const ContentPage = () => {
 				contentName={contentName}
 			/>
 
-			{/* 셀럽 정보 */}
 			<PersonInfoContainer>
 				<ImageContainer>
 					<StyledImage src={personInfo.img_link} alt={personInfo.name} />
@@ -107,13 +110,11 @@ const ContentPage = () => {
 				<PersonInfoText>{personInfo.biography}</PersonInfoText>
 			</PersonInfoContainer>
 
-			{/* 상단 목차 */}
 			<TableOfContents
 				recommendations={recommendations}
 				onItemClick={scrollToContent}
 			/>
 
-			{/* 추천 컨텐츠 항목 */}
 			{recommendations.map((recommendation, index) => (
 				<RecommendationCard
 					key={index}
@@ -121,12 +122,13 @@ const ContentPage = () => {
 					index={index}
 					totalCount={recommendations.length}
 					ref={contentRefs.current[index]}
-					onPrevious={() => scrollToContent(index - 1)}
-					onNext={() => scrollToContent(index + 1)}
+					onPrevious={() => scrollToContent(Math.max(0, index - 1))}
+					onNext={() =>
+						scrollToContent(Math.min(recommendations.length - 1, index + 1))
+					}
 				/>
 			))}
 
-			{/* 우측 사이드 메뉴 목차 */}
 			<FloatingMenu
 				isOpen={isMenuOpen}
 				onToggle={toggleMenu}

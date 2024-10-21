@@ -11,11 +11,11 @@ import AdminLoginModal from './AdminLoginModal';
 import { useNavigate, Link } from 'react-router-dom';
 
 const StyledAppBar = styled(MuiAppBar)(({ theme }) => ({
-	background: `linear-gradient(to bottom, #1A2A4A, #2C3E60)`, 
+	background: `linear-gradient(to bottom, #1A2A4A, #2C3E60)`,
 
-	position: 'sticky', 
-	top: 0, 
-	zIndex: theme.zIndex.appBar, 
+	position: 'sticky',
+	top: 0,
+	zIndex: theme.zIndex.appBar,
 	overflow: 'hidden',
 	'&::before, &::after': {
 		content: '""',

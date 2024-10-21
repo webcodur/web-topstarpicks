@@ -1,7 +1,6 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Paper, Fade } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Paper, Fade, Snackbar } from '@mui/material';
 import {
 	StyledCardContent,
 	StyledTitle,
@@ -12,9 +11,8 @@ import {
 	AffiliateLink,
 	SourceLink,
 	MediaDescContainer,
-	NavigationContainer,
 	CardWrapper,
-	NavigationButton,
+	NavigationArea,
 } from './RecommendationCardStyle';
 
 const RecommendationCard = forwardRef(
@@ -23,6 +21,22 @@ const RecommendationCard = forwardRef(
 		ref
 	) => {
 		const theme = useTheme();
+		const [snackbarOpen, setSnackbarOpen] = useState(false);
+		const [snackbarMessage, setSnackbarMessage] = useState('');
+
+		const handleNavigation = (direction) => {
+			if (direction === 'left' && index === 0) {
+				setSnackbarMessage('첫 번째 항목입니다.');
+				setSnackbarOpen(true);
+			} else if (direction === 'right' && index === totalCount - 1) {
+				setSnackbarMessage('마지막 항목입니다.');
+				setSnackbarOpen(true);
+			} else if (direction === 'left') {
+				onPrevious();
+			} else {
+				onNext();
+			}
+		};
 
 		const formatText = (text) => {
 			return text.split('\n').map((line, i) => (
@@ -36,17 +50,20 @@ const RecommendationCard = forwardRef(
 		return (
 			<Fade in={true} timeout={500}>
 				<CardWrapper ref={ref}>
+					<NavigationArea
+						direction="left"
+						onClick={() => handleNavigation('left')}
+						disabled={index === 0}
+					/>
 					<Paper
 						elevation={3}
 						sx={{
 							backgroundColor: theme.palette.background.paper,
-							borderRadius: theme.shape.borderRadius,
+							borderRadius: 0,
 							overflow: 'hidden',
-							transition:
-								'box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out',
+							transition: 'box-shadow 0.3s ease-in-out',
 							'&:hover': {
 								boxShadow: theme.shadows[6],
-								transform: 'translateY(-5px)',
 							},
 						}}>
 						<StyledCardContent
@@ -60,11 +77,9 @@ const RecommendationCard = forwardRef(
 								fontWeight: '600',
 								fontFamily: 'Noto Serif KR',
 							}}>
-							<NavigationContainer>
-								<StyledTitle>
-									NO {index + 1}: &nbsp;{recommendation.title}
-								</StyledTitle>
-							</NavigationContainer>
+							<StyledTitle>
+								NO {index + 1}: &nbsp;{recommendation.title}
+							</StyledTitle>
 
 							<Fade
 								in={true}
@@ -85,32 +100,22 @@ const RecommendationCard = forwardRef(
 								</div>
 							</Fade>
 
-							{/* // font-family: 'Grandiflora One', cursive;
-								// font-family: 'Noto Serif KR', serif;
-								// font-family: 'Gowun Batang', serif;
-								// font-family: 'Black Han Sans', sans-serif;
-								// font-family: 'Song Myung', serif; */}
+							{recommendation.img_link &&
+								recommendation.img_link.length > 0 && (
+									<Fade
+										in={true}
+										timeout={500}
+										style={{ transitionDelay: '400ms' }}>
+										<ImageContainer>
+											<StyledBookImage
+												src={recommendation.img_link}
+												alt={recommendation.title}
+											/>
+										</ImageContainer>
+									</Fade>
+								)}
 
-							{recommendation.img_link.length > 0 && (
-								<Fade
-									in={true}
-									timeout={500}
-									style={{ transitionDelay: '400ms' }}>
-									<ImageContainer>
-										<StyledBookImage
-											src={
-												recommendation.img_link ||
-												`https://via.placeholder.com/150?text=${encodeURIComponent(
-													recommendation.title
-												)}`
-											}
-											alt={recommendation.title}
-										/>
-									</ImageContainer>
-								</Fade>
-							)}
-
-							{recommendation.reason.length > 1 && (
+							{recommendation.reason && recommendation.reason.length > 1 && (
 								<Fade
 									in={true}
 									timeout={500}
@@ -127,19 +132,20 @@ const RecommendationCard = forwardRef(
 								</Fade>
 							)}
 
-							{recommendation.mediaDescription.length > 0 && (
-								<Fade
-									in={true}
-									timeout={500}
-									style={{ transitionDelay: '800ms' }}>
-									<MediaDescContainer>
-										<div style={{ textAlign: 'center', margin: '10px' }}>
-											<b>내용</b>
-										</div>
-										{formatText(recommendation.mediaDescription)}
-									</MediaDescContainer>
-								</Fade>
-							)}
+							{recommendation.mediaDescription &&
+								recommendation.mediaDescription.length > 0 && (
+									<Fade
+										in={true}
+										timeout={500}
+										style={{ transitionDelay: '800ms' }}>
+										<MediaDescContainer>
+											<div style={{ textAlign: 'center', margin: '10px' }}>
+												<b>내용</b>
+											</div>
+											{formatText(recommendation.mediaDescription)}
+										</MediaDescContainer>
+									</Fade>
+								)}
 
 							{recommendation.affiliate_link && (
 								<Fade
@@ -156,18 +162,21 @@ const RecommendationCard = forwardRef(
 							)}
 						</StyledCardContent>
 					</Paper>
-					<NavigationButton
-						direction="left"
-						onClick={onPrevious}
-						disabled={index === 0}>
-						<ChevronLeft />
-					</NavigationButton>
-					<NavigationButton
+					<NavigationArea
 						direction="right"
-						onClick={onNext}
-						disabled={index === totalCount - 1}>
-						<ChevronRight />
-					</NavigationButton>
+						onClick={() => handleNavigation('right')}
+						disabled={index === totalCount - 1}
+					/>
+					<Snackbar
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'center',
+						}}
+						open={snackbarOpen}
+						autoHideDuration={3000}
+						onClose={() => setSnackbarOpen(false)}
+						message={snackbarMessage}
+					/>
 				</CardWrapper>
 			</Fade>
 		);
