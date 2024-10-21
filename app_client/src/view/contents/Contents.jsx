@@ -28,13 +28,29 @@ const ContentPage = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const contentRefs = useRef([]);
 
+	// Intl.DisplayNames 인스턴스 생성
+	const countryNames = new Intl.DisplayNames(['ko'], { type: 'region' });
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const celebName = parseNameFromUrl(personName);
 
 			try {
 				const personData = await fetchPersonInfo(celebName);
-				setPersonInfo(Array.isArray(personData) ? personData[0] : personData);
+				const processPersonData = (data) => ({
+					...data,
+					nationality: countryNames.of(data.nationality),
+				});
+
+				const processedPersonData = Array.isArray(personData)
+					? personData.map(processPersonData)
+					: processPersonData(personData);
+
+				setPersonInfo(
+					Array.isArray(processedPersonData)
+						? processedPersonData[0]
+						: processedPersonData
+				);
 
 				const recommendationsData = await fetchRecommendations(
 					celebName,
@@ -52,7 +68,7 @@ const ContentPage = () => {
 		};
 
 		fetchData();
-	}, [personName, contentName]);
+	}, [personName, contentName, countryNames]);
 
 	const scrollToContent = (index) => {
 		contentRefs.current[index].current.scrollIntoView({ behavior: 'smooth' });
@@ -80,14 +96,15 @@ const ContentPage = () => {
 					<StyledImage src={personInfo.img_link} alt={personInfo.name} />
 				</ImageContainer>
 				<PersonName>{personInfo.name}</PersonName>
-				<PersonInfoText>출생: {personInfo.birth_date}</PersonInfoText>
-				{personInfo.death_date && (
-					<PersonInfoText>사망: {personInfo.death_date}</PersonInfoText>
-				)}
-				<PersonInfoText>성별: {personInfo.gender}</PersonInfoText>
-				<PersonInfoText>국적: {personInfo.nationality}</PersonInfoText>
-				<PersonInfoText>직군: {personInfo.profession}</PersonInfoText>
-				<PersonInfoText>약력: {personInfo.biography}</PersonInfoText>
+
+				<PersonInfoText>
+					({personInfo.birth_date || '???'}) ~ ({personInfo.death_date || '???'}
+					)
+				</PersonInfoText>
+				<PersonInfoText>
+					{personInfo.nationality} {personInfo.profession}
+				</PersonInfoText>
+				<PersonInfoText>{personInfo.biography}</PersonInfoText>
 			</PersonInfoContainer>
 
 			{/* 상단 목차 */}

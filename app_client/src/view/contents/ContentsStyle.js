@@ -40,18 +40,16 @@ export const PersonName = styled.h1`
 `;
 
 export const StyledImage = styled.img`
-	width: 400px;
+	max-width: 400px;
 	object-fit: cover;
-	margin-bottom: 50px;
 	transition: transform 0.3s ease;
-
 	&:hover {
 		transform: scale(1.05);
 	}
+	border-radius: 10px;
 `;
 
 export const ImageContainer = styled.div`
-	border: 1px solid lightGray;
 	border-radius: 10px;
 	padding: 5px;
 	margin-bottom: ${(props) => props.theme.spacing(2)};
