@@ -18,7 +18,7 @@ const MainLayout = React.memo(() => {
 	}, []);
 
 	const closeMenu = useCallback(() => {
-		// setIsSidebarOpen((prev) => !prev);
+		setIsSidebarOpen((prev) => !prev);
 	}, []);
 
 	useEffect(() => {
@@ -47,7 +47,7 @@ const MainLayout = React.memo(() => {
 				<StyledDrawer open={isSidebarOpen}>
 					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
 				</StyledDrawer>
-				<MainContent>
+				<MainContent open={isSidebarOpen}>
 					<Outlet />
 				</MainContent>
 			</ContentWrapper>

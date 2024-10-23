@@ -1,14 +1,17 @@
-// Profession.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
-import useProfessionData from './useProfessionData';
-import SortControls from './SortControls';
+import useProfessionData from '../../hooks/useProfessionData';
+import SortControls from './dataControlPanel/SortControls';
+import ProfessionFilter from './dataControlPanel/ProfessionFilter';
 import AgeBoundaries from './AgeBoundaries';
 import ProfessionGrid from './professionGrid/ProfessionGrid';
 import ScoreModal from './scoreModal/ScoreModal';
 import LoadingScreen from './LoadingScreen';
+import CategorySelect from './dataControlPanel/CategorySelect';
+import FilterControls from './dataControlPanel/FilterControls';
+
 import {
 	PageTitle,
 	ContentWrapper,
@@ -46,15 +49,21 @@ const Profession = () => {
 			<PageTitle variant="h4" component="h1" align="center">
 				{contentName === '전체' ? pageTitle : `${pageTitle}들의 ${contentName}`}
 			</PageTitle>
+
+			<FilterControls>
+				<ProfessionFilter currentProfession={profession} />
+				<CategorySelect />
+				<SortControls
+					sortCriteria={sortCriteria}
+					setSortCriteria={setSortCriteria}
+					sortOrder={sortOrder}
+					setSortOrder={setSortOrder}
+				/>
+			</FilterControls>
+
 			<Divider />
 			<Spacer />
-
-			<SortControls
-				sortCriteria={sortCriteria}
-				setSortCriteria={setSortCriteria}
-				sortOrder={sortOrder}
-				setSortOrder={setSortOrder}
-			/>
+			<Spacer />
 
 			{sortCriteria === 'age' && (
 				<AgeBoundaries

@@ -1,0 +1,94 @@
+import React, { memo, useState } from 'react';
+import {
+	Select,
+	MenuItem,
+	InputLabel,
+	FormControl,
+	Snackbar,
+	Alert,
+} from '@mui/material';
+import { useAtom } from 'jotai';
+import { contentNameAtom } from 'store/atom';
+import { useContentNames } from 'hooks/useContentNames';
+import { styled } from '@mui/material/styles';
+
+// Alert 컴포넌트 커스터마이징
+const CustomAlert = styled(Alert)(({ theme }) => ({
+	'&.MuiAlert-filledInfo': {
+		backgroundColor: '#0d47a1', // 파랑
+	},
+	// 아이콘 색상 설정
+	'& .MuiAlert-icon': {
+		color: 'inherit', // 텍스트와 같은 색상 사용
+	},
+	// 닫기 버튼 색상 설정
+	'& .MuiAlert-action': {
+		'& .MuiIconButton-root': {
+			color: 'inherit',
+		},
+	},
+}));
+
+const CategorySelect = memo(() => {
+	const [contentType, setContentType] = useAtom(contentNameAtom);
+	const contentNames = useContentNames();
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+
+	const handleCategoryChange = (event) => {
+		const noContentCategories = ['게임', '음악', '웹툰', '애니', '맛집'];
+		if (noContentCategories.includes(event.target.value)) {
+			setOpenSnackbar(true);
+			return;
+		}
+		setContentType(event.target.value);
+	};
+
+	const handleCloseSnackbar = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setOpenSnackbar(false);
+	};
+
+	if (!contentNames) return null;
+
+	return (
+		<>
+			<FormControl>
+				<InputLabel id="content-select-label">컨텐츠 필터</InputLabel>
+				<Select
+					labelId="content-select-label"
+					id="content-select"
+					label="컨텐츠 선택"
+					value={contentType}
+					onChange={handleCategoryChange}
+					size="small">
+					{contentNames.map((ele) => (
+						<MenuItem value={ele.name} key={ele.name}>
+							{ele.name}
+						</MenuItem>
+					))}
+				</Select>
+			</FormControl>
+
+			<Snackbar
+				open={openSnackbar}
+				autoHideDuration={3000}
+				onClose={handleCloseSnackbar}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+				<CustomAlert
+					onClose={handleCloseSnackbar}
+					severity="info"
+					variant="filled"
+					sx={{
+						width: '100%',
+						boxShadow: '0 3px 6px rgba(0,0,0,0.16)',
+					}}>
+					해당 컨텐츠가 없습니다.
+				</CustomAlert>
+			</Snackbar>
+		</>
+	);
+});
+
+export default CategorySelect;

@@ -5,7 +5,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BuildIcon from '@mui/icons-material/Build';
 import { useTranslation } from 'react-i18next';
-import CategorySelect from './CategorySelect';
 import SettingsModal from './SettingsModal';
 import AdminLoginModal from './AdminLoginModal';
 import { useNavigate, Link } from 'react-router-dom';
@@ -74,7 +73,6 @@ const AppBar = memo(({ toggleSidebar }) => {
 						sx={{ mr: 2 }}>
 						<MenuIcon />
 					</IconButton>
-					<CategorySelect />
 				</Box>
 
 				<Link to="/" style={{ textDecoration: 'none' }}>

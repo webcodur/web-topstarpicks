@@ -3,7 +3,7 @@ import { List, ListItemButton } from '@mui/material';
 
 export const StyledList = styled(List)(({ theme }) => ({
 	width: '100%',
-	padding: theme.spacing(2, 0),
+	// padding: theme.spacing(2, 0),
 }));
 
 export const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({

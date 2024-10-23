@@ -1,9 +1,6 @@
-// SortControls.jsx
 import React from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
-// import { StyledButton } from './ProfessionStyles';
-import { Card, CardContent, Button, Typography } from '@mui/material';
 
 const SortControls = ({
 	sortCriteria,
@@ -20,45 +17,34 @@ const SortControls = ({
 	};
 
 	return (
-		<Box
-			align="center"
-			sx={{
-				display: 'flex',
-				alignItems: 'center',
-				mb: 4,
-				justifyContent: 'center',
-			}}>
-			{/* 정렬 기준 선택 */}
-			<FormControl sx={{ minWidth: 200, mr: 2 }}>
-				<InputLabel id="sort-select-label" sx={{ zIndex: 0 }}>
-					정렬 기준
-				</InputLabel>
+		<Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+			<FormControl>
+				<InputLabel id="sort-select-label">정렬</InputLabel>
 				<Select
 					labelId="sort-select-label"
 					id="sort-select"
 					value={sortCriteria}
 					label="정렬 기준"
-					onChange={handleSortChange}>
+					onChange={handleSortChange}
+					size="small">
 					<MenuItem value="name">이름</MenuItem>
 					<MenuItem value="nationality">국적</MenuItem>
 					<MenuItem value="rank">랭크</MenuItem>
 					<MenuItem value="age">나이/시대</MenuItem>
 				</Select>
 			</FormControl>
-
-			{/* 정렬 방향 선택*/}
-			<CardContent
+			<div
 				onClick={handleSortOrderChange}
 				style={{
-					backgroundColor: 'lightgray',
+					cursor: 'pointer',
 					border: '1px solid lightgray',
 					borderRadius: '10px',
-					padding: '5px',
-					paddingTop: '10px',
-					cursor: 'pointer',
+					marginTop: '3px',
+					lineHeight: '20px',
+					padding: '3px',
 				}}>
 				{sortOrder === 'asc' ? <ArrowUpward /> : <ArrowDownward />}
-			</CardContent>
+			</div>
 		</Box>
 	);
 };
