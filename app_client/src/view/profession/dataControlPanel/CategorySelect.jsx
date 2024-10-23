@@ -6,22 +6,22 @@ import {
 	FormControl,
 	Snackbar,
 	Alert,
+	ListItemIcon,
 } from '@mui/material';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
 import { useContentNames } from 'hooks/useContentNames';
 import { styled } from '@mui/material/styles';
+import { contentIcons } from './icons/contentIcons';
 
 // Alert 컴포넌트 커스터마이징
 const CustomAlert = styled(Alert)(({ theme }) => ({
 	'&.MuiAlert-filledInfo': {
 		backgroundColor: '#0d47a1', // 파랑
 	},
-	// 아이콘 색상 설정
 	'& .MuiAlert-icon': {
-		color: 'inherit', // 텍스트와 같은 색상 사용
+		color: 'inherit',
 	},
-	// 닫기 버튼 색상 설정
 	'& .MuiAlert-action': {
 		'& .MuiIconButton-root': {
 			color: 'inherit',
@@ -63,11 +63,23 @@ const CategorySelect = memo(() => {
 					value={contentType}
 					onChange={handleCategoryChange}
 					size="small">
-					{contentNames.map((ele) => (
-						<MenuItem value={ele.name} key={ele.name}>
-							{ele.name}
-						</MenuItem>
-					))}
+					{contentNames.map((ele) => {
+						const iconConfig = contentIcons.find(
+							(icon) => icon.name === ele.name
+						);
+						const IconComponent = iconConfig ? iconConfig.icon : null;
+
+						return (
+							<MenuItem value={ele.name} key={ele.name}>
+								{IconComponent && (
+									<ListItemIcon>
+										<IconComponent fontSize="small" />
+									</ListItemIcon>
+								)}
+								{ele.name}
+							</MenuItem>
+						);
+					})}
 				</Select>
 			</FormControl>
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Box,
 	FormControl,
 	InputLabel,
 	Select,
@@ -8,7 +7,7 @@ import {
 	ListItemIcon,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import professionIcons from './professionIcons';
+import professionIcons from './icons/professionIcons';
 import useCelebNumbers from 'hooks/useCelebNumbers';
 
 const ProfessionFilter = ({ currentProfession }) => {

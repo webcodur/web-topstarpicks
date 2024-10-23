@@ -2,8 +2,9 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const FilterContainer = styled(Box)({
+const FilterContainer = styled(Box)(({ theme }) => ({
 	display: 'flex',
+	flexDirection: 'row',
 	gap: '16px',
 	justifyContent: 'center',
 	alignItems: 'center',
@@ -34,7 +35,10 @@ const FilterContainer = styled(Box)({
 			backgroundColor: '#e0e0e0',
 		},
 	},
-});
+	[theme.breakpoints.down('md')]: {
+		flexDirection: 'column',
+	},
+}));
 
 const FilterControls = ({ children }) => {
 	return <FilterContainer>{children}</FilterContainer>;

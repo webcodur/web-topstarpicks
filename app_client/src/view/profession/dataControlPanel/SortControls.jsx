@@ -1,6 +1,14 @@
 import React from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+	ListItemIcon,
+} from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { sortIcons } from './icons/sortIcons';
 
 const SortControls = ({
 	sortCriteria,
@@ -17,7 +25,15 @@ const SortControls = ({
 	};
 
 	return (
-		<Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+		<Box
+			sx={{
+				display: 'flex',
+				alignItems: 'center',
+				gap: '8px',
+				'& .MuiFormControl-root': {
+					minWidth: '115px',
+				},
+			}}>
 			<FormControl>
 				<InputLabel id="sort-select-label">정렬</InputLabel>
 				<Select
@@ -27,10 +43,14 @@ const SortControls = ({
 					label="정렬 기준"
 					onChange={handleSortChange}
 					size="small">
-					<MenuItem value="name">이름</MenuItem>
-					<MenuItem value="nationality">국적</MenuItem>
-					<MenuItem value="rank">랭크</MenuItem>
-					<MenuItem value="age">나이/시대</MenuItem>
+					{sortIcons.map(({ value, label, icon: IconComponent }) => (
+						<MenuItem value={value} key={value}>
+							<ListItemIcon>
+								<IconComponent fontSize="small" />
+							</ListItemIcon>
+							{label}
+						</MenuItem>
+					))}
 				</Select>
 			</FormControl>
 			<div

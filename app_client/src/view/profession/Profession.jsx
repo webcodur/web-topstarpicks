@@ -47,7 +47,7 @@ const Profession = () => {
 	return (
 		<ContentWrapper>
 			<PageTitle variant="h4" component="h1" align="center">
-				{contentName === '전체' ? pageTitle : `${pageTitle}들의 ${contentName}`}
+				{contentName === '전체' ? pageTitle : `${pageTitle}의 ${contentName}`}
 			</PageTitle>
 
 			<FilterControls>
