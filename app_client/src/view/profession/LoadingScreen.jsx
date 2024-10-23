@@ -9,7 +9,7 @@ import {
 const LoadingScreen = () => {
 	return (
 		<LoadingContainer>
-			<StyledLogo component="img" src="/logo.png" alt="loading" />
+			{/* <StyledLogo component="img" src="/logo.png" alt="loading" /> */}
 			<FadingText>데이터를 불러오는 중입니다...</FadingText>
 		</LoadingContainer>
 	);

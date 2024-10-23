@@ -69,12 +69,6 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					vidLink={person.vid_link}
 					name={person.name}
 					rank={person.rank}
-					getContentLink={getContentLink}
-					person={person}
-					contentNames={contentNames}
-					oncontentNameClick={(content) => (
-						<Link to={getContentLink(person.name, content)}>{content}</Link>
-					)}
 				/>
 
 				{/* 이름 */}

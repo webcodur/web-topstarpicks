@@ -1,5 +1,5 @@
 // Profession.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { contentNameAtom } from 'store/atom';
@@ -24,6 +24,7 @@ const Profession = () => {
 	const [selectedPerson, setSelectedPerson] = useState(null);
 	const [sortCriteria, setSortCriteria] = useState('rank');
 	const [sortOrder, setSortOrder] = useState('desc');
+	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
 	const [eraBoundaries, setEraBoundaries] = useState({
 		ancient: 476,
 		medieval: 1453,
@@ -31,20 +32,14 @@ const Profession = () => {
 		modern: 1945,
 	});
 
-	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
-
 	const handleModalOpen = (person) => {
 		setSelectedPerson(person);
 		setModalOpen(true);
 	};
 
-	const handleModalClose = () => {
-		setModalOpen(false);
-	};
+	const handleModalClose = () => setModalOpen(false);
 
-	if (!Array.isArray(professionData) || professionData.length === 0) {
-		return <LoadingScreen />;
-	}
+	if (!professionData?.length) return <LoadingScreen />;
 
 	return (
 		<ContentWrapper>

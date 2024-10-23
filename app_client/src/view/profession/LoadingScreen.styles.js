@@ -1,13 +1,6 @@
 // LoadingScreen.styles.js
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
-import { keyframes } from '@emotion/react';
-
-const fadeInOut = keyframes`
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-`;
 
 export const LoadingContainer = styled(Box)`
 	position: fixed;
@@ -31,5 +24,4 @@ export const FadingText = styled.div`
 	color: white;
 	font-size: 1.5rem;
 	font-family: 'Song Myung', serif;
-	animation: ${fadeInOut} 2s ease-in-out infinite;
 `;
