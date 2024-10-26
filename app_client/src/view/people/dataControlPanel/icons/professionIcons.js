@@ -9,6 +9,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import MicIcon from '@mui/icons-material/Mic';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 
 const professionIcons = [
 	{
@@ -22,6 +23,12 @@ const professionIcons = [
 		text: '정치인',
 		icon: <AccountBalanceIcon />,
 		to: '정치인',
+	},
+	{
+		key: '지도자',
+		text: '지도자',
+		icon: <EmojiPeopleIcon />,
+		to: '지도자',
 	},
 	{
 		key: '지휘관',

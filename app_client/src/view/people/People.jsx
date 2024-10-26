@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-// import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { contentNameAtom, professionNameAtom, menuInfoAtom } from 'store/atom';
+import {
+	contentNameAtom,
+	timesNameAtom,
+	professionNameAtom,
+	menuInfoAtom,
+} from 'store/atom';
 import useProfessionData from '../../hooks/useProfessionData';
 import SortControls from './dataControlPanel/SortControls';
 import ProfessionFilter from './dataControlPanel/ProfessionFilter';
@@ -10,22 +14,29 @@ import PeopleGrid from './peopleGrid/PeopleGrid';
 import ScoreModal from './scoreModal/ScoreModal';
 import LoadingScreen from './LoadingScreen';
 import CategorySelect from './dataControlPanel/CategorySelect';
+import CategorySelect2 from './dataControlPanel/CategorySelect2';
 import FilterControls from './dataControlPanel/FilterControls';
 
 import { PageTitle, ContentWrapper, Divider, Spacer } from './People.styles';
 
 const People = () => {
 	const [contentName] = useAtom(contentNameAtom);
+	const [timesName] = useAtom(timesNameAtom);
+
 	const [profession] = useAtom(professionNameAtom);
 	const [menuInfo] = useAtom(menuInfoAtom);
 
-	const professionData = useProfessionData(profession, contentName, menuInfo);
+	const professionData = useProfessionData(
+		profession,
+		contentName,
+		timesName,
+		menuInfo
+	);
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPerson, setSelectedPerson] = useState(null);
 	const [sortCriteria, setSortCriteria] = useState('influence');
 	const [sortOrder, setSortOrder] = useState('desc');
-	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
 
 	const [eraBoundaries, setEraBoundaries] = useState({
 		ancient: 476,
@@ -45,15 +56,22 @@ const People = () => {
 
 	return (
 		<ContentWrapper>
-			<PageTitle variant="h4" component="h1" align="center">
+			<PageTitle variant="h3" component="h1" align="center">
 				{menuInfo === '추천정보' && '유명인사 추천정보'}
 				{menuInfo === '인물도감' && '유명인사 인물도감'}
+			</PageTitle>
+			<PageTitle variant="h5" component="h3" align="center">
+				{menuInfo === '추천정보' &&
+					'컨텐츠 종류에 따른 인물별 추천정보를 확인하세요!'}
+				{menuInfo === '인물도감' &&
+					'인물별 특성과 능력치를 확인하고 카드 게임에서 활용하세요!'}
 			</PageTitle>
 
 			<FilterControls>
 				<ProfessionFilter currentProfession={profession} />
 
 				{menuInfo === '추천정보' && <CategorySelect />}
+				<CategorySelect2 />
 
 				<SortControls
 					sortCriteria={sortCriteria}

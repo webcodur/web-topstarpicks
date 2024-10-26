@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Score, Hexagon, Description } from '@mui/icons-material';
+import { Chip } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import CelebImage from './celebImage/CelebImage';
 import LifespanDisplay from './LifespanDisplay';
@@ -17,33 +18,27 @@ import {
 	BiographyText,
 	ReadMoreButton,
 	BiographyContainer,
-} from './ProfessionStyles';
+	TagContainer,
+} from './personCard.style';
 
 import { useAtom } from 'jotai';
-import { contentNameAtom, professionNameAtom, menuInfoAtom } from 'store/atom';
+import { menuInfoAtom } from 'store/atom';
 
-// 전기 텍스트의 최대 길이를 정의
-const MAX_BIOGRAPHY_LENGTH = 60;
+const MAX_BIOGRAPHY_LENGTH = 40;
 const NO_DATA = '';
 
-// PersonCard 컴포넌트: 개인 정보를 카드 형태로 표시
 const PersonCard = ({ person, contentName, onModalOpen }) => {
-	// 전기 모달의 열림/닫힘 상태
 	const [isBiographyModalOpen, setIsBiographyModalOpen] = useState(false);
-	// 전기 텍스트 확장/축소 상태
 	const [isExpanded, setIsExpanded] = useState(false);
-	const [menuInfo, _] = useAtom(menuInfoAtom);
+	const [menuInfo] = useAtom(menuInfoAtom);
 
-	// 추천 컨텐츠 이름을 배열로 변환
 	const contentNames = person.recommended_content_names
 		? person.recommended_content_names.split(',')
 		: [];
 
-	// 컨텐츠 링크를 생성하는 함수
 	const getContentLink = (personName, content) =>
 		`/${formatNameForUrl(personName)}/${content}`;
 
-	// '더 보기' 버튼 클릭 핸들러
 	const handleReadMoreClick = () => {
 		if (person.biography && person.biography.length > MAX_BIOGRAPHY_LENGTH) {
 			setIsBiographyModalOpen(true);
@@ -52,22 +47,18 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 		}
 	};
 
-	// 전기 모달을 닫는 핸들러
 	const handleCloseModal = () => {
 		setIsBiographyModalOpen(false);
 	};
 
-	// 전기 텍스트를 최대 길이로 절단
 	const truncatedBiography =
 		person.biography && person.biography.length > MAX_BIOGRAPHY_LENGTH
 			? `${person.biography.slice(0, MAX_BIOGRAPHY_LENGTH)}...`
 			: person.biography;
 
-	// 개인 인물 카드
 	return (
 		<StyledCard>
 			<StyledCardContent>
-				{/* 이미지 */}
 				<CelebImage
 					imgLink={person.img_link}
 					vidLink={person.vid_link}
@@ -75,7 +66,6 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					rank={person.rank}
 				/>
 
-				{/* 이름 */}
 				<PersonPreName>
 					{person.prename}
 					{person.prename && <br />}
@@ -86,7 +76,6 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				</PersonName>
 
 				<Introduction>
-					{/* 영향력 */}
 					<PersonInfo>
 						<Score fontSize="small" />
 						{person.total_score || NO_DATA}점
@@ -101,13 +90,11 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 						/>
 					</PersonInfo>
 
-					{/* 생년월일 - 사망일 */}
 					<LifespanDisplay
 						BIRTH={person.birth_date}
 						DEATH={person.death_date}
 					/>
 
-					{/* 전기 정보 */}
 					<PersonInfo component="div">
 						<Description fontSize="small" />
 						<BiographyContainer>
@@ -126,7 +113,54 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					</PersonInfo>
 				</Introduction>
 
-				{/* 컨텐츠 버튼 */}
+				{/* 태그 컨테이너 추가 */}
+				<TagContainer>
+					<Chip
+						label={person.profession}
+						size="small"
+						sx={{
+							backgroundColor: 'rgba(156, 39, 176, 0.1)',
+							color: '#9c27b0',
+							border: '1px solid wheat',
+							fontSize: '1rem',
+							// height: '24px',
+							marginLeft: '20px',
+							'& .MuiChip-label': {
+								padding: '0 8px',
+							},
+						}}
+					/>
+					{person.is_historical === 1 && menuInfo === '인물도감' && (
+						<Chip
+							label="역사"
+							size="small"
+							sx={{
+								backgroundColor: 'rgba(33, 150, 243, 0.1)',
+								color: '#2196f3',
+								border: '1px solid wheat',
+								fontSize: '1rem',
+								// height: '24px',
+							}}
+						/>
+					)}
+					{person.is_fictional === 1 && menuInfo === '인물도감' && (
+						<Chip
+							label="신화"
+							size="small"
+							sx={{
+								backgroundColor: 'lightyellow',
+								color: 'hotpink',
+								border: '1px solid wheat',
+								fontSize: '1rem',
+								// height: '24px',
+								'& .MuiChip-label': {
+									padding: '0 8px',
+								},
+							}}
+						/>
+					)}
+				</TagContainer>
+
 				{menuInfo === '추천정보' && (
 					<ButtonContainer style={{ marginTop: '16px' }}>
 						{contentNames
@@ -145,7 +179,6 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				)}
 			</StyledCardContent>
 
-			{/* BiographyModal 컴포넌트: 전체 전기를 모달로 표시합니다. */}
 			<BiographyModal
 				isOpen={isBiographyModalOpen}
 				onClose={handleCloseModal}

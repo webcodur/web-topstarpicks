@@ -2,11 +2,11 @@
 const UNKNOWN = '알 수 없음';
 const AGES = Object.freeze(['고대', '중세', '근세', '근대', '현대']);
 const DEFAULT_LIFESPAN = 70;
-const S_RANK = 'S: Stellar';
-const A_RANK = 'A: Authority';
-const B_RANK = 'B: Beacon';
-const C_RANK = 'C: Certified';
-const D_RANK = 'D: Dignity';
+const S_RANK = 'S: Stellar 등급';
+const A_RANK = 'A: Authority 등급';
+const B_RANK = 'B: Beacon 등급';
+const C_RANK = 'C: Certified 등급';
+const D_RANK = 'D: Dignity 등급';
 
 // ---------------------------- 헬퍼 함수 ----------------------------
 // 헬퍼 함수(1/5): 연도 추출
@@ -115,7 +115,6 @@ export const getSortedAndGroupedData = (
 
 	for (const person of sortedData) {
 		const key = getGroupKey(person, sortCriteria, periods);
-		console.log('key', key);
 		if (!groups.has(key)) {
 			groups.set(key, { key, persons: [] });
 		}

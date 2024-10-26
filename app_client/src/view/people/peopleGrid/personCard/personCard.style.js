@@ -104,3 +104,9 @@ export const ReadMoreButton = styled(Button)`
 		text-decoration: underline;
 	}
 `;
+
+export const TagContainer = styled.div`
+	display: flex;
+	gap: 4px;
+	padding: 0 4px;
+`;

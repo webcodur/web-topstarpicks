@@ -5,8 +5,14 @@ import { Typography } from '@mui/material';
 export const PageTitle = styled(Typography)`
 	margin-top: 32px;
 	margin-bottom: 32px;
-	font-family: 'Song Myung', serif;
-	font-size: 40px;
+	font-family: 'Gowun Batang', serif;
+	font-weight: bold;
+
+	@media screen and (max-width: 768px) {
+		font-size: 1.5rem;
+		margin-top: 24px;
+		margin-bottom: 24px;
+	}
 `;
 
 export const ContentWrapper = styled.div`

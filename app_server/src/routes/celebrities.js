@@ -16,7 +16,7 @@ router.get(
 		const sql = SQL`
     SELECT 
       cel.id, cel.name, cel.postname, cel.prename,
-      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link,
+      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, cel.is_historical, cel.is_fictional,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
     FROM 
       celebrities cel
@@ -47,6 +47,7 @@ router.get(
       cel.id, cel.name, cel.prename, cel.postname,
       cel.gender, cel.nationality, cel.birth_date, cel.death_date, 
       cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
+      cel.is_historical, cel.is_fictional,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
 
       inf.political,
@@ -145,7 +146,7 @@ router.get(
 	})
 );
 
-// POST: 새 Celebrity 추가 (Admin 용) createCelebrity
+// POST: 새 Celebrity 추가 (Admin 용) createCelebrity - todo: is값 추가 필요
 router.post(
 	'/',
 	db.asyncHandler(async (req, res) => {
@@ -180,7 +181,7 @@ router.post(
 	})
 );
 
-// PUT: Celebrity 정보 수정 (Admin 용) updateCelebrity
+// PUT: Celebrity 정보 수정 (Admin 용) updateCelebrity - todo: is값 추가 필요
 router.put(
 	'/:id',
 	db.asyncHandler(async (req, res) => {

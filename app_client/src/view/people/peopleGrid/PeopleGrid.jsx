@@ -32,7 +32,7 @@ const PeopleGrid = ({
 					<br />
 
 					{sortCriteria && (
-						<StencilTypography variant="h4" sx={{ my: 2 }}>
+						<StencilTypography variant="h5" sx={{ my: 2 }}>
 							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
 						</StencilTypography>
 					)}

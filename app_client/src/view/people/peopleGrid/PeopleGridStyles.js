@@ -3,9 +3,9 @@ import { Typography } from '@mui/material';
 
 export const StencilTypography = styled(Typography)`
 	text-align: center;
-	font-family: 'Black Han Sans', sans-serif;
-	font-weight: bold;
+	font-family: 'Gowun Batang', sans-serif;
 	color: black;
+	font-weight: bold;
 	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
 		1px 1px 0 #fff;
 	letter-spacing: 2px;
