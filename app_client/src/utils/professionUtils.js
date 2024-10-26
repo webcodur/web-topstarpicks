@@ -2,6 +2,11 @@
 const UNKNOWN = '알 수 없음';
 const AGES = Object.freeze(['고대', '중세', '근세', '근대', '현대']);
 const DEFAULT_LIFESPAN = 70;
+const S_RANK = 'S: Stellar';
+const A_RANK = 'A: Authority';
+const B_RANK = 'B: Beacon';
+const C_RANK = 'C: Certified';
+const D_RANK = 'D: Dignity';
 
 // ---------------------------- 헬퍼 함수 ----------------------------
 // 헬퍼 함수(1/5): 연도 추출
@@ -62,6 +67,7 @@ const createSortFunction = (criteria, periods) => {
 // 헬퍼 함수(5/5): 그룹 키 생성
 const getGroupKey = (person, sortCriteria, periods) => {
 	if (!sortCriteria) return 'all';
+
 	if (sortCriteria === 'age') {
 		const birthYear = estimateBirthYear(person);
 		return getAgeCategory(birthYear, periods);
@@ -69,19 +75,18 @@ const getGroupKey = (person, sortCriteria, periods) => {
 
 	if (sortCriteria === 'influence') {
 		return {
-			9: 'Stellar',
-			8: 'Stellar',
-			7: 'Stellar',
-			6: 'Authority',
-			5: 'Beacon',
-			4: 'Crystal',
-			3: 'Dignity',
-			2: 'Dignity',
-			1: 'Dignity',
-			0: 'Dignity',
+			9: S_RANK,
+			8: S_RANK,
+			7: S_RANK,
+			6: A_RANK,
+			5: B_RANK,
+			4: C_RANK,
+			3: D_RANK,
+			2: D_RANK,
+			1: D_RANK,
+			0: D_RANK,
 		}[Math.floor(person.total_score / 10)];
 	}
-
 	return person[sortCriteria] || UNKNOWN;
 };
 

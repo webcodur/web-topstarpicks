@@ -6,13 +6,16 @@ import {
 	MenuItem,
 	ListItemIcon,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+
 import professionIcons from './icons/professionIcons';
 import useCelebNumbers from 'hooks/useCelebNumbers';
 
-const ProfessionFilter = ({ currentProfession }) => {
-	const navigate = useNavigate();
+import { useAtom } from 'jotai';
+import { professionNameAtom } from 'store/atom';
+
+const ProfessionFilter = () => {
 	const [celebNumbers, celebTotals] = useCelebNumbers();
+	const [profession, setProfession] = useAtom(professionNameAtom);
 
 	const getNumberByProfession = (professionName) => {
 		if (professionName === '전체') return celebTotals;
@@ -23,8 +26,7 @@ const ProfessionFilter = ({ currentProfession }) => {
 	};
 
 	const handleProfessionChange = (event) => {
-		const selectedProfession = event.target.value;
-		navigate(`/${selectedProfession}`);
+		setProfession(event.target.value);
 	};
 
 	if (!celebNumbers || !celebTotals) {
@@ -37,7 +39,7 @@ const ProfessionFilter = ({ currentProfession }) => {
 			<Select
 				labelId="profession-select-label"
 				id="profession-select"
-				value={currentProfession || '전체'}
+				value={profession || '전체'}
 				label="직군 선택"
 				onChange={handleProfessionChange}
 				size="small"

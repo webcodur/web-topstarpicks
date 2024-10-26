@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { Divider, Box } from '@mui/material';
 import PersonCard from './personCard/PersonCard';
 import { getSortedAndGroupedData, getSortLabel } from 'utils/professionUtils';
-import { StencilTypography } from './ProfessionGridStyles';
+import { StencilTypography } from './PeopleGridStyles';
 
-const ProfessionGrid = ({
+const PeopleGrid = ({
 	professionData,
 	sortCriteria,
 	sortOrder,
@@ -65,4 +65,4 @@ const ProfessionGrid = ({
 	);
 };
 
-export default ProfessionGrid;
+export default PeopleGrid;

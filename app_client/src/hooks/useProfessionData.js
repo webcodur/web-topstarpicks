@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchCelebrities } from 'api/celebrityApi';
 
-const useProfessionData = (profession, contentName) => {
+const useProfessionData = (profession, contentName, menuInfo) => {
 	const [professionData, setProfessionData] = useState(null);
 
 	useEffect(() => {
@@ -10,15 +10,17 @@ const useProfessionData = (profession, contentName) => {
 				const fixProfession = profession === '전체' ? 'all' : profession;
 				const data = await fetchCelebrities(fixProfession);
 
-				if (contentName !== '전체') {
+				if (menuInfo === '인물도감') {
+					setProfessionData(data);
+				}
+
+				if (menuInfo === '추천정보') {
 					const filteredData = data.filter(
 						(celeb) =>
 							celeb.recommended_content_names &&
 							celeb.recommended_content_names.includes(contentName)
 					);
 					setProfessionData(filteredData);
-				} else {
-					setProfessionData(data);
 				}
 			} catch (error) {
 				console.error('Failed to load celebrity data:', error);
@@ -26,7 +28,7 @@ const useProfessionData = (profession, contentName) => {
 		};
 
 		loadCelebrities();
-	}, [profession, contentName]);
+	}, [profession, contentName, menuInfo]);
 
 	return professionData;
 };

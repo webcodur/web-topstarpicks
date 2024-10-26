@@ -6,13 +6,13 @@ const navigationIcons = [
 		key: 'about',
 		text: '제작자',
 		icon: <ContactsIcon />,
-		to: 'about',
+		to: '/about',
 	},
 	{
 		key: 'guide',
 		text: '가이드',
 		icon: <SignpostIcon />,
-		to: 'guide',
+		to: '/guide',
 	},
 ];
 

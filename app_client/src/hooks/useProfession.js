@@ -10,7 +10,6 @@ export const useProfession = () => {
 		const fetchFunc = async () => {
 			try {
 				const professionInfo = await fetchProfession();
-				console.log('professionInfo', professionInfo);
 				setProfessionName(professionInfo);
 			} catch (error) {
 				console.error('Error fetching professionInfo:', error);

@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { contentNameAtom } from 'store/atom';
+import { contentNameAtom, professionNameAtom, menuInfoAtom } from 'store/atom';
 import useProfessionData from '../../hooks/useProfessionData';
 import SortControls from './dataControlPanel/SortControls';
 import ProfessionFilter from './dataControlPanel/ProfessionFilter';
 import AgeBoundaries from './AgeBoundaries';
-import ProfessionGrid from './professionGrid/ProfessionGrid';
+import PeopleGrid from './peopleGrid/PeopleGrid';
 import ScoreModal from './scoreModal/ScoreModal';
 import LoadingScreen from './LoadingScreen';
 import CategorySelect from './dataControlPanel/CategorySelect';
 import FilterControls from './dataControlPanel/FilterControls';
 
-import {
-	PageTitle,
-	ContentWrapper,
-	Divider,
-	Spacer,
-} from './Profession.styles';
+import { PageTitle, ContentWrapper, Divider, Spacer } from './People.styles';
 
-const Profession = () => {
+const People = () => {
 	const [contentName] = useAtom(contentNameAtom);
-	const { profession } = useParams();
-	const professionData = useProfessionData(profession, contentName);
+	const [profession] = useAtom(professionNameAtom);
+	const [menuInfo] = useAtom(menuInfoAtom);
+
+	const professionData = useProfessionData(profession, contentName, menuInfo);
+
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPerson, setSelectedPerson] = useState(null);
 	const [sortCriteria, setSortCriteria] = useState('influence');
 	const [sortOrder, setSortOrder] = useState('desc');
 	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
+
 	const [eraBoundaries, setEraBoundaries] = useState({
 		ancient: 476,
 		medieval: 1453,
@@ -47,12 +46,15 @@ const Profession = () => {
 	return (
 		<ContentWrapper>
 			<PageTitle variant="h4" component="h1" align="center">
-				{contentName === '전체' ? pageTitle : `${pageTitle}의 ${contentName}`}
+				{menuInfo === '추천정보' && '유명인사 추천정보'}
+				{menuInfo === '인물도감' && '유명인사 인물도감'}
 			</PageTitle>
 
 			<FilterControls>
 				<ProfessionFilter currentProfession={profession} />
-				<CategorySelect />
+
+				{menuInfo === '추천정보' && <CategorySelect />}
+
 				<SortControls
 					sortCriteria={sortCriteria}
 					setSortCriteria={setSortCriteria}
@@ -72,7 +74,7 @@ const Profession = () => {
 				/>
 			)}
 
-			<ProfessionGrid
+			<PeopleGrid
 				professionData={professionData}
 				sortCriteria={sortCriteria}
 				sortOrder={sortOrder}
@@ -90,4 +92,4 @@ const Profession = () => {
 	);
 };
 
-export default Profession;
+export default People;

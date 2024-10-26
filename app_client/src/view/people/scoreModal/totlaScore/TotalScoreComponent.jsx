@@ -25,7 +25,7 @@ const TotalScoreComponent = ({ person }) => {
 					<br />
 					50점 이상: Beacon 랭크
 					<br />
-					40점 이상: Crystal 랭크
+					40점 이상: Certified 랭크
 					<br />
 					30점 이상: Dignity 랭크
 				</ExplanationText>

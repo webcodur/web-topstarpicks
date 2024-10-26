@@ -1,6 +1,6 @@
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
+import People from 'view/people/People';
 import Login from 'pages/Login';
-import Profession from 'pages/Profession';
 import Content from 'pages/Content';
 import Admin from 'pages/Admin';
 import About from 'pages/About';
@@ -10,14 +10,12 @@ import Games from 'pages/Games';
 
 export const routes = [
 	// 메인 페이지
-	{ path: '/', element: <Navigate to="/전체" /> },
 	{
-		path: '/:profession',
-		element: <Profession />,
+		path: '/',
+		element: <People />,
 	},
-	{ path: '/:profession/:personName/:contentName', element: <Content /> },
-
-	// { path: '/:recommendation', element: <People /> },
+	// 상세 페이지: 컨텐츠 페이지
+	{ path: '/:personName/:contentName', element: <Content /> },
 	// { path: '/:gallery', element: <People /> },
 	{ path: '/games', element: <Games /> },
 

@@ -19,6 +19,9 @@ import {
 	BiographyContainer,
 } from './ProfessionStyles';
 
+import { useAtom } from 'jotai';
+import { contentNameAtom, professionNameAtom, menuInfoAtom } from 'store/atom';
+
 // 전기 텍스트의 최대 길이를 정의
 const MAX_BIOGRAPHY_LENGTH = 60;
 const NO_DATA = '';
@@ -29,6 +32,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 	const [isBiographyModalOpen, setIsBiographyModalOpen] = useState(false);
 	// 전기 텍스트 확장/축소 상태
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [menuInfo, _] = useAtom(menuInfoAtom);
 
 	// 추천 컨텐츠 이름을 배열로 변환
 	const contentNames = person.recommended_content_names
@@ -37,7 +41,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 
 	// 컨텐츠 링크를 생성하는 함수
 	const getContentLink = (personName, content) =>
-		`/${person.profession}/${formatNameForUrl(personName)}/${content}`;
+		`/${formatNameForUrl(personName)}/${content}`;
 
 	// '더 보기' 버튼 클릭 핸들러
 	const handleReadMoreClick = () => {
@@ -123,20 +127,22 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				</Introduction>
 
 				{/* 컨텐츠 버튼 */}
-				<ButtonContainer style={{ marginTop: '16px' }}>
-					{contentNames
-						.filter(
-							(content) => contentName === '전체' || content === contentName
-						)
-						.map((content) => (
-							<Link
-								key={`${person.name}-${content}`}
-								to={getContentLink(person.name, content)}
-								style={{ textDecoration: 'none' }}>
-								<StyledButton>{content}</StyledButton>
-							</Link>
-						))}
-				</ButtonContainer>
+				{menuInfo === '추천정보' && (
+					<ButtonContainer style={{ marginTop: '16px' }}>
+						{contentNames
+							.filter(
+								(content) => contentName === '전체' || content === contentName
+							)
+							.map((content) => (
+								<Link
+									key={`${person.name}-${content}`}
+									to={getContentLink(person.name, content)}
+									style={{ textDecoration: 'none' }}>
+									<StyledButton>{content}</StyledButton>
+								</Link>
+							))}
+					</ButtonContainer>
+				)}
 			</StyledCardContent>
 
 			{/* BiographyModal 컴포넌트: 전체 전기를 모달로 표시합니다. */}
