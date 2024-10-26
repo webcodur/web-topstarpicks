@@ -1,6 +1,6 @@
 // import { Navigate } from 'react-router-dom';
 import People from 'view/people/People';
-import Login from 'pages/Login';
+// import Login from 'pages/Login';
 import Content from 'pages/Content';
 import Admin from 'pages/Admin';
 import About from 'pages/About';
@@ -20,7 +20,7 @@ export const routes = [
 	{ path: '/games', element: <Games /> },
 
 	// 서비스 페이지
-	{ path: '/login', element: <Login /> },
+	// { path: '/login', element: <Login /> },
 	{ path: '/about', element: <About /> },
 	{ path: '/guide', element: <Guide /> },
 
