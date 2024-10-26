@@ -19,15 +19,15 @@ const TotalScoreComponent = ({ person }) => {
 			<GradeExplanation>
 				<ExplanationTitle>등급 기준</ExplanationTitle>
 				<ExplanationText>
-					70점 이상: Supreme 랭크
+					70점 이상: Stellar 랭크
 					<br />
-					60점 이상: Apex 랭크
+					60점 이상: Authority 랭크
 					<br />
-					50점 이상: Beyond 랭크
+					50점 이상: Beacon 랭크
 					<br />
-					40점 이상: Crest 랭크
+					40점 이상: Crystal 랭크
 					<br />
-					30점 이상: Decent 랭크
+					30점 이상: Dignity 랭크
 				</ExplanationText>
 			</GradeExplanation>
 		</Container>

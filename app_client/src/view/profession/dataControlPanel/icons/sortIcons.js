@@ -15,8 +15,8 @@ export const sortIcons = [
 		icon: FlagIcon,
 	},
 	{
-		value: 'rank',
-		label: '랭크',
+		value: 'influence',
+		label: '영향력',
 		icon: GradeIcon,
 	},
 	{

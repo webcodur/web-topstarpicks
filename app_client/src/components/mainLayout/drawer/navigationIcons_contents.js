@@ -1,5 +1,5 @@
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import PersonIcon from '@mui/icons-material/Person';
+import Groups2Icon from '@mui/icons-material/Groups2';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 
 const navigationIcons = [
@@ -11,15 +11,15 @@ const navigationIcons = [
 	},
 	{
 		key: 'gallery',
-		text: '갤러리',
-		icon: <PersonIcon />,
+		text: '인물도감',
+		icon: <Groups2Icon />,
 		to: 'gallery',
 	},
 	{
-		key: 'game',
-		text: '게임',
+		key: 'games',
+		text: '카드게임',
 		icon: <SportsEsportsIcon />,
-		to: 'game',
+		to: 'games',
 	},
 ];
 

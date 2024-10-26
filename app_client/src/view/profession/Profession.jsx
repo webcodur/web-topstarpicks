@@ -25,7 +25,7 @@ const Profession = () => {
 	const professionData = useProfessionData(profession, contentName);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPerson, setSelectedPerson] = useState(null);
-	const [sortCriteria, setSortCriteria] = useState('rank');
+	const [sortCriteria, setSortCriteria] = useState('influence');
 	const [sortOrder, setSortOrder] = useState('desc');
 	const pageTitle = profession === '전체' ? '전체 셀럽' : profession;
 	const [eraBoundaries, setEraBoundaries] = useState({
