@@ -8,7 +8,7 @@ export const useContentNames = () => {
 		const fetchFunc = async () => {
 			const contentInfo = await fetchContent();
 			setContentNames([
-				{ id: 999, name: '전체', eng_name: 'all' },
+				// { id: 999, name: '전체', eng_name: 'all' },
 				...contentInfo,
 			]);
 		};

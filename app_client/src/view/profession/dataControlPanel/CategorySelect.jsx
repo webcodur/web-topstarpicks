@@ -43,7 +43,7 @@ const CategorySelect = memo(() => {
 		setContentType(event.target.value);
 	};
 
-	const handleCloseSnackbar = (event, reason) => {
+	const handleCloseSnackbar = (_, reason) => {
 		if (reason === 'clickaway') {
 			return;
 		}

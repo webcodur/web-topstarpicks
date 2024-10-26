@@ -63,7 +63,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 	return (
 		<StyledCard>
 			<StyledCardContent>
-				{/* CelebImage 컴포넌트: 인물 이미지와 관련 정보를 표시합니다. */}
+				{/* 이미지 */}
 				<CelebImage
 					imgLink={person.img_link}
 					vidLink={person.vid_link}
