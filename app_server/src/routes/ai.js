@@ -40,11 +40,14 @@ router.post('/chat', async (req, res) => {
 // 영향력 평가
 router.post('/assess-influence', async (req, res) => {
 	try {
-		const { name } = req.body;
+		const { name, otherDesc } = req.body;
 		if (!name) return res.status(400).json({ error: '인물 이름 필요.' });
 
-		const result = await influenceService.assessAndSaveInfluence(name);
-		console.log('result', result);
+		const result = await influenceService.assessAndSaveInfluence(
+			name,
+			otherDesc
+		);
+
 		res.json({ message: 'success', data: result });
 	} catch (error) {
 		console.error('Error:', error);

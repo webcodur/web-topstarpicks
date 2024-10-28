@@ -3,6 +3,7 @@ import { assessInfluence } from 'api/aiApi';
 
 const Influence = () => {
 	const [name, setName] = useState('');
+	const [otherDesc, setOtherDesc] = useState('');
 	const [result, setResult] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -13,7 +14,7 @@ const Influence = () => {
 		setIsLoading(true);
 
 		try {
-			const data = await assessInfluence(name);
+			const data = await assessInfluence(name, otherDesc);
 			setResult(data);
 		} catch (error) {
 			console.error('Error:', error);
@@ -43,8 +44,16 @@ const Influence = () => {
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					className="border border-gray-300 rounded-l-lg p-2 w-full"
-					placeholder="인물 이름을 입력하세요..."
+					placeholder="인물 이름을 입력하세요"
 				/>
+				<input
+					type="text"
+					value={otherDesc}
+					onChange={(e) => setOtherDesc(e.target.value)}
+					className="border border-gray-300 rounded-l-lg p-2 w-full"
+					placeholder="다른 추가설명이 필요하면 여기 넣어주세요."
+				/>
+
 				<button
 					type="submit"
 					className="bg-blue-500 text-white px-4 py-2 rounded-r-lg mt-2"

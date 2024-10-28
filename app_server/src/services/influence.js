@@ -24,14 +24,15 @@ async function findCelebrityId(name) {
  * @param {string} name - 평가할 인물 이름
  * @returns {Promise<Object>} 평가 결과
  */
-async function assessAndSaveInfluence(name) {
-	const promptTemplate = await openai.readPromptFile('influenceAssessment.txt');
-	const prompt = promptTemplate.replace('[인물 이름]', name);
+async function assessAndSaveInfluence(name, otherDesc) {
+	const prompt1 = await openai.readPromptFile('influenceAssessment.txt');
+	const prompt2 = prompt1.replace('[인물 이름]', name);
+	const prompt3 = prompt2.replace('[추가적인 설명]', otherDesc);
 
 	const systemMessage =
 		'You are a highly knowledgeable AI assistant specialized in historical analysis and influence assessment. Provide accurate, factual information based on historical records and avoid speculation or unsupported claims. Always respond in valid JSON format.';
 
-	const aiResponse = await openai.getChatCompletion(prompt, systemMessage);
+	const aiResponse = await openai.getChatCompletion(prompt3, systemMessage);
 	if (aiResponse.error) throw new Error(aiResponse.error);
 
 	const result = assessment.processResult(aiResponse);

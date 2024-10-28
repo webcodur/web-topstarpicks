@@ -3,7 +3,6 @@ import { Card, CardContent, Button, Typography } from '@mui/material';
 
 export const StyledCard = styled(Card)`
 	height: 100%;
-	/* height: 1100px; */
 	display: flex;
 	flex-direction: column;
 	background-color: ${(props) => props.theme.palette.background.paper};
@@ -13,17 +12,11 @@ export const StyledCard = styled(Card)`
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 	&:hover {
 		transform: translateY(-2px);
-		/* box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); */
 		box-shadow: 0 6px 25px gray;
 	}
 `;
 
-export const StyledCardContent = styled(CardContent)`
-	/* flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	padding: 24px; */
-`;
+export const StyledCardContent = styled(CardContent)``;
 
 export const Introduction = styled.div`
 	margin-bottom: ${(props) => props.theme.spacing(2)};
@@ -103,10 +96,4 @@ export const ReadMoreButton = styled(Button)`
 		background-color: transparent;
 		text-decoration: underline;
 	}
-`;
-
-export const TagContainer = styled.div`
-	display: flex;
-	gap: 4px;
-	padding: 0 4px;
 `;

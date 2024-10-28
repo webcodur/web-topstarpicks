@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Score, Hexagon, Description } from '@mui/icons-material';
-import { Chip } from '@mui/material';
 import { formatNameForUrl } from 'utils/urlUtils';
 import CelebImage from './celebImage/CelebImage';
 import LifespanDisplay from './LifespanDisplay';
 import BiographyModal from './BiographyModal';
+import TagContainer from './tagContainer/TagContainer';
 import {
 	StyledCard,
 	StyledCardContent,
@@ -18,7 +18,6 @@ import {
 	BiographyText,
 	ReadMoreButton,
 	BiographyContainer,
-	TagContainer,
 } from './personCard.style';
 
 import { useAtom } from 'jotai';
@@ -113,53 +112,12 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					</PersonInfo>
 				</Introduction>
 
-				{/* 태그 컨테이너 추가 */}
-				<TagContainer>
-					<Chip
-						label={person.profession}
-						size="small"
-						sx={{
-							backgroundColor: 'rgba(156, 39, 176, 0.1)',
-							color: '#9c27b0',
-							border: '1px solid wheat',
-							fontSize: '1rem',
-							// height: '24px',
-							marginLeft: '20px',
-							'& .MuiChip-label': {
-								padding: '0 8px',
-							},
-						}}
-					/>
-					{person.is_historical === 1 && menuInfo === '인물도감' && (
-						<Chip
-							label="역사"
-							size="small"
-							sx={{
-								backgroundColor: 'rgba(33, 150, 243, 0.1)',
-								color: '#2196f3',
-								border: '1px solid wheat',
-								fontSize: '1rem',
-								// height: '24px',
-							}}
-						/>
-					)}
-					{person.is_fictional === 1 && menuInfo === '인물도감' && (
-						<Chip
-							label="신화"
-							size="small"
-							sx={{
-								backgroundColor: 'lightyellow',
-								color: 'hotpink',
-								border: '1px solid wheat',
-								fontSize: '1rem',
-								// height: '24px',
-								'& .MuiChip-label': {
-									padding: '0 8px',
-								},
-							}}
-						/>
-					)}
-				</TagContainer>
+				<TagContainer
+					profession={person.profession}
+					isHistorical={person.is_historical}
+					isFictional={person.is_fictional}
+					menuInfo={menuInfo}
+				/>
 
 				{menuInfo === '추천정보' && (
 					<ButtonContainer style={{ marginTop: '16px' }}>

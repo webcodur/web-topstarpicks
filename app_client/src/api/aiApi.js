@@ -13,7 +13,8 @@ export const openaiChatTest = createApiCall(
 
 // 영향력 평가
 export const assessInfluence = createApiCall(
-	(name) => axiosInstance.post('/ai/assess-influence', { name }),
+	(name, otherDesc) =>
+		axiosInstance.post('/ai/assess-influence', { name, otherDesc }),
 	'인물 영향력 평가에 실패했습니다:',
 	'assessInfluence'
 );
