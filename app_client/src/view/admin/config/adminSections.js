@@ -2,19 +2,14 @@ import { lazy } from 'react';
 
 export const adminSections = [
 	{
-		id: 'celeb',
-		title: '셀럽 관리자',
-		component: lazy(() => import('../manager/celeb/Celeb')),
-	},
-	{
 		id: 'recommendation',
 		title: '추천정보 관리자',
 		component: lazy(() => import('../manager/recs/Recs')),
 	},
 	{
-		id: 'newCeleb',
-		title: '새 셀럽 추가',
-		component: lazy(() => import('../manager/celeb/NewCelebForm')),
+		id: 'Celeb',
+		title: '셀럽 관리자',
+		component: lazy(() => import('../manager/celeb/CelebForm')),
 	},
 	{
 		id: 'newRecs',

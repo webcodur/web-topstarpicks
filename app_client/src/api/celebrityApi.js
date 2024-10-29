@@ -50,3 +50,14 @@ export const fetchInfluenceIndex = createApiCall(
 	(testName) => axiosInstance.get(`/celebrities/influenceIndex/${testName}`),
 	'influenceIndex 정보를 가져오는데 실패했습니다:'
 );
+
+export const searchCelebrities = createApiCall(
+	(query) => axiosInstance.get('/celebrities/search', { params: { query } }),
+	'유명인사 검색에 실패했습니다:'
+);
+
+// ID로 유명인사 정보 조회 - URL 패턴 변경
+export const fetchCelebrityById = createApiCall(
+	(id) => axiosInstance.get(`/celebrities/detail/${id}`),
+	'유명인사 정보를 가져오는데 실패했습니다:'
+);

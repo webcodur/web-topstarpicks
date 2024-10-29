@@ -163,11 +163,23 @@ router.post(
 				biography,
 				img_link,
 				vid_link,
+				book_story,
+				quotes,
+				is_historical,
+				is_fictional,
 			} = req.body;
 
 			const sql = SQL`
-        INSERT INTO celebrities (name, prename, postname, profession_id, gender, nationality, birth_date, death_date, biography, img_link, vid_link)
-        VALUES (${name}, ${prename}, ${postname}, ${profession_id}, ${gender}, ${nationality}, ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link})
+        INSERT INTO celebrities (
+          name, prename, postname, profession_id, gender, nationality, 
+          birth_date, death_date, biography, img_link, vid_link,
+          book_story, quotes, is_historical, is_fictional
+        )
+        VALUES (
+          ${name}, ${prename}, ${postname}, ${profession_id}, ${gender}, ${nationality}, 
+          ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link},
+          ${book_story}, ${quotes}, ${is_historical}, ${is_fictional}
+        )
       `;
 
 			const result = await db.executeQuery(sql);
@@ -196,6 +208,10 @@ router.put(
 			death_date,
 			biography,
 			img_link,
+			book_story,
+			quotes,
+			is_historical,
+			is_fictional,
 		} = req.body;
 
 		const sql = SQL`
@@ -209,7 +225,11 @@ router.put(
         birth_date = ${birth_date}, 
         death_date = ${death_date}, 
         biography = ${biography}, 
-        img_link = ${img_link}
+        img_link = ${img_link},
+        book_story = ${book_story},
+        quotes = ${quotes},
+        is_historical = ${is_historical},
+        is_fictional = ${is_fictional}
     WHERE id = ${req.params.id}
   `;
 
@@ -225,6 +245,73 @@ router.delete(
 		const sql = SQL`DELETE FROM celebrities WHERE id = ${req.params.id}`;
 		const result = await db.executeQuery(sql);
 		res.json({ message: 'success', data: { changes: result.changes } });
+	})
+);
+
+// 이름으로 유명인사 검색 (부분 일치)
+router.get(
+	'/search',
+	db.asyncHandler(async (req, res) => {
+		const { query } = req.query;
+
+		if (!query) {
+			return res.status(400).json({ error: '검색어를 입력해주세요.' });
+		}
+
+		console.log('Search query:', query);
+
+		const sql = SQL`
+      SELECT 
+        cel.id, 
+        cel.name,
+        cel.prename,
+        cel.postname,
+        pro.name as profession_kor
+      FROM celebrities cel
+      LEFT JOIN profession pro ON pro.id = cel.profession_id
+      WHERE cel.name LIKE ${`%${query}%`}
+      OR cel.prename LIKE ${`%${query}%`}
+      OR cel.postname LIKE ${`%${query}%`}
+      ORDER BY cel.name
+      LIMIT 10
+    `;
+
+		const rows = await db.executeQuery(sql);
+		console.log('Search results:', rows);
+		res.json({ message: 'success', data: rows });
+	})
+);
+
+// ID로 유명인사 정보 조회
+router.get(
+	'/detail/:id',
+	db.asyncHandler(async (req, res) => {
+		const { id } = req.params;
+		console.log('Fetching celebrity details for ID:', id);
+
+		const sql = SQL`
+      SELECT 
+        cel.id, cel.name, cel.postname, cel.prename,
+        pro.name as profession, cel.gender, cel.nationality, 
+        cel.birth_date, cel.death_date, cel.biography, 
+        cel.img_link, cel.vid_link, cel.book_story, cel.quotes,
+        cel.is_historical, cel.is_fictional,
+        pro.id as profession_id
+      FROM 
+        celebrities cel
+      LEFT JOIN 
+        profession pro ON pro.id = cel.profession_id
+      WHERE 
+        cel.id = ${id}
+    `;
+
+		const rows = await db.executeQuery(sql);
+		console.log('Query results:', rows);
+
+		if (rows.length === 0) {
+			return res.status(404).json({ message: 'Celebrity not found' });
+		}
+		res.json({ message: 'success', data: rows[0] });
 	})
 );
 

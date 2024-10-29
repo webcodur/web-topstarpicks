@@ -1,22 +1,24 @@
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
-import { professionNameAtom } from 'store/atom';
-import { fetchProfession } from 'api/profession';
+import { useState, useEffect } from 'react';
+import { fetchProfessions } from 'api/professionApi';
 
 export const useProfession = () => {
-	const [professionName, setProfessionName] = useAtom(professionNameAtom);
+	const [professions, setProfessions] = useState([]);
 
 	useEffect(() => {
-		const fetchFunc = async () => {
+		const loadProfessions = async () => {
 			try {
-				const professionInfo = await fetchProfession();
-				setProfessionName(professionInfo);
+				const response = await fetchProfessions();
+				if (response?.data) {
+					setProfessions(response.data);
+				}
 			} catch (error) {
-				console.error('Error fetching professionInfo:', error);
+				console.error('Failed to load professions:', error);
+				setProfessions([]);
 			}
 		};
-		fetchFunc();
-	}, [setProfessionName]);
 
-	return professionName;
+		loadProfessions();
+	}, []);
+
+	return professions;
 };
