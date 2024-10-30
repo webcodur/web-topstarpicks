@@ -16,6 +16,7 @@ import LoadingScreen from './LoadingScreen';
 import CategorySelect from './dataControlPanel/CategorySelect';
 import CategorySelect2 from './dataControlPanel/CategorySelect2';
 import FilterControls from './dataControlPanel/FilterControls';
+import PersonTypeFilter from './dataControlPanel/PersonTypeFilter';
 
 import { PageTitle, ContentWrapper, Divider, Spacer } from './People.styles';
 
@@ -69,6 +70,7 @@ const People = () => {
 
 			<FilterControls>
 				<ProfessionFilter currentProfession={profession} />
+				{menuInfo === '인물도감' && <PersonTypeFilter />}
 
 				{menuInfo === '추천정보' && <CategorySelect />}
 				<CategorySelect2 />

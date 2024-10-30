@@ -7,13 +7,20 @@ const SQL = require('sql-template-strings');
 router.get(
 	'/',
 	db.asyncHandler(async (req, res) => {
+		console.log('Profession GET request received');
 		const sql = SQL`
 			SELECT id, name, eng_name
 			FROM profession
 			ORDER BY name
 		`;
-		const rows = await db.executeQuery(sql);
-		res.json({ message: 'success', data: rows });
+		try {
+			const rows = await db.executeQuery(sql);
+			console.log('Profession query results:', rows);
+			res.json({ message: 'success', data: rows });
+		} catch (error) {
+			console.error('Profession query error:', error);
+			res.status(500).json({ message: 'error', error: error.message });
+		}
 	})
 );
 

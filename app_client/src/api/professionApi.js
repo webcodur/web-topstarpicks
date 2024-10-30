@@ -1,9 +1,15 @@
 import { axiosInstance, createApiCall } from './apiUtils';
 
-export const fetchProfessions = createApiCall(
-	() => axiosInstance.get('/profession'),
-	'직군 정보를 가져오는데 실패했습니다:'
-);
+export const fetchProfessions = async () => {
+	try {
+		const response = await axiosInstance.get('/profession');
+		console.log('Profession API Response:', response);
+		return response;
+	} catch (error) {
+		console.error('Profession API Error:', error);
+		throw error;
+	}
+};
 
 export const createProfession = createApiCall(
 	(professionData) => axiosInstance.post('/profession', professionData),

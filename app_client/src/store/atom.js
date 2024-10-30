@@ -6,6 +6,7 @@ export const professionNameAtom = atom('전체');
 export const contentNameAtom = atom('책');
 export const timesNameAtom = atom('전체인물');
 export const menuInfoAtom = atomWithStorage('menuInfo', '추천정보');
+export const personTypeAtom = atom('all'); // 'all' | 'real' | 'fictional'
 
 // 시스템 자원
 export const darkModeAtom = atomWithStorage('darkMode', false);

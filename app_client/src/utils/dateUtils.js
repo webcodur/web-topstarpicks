@@ -1,3 +1,6 @@
+// 한국어 날짜 문자열을 'YYYY-MM-DD' 형식으로 변환
+// 입력 예시: "기원전 500년 3월 15일" -> "-0500-03-15"
+//           "2024년 3월 15일" -> "2024-03-15"
 export const formatDateString = (dateStr) => {
 	if (!dateStr) return '';
 

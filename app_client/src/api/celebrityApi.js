@@ -61,3 +61,9 @@ export const fetchCelebrityById = createApiCall(
 	(id) => axiosInstance.get(`/celebrities/detail/${id}`),
 	'유명인사 정보를 가져오는데 실패했습니다:'
 );
+
+export const fetchCelebrityInfoByGPT = createApiCall(
+	(name, description = '') =>
+		axiosInstance.post('/celebrities/gpt-info', { name, description }),
+	'GPT 정보 조회에 실패했습니다:'
+);

@@ -41,8 +41,8 @@ async function getChatCompletion(prompt, systemMessage) {
 
 	const jsonString = rawResponse
 		.replace(/^aiResponse \(influence\),\s*/, '')
-		.replace(/^`+json\s*/, '') // 시작 부분의 백틱과 'json' 제거
-		.replace(/`+$/, '') // 끝 부분의 백틱 제거
+		.replace(/^`+json\s*/, '')
+		.replace(/`+$/, '')
 		.trim();
 
 	const parsedResponse = JSON.parse(jsonString);
@@ -60,8 +60,28 @@ async function getAvailableModels() {
 	}
 }
 
+async function getCelebrityInfoByGPT(name, description = '') {
+	try {
+		const promptTemplate = await readPromptFile('celebrityInfo.txt');
+
+		const prompt = promptTemplate
+			.replace('[인물 이름]', name)
+			.replace('[추가 설명]', description);
+
+		const systemMessage =
+			'당신은 인물 정보 전문가입니다. 정확하고 객관적인 정보만을 제공하며, 항상 유효한 JSON 형식으로 응답합니다.';
+
+		const parsedResponse = await getChatCompletion(prompt, systemMessage);
+		return parsedResponse;
+	} catch (error) {
+		console.error('Error in getCelebrityInfoByGPT:', error);
+		throw error;
+	}
+}
+
 module.exports = {
 	readPromptFile,
 	getChatCompletion,
 	getAvailableModels,
+	getCelebrityInfoByGPT,
 };

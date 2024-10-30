@@ -256,12 +256,14 @@ const countryCodes = [
 export const useCountries = () => {
 	const countries = useMemo(() => {
 		const displayNames = new Intl.DisplayNames(['ko'], { type: 'region' });
-		return countryCodes
-			.map((code) => ({
-				code,
-				name: displayNames.of(code),
-			}))
-			.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+		return {
+			data: countryCodes
+				.map((code) => ({
+					code,
+					name: displayNames.of(code),
+				}))
+				.sort((a, b) => a.name.localeCompare(b.name, 'ko')),
+		};
 	}, []);
 
 	return countries;

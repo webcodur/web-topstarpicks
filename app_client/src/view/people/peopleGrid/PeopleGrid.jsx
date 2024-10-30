@@ -3,6 +3,8 @@ import { Divider, Box } from '@mui/material';
 import PersonCard from './personCard/PersonCard';
 import { getSortedAndGroupedData, getSortLabel } from 'utils/professionUtils';
 import { StencilTypography } from './PeopleGridStyles';
+import { useAtom } from 'jotai';
+import { personTypeAtom } from 'store/atom';
 
 const PeopleGrid = ({
 	professionData,
@@ -12,15 +14,24 @@ const PeopleGrid = ({
 	contentName,
 	onModalOpen,
 }) => {
+	const [personType] = useAtom(personTypeAtom);
+
+	const filteredData = professionData.filter((person) => {
+		if (personType === 'all') return true;
+		if (personType === 'real') return person.is_real;
+		if (personType === 'fictional') return person.is_fictional;
+		return true;
+	});
+
 	const groupedData = useMemo(
 		() =>
 			getSortedAndGroupedData(
-				professionData,
+				filteredData,
 				sortCriteria,
 				sortOrder,
 				eraBoundaries
 			),
-		[professionData, sortCriteria, sortOrder, eraBoundaries]
+		[filteredData, sortCriteria, sortOrder, eraBoundaries]
 	);
 
 	return (
@@ -33,7 +44,7 @@ const PeopleGrid = ({
 
 					{sortCriteria && (
 						<StencilTypography variant="h5" sx={{ my: 2 }}>
-							{getSortLabel(sortCriteria, group.key, eraBoundaries)}
+							{getSortLabel(sortCriteria, group.key, eraBoundaries, group)}
 						</StencilTypography>
 					)}
 

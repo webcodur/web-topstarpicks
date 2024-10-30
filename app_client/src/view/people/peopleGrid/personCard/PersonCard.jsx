@@ -114,7 +114,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 
 				<TagContainer
 					profession={person.profession}
-					isHistorical={person.is_historical}
+					isHistorical={person.is_real}
 					isFictional={person.is_fictional}
 					menuInfo={menuInfo}
 				/>

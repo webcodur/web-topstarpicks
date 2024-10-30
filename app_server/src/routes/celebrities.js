@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const SQL = require('sql-template-strings');
+const {
+	getCelebrityInfo,
+	getCelebrityInfoByGPT,
+} = require('../services/openai');
 
 // 인물명으로 단일 인물 정보 조회
 router.get(
@@ -16,7 +20,7 @@ router.get(
 		const sql = SQL`
     SELECT 
       cel.id, cel.name, cel.postname, cel.prename,
-      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, cel.is_historical, cel.is_fictional,
+      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, cel.is_real, cel.is_fictional,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
     FROM 
       celebrities cel
@@ -47,7 +51,7 @@ router.get(
       cel.id, cel.name, cel.prename, cel.postname,
       cel.gender, cel.nationality, cel.birth_date, cel.death_date, 
       cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
-      cel.is_historical, cel.is_fictional,
+      cel.is_real, cel.is_fictional,
       GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
 
       inf.political,
@@ -165,7 +169,7 @@ router.post(
 				vid_link,
 				book_story,
 				quotes,
-				is_historical,
+				is_real,
 				is_fictional,
 			} = req.body;
 
@@ -173,12 +177,12 @@ router.post(
         INSERT INTO celebrities (
           name, prename, postname, profession_id, gender, nationality, 
           birth_date, death_date, biography, img_link, vid_link,
-          book_story, quotes, is_historical, is_fictional
+          book_story, quotes, is_real, is_fictional
         )
         VALUES (
           ${name}, ${prename}, ${postname}, ${profession_id}, ${gender}, ${nationality}, 
           ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link},
-          ${book_story}, ${quotes}, ${is_historical}, ${is_fictional}
+          ${book_story}, ${quotes}, ${is_real}, ${is_fictional}
         )
       `;
 
@@ -210,7 +214,7 @@ router.put(
 			img_link,
 			book_story,
 			quotes,
-			is_historical,
+			is_real,
 			is_fictional,
 		} = req.body;
 
@@ -228,7 +232,7 @@ router.put(
         img_link = ${img_link},
         book_story = ${book_story},
         quotes = ${quotes},
-        is_historical = ${is_historical},
+        is_real = ${is_real},
         is_fictional = ${is_fictional}
     WHERE id = ${req.params.id}
   `;
@@ -295,7 +299,7 @@ router.get(
         pro.name as profession, cel.gender, cel.nationality, 
         cel.birth_date, cel.death_date, cel.biography, 
         cel.img_link, cel.vid_link, cel.book_story, cel.quotes,
-        cel.is_historical, cel.is_fictional,
+        cel.is_real, cel.is_fictional,
         pro.id as profession_id
       FROM 
         celebrities cel
@@ -314,5 +318,35 @@ router.get(
 		res.json({ message: 'success', data: rows[0] });
 	})
 );
+
+router.post('/gpt-info', async (req, res) => {
+	try {
+		const { name, description } = req.body;
+		if (!name) {
+			return res.status(400).json({ error: '인물 이름은 필수입니다.' });
+		}
+
+		const celebrityInfo = await getCelebrityInfoByGPT(name, description);
+		console.log('Server - Raw GPT Response:', celebrityInfo);
+
+		const validatedResponse = {
+			name: celebrityInfo.name || '',
+			profession_kor: celebrityInfo.profession_kor || '',
+			gender: celebrityInfo.gender || '',
+			nationality: celebrityInfo.nationality || '',
+			birth_date: celebrityInfo.birth_date || '',
+			death_date: celebrityInfo.death_date || '',
+			biography: celebrityInfo.biography || '',
+			is_real: celebrityInfo.is_real || false,
+			is_fictional: celebrityInfo.is_fictional || false,
+		};
+
+		console.log('Server - Validated Response:', validatedResponse);
+		res.json({ message: 'success', data: validatedResponse });
+	} catch (error) {
+		console.error('Error in /gpt-info:', error);
+		res.status(500).json({ error: 'GPT 정보 조회 중 오류가 발생했습니다.' });
+	}
+});
 
 module.exports = router;
