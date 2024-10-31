@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { personTypeAtom } from 'store/atom';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const PersonTypeFilter = () => {
+const FilterByPersonType = () => {
 	const [personType, setPersonType] = useAtom(personTypeAtom);
 
 	return (
@@ -21,4 +21,4 @@ const PersonTypeFilter = () => {
 	);
 };
 
-export default PersonTypeFilter;
+export default FilterByPersonType;

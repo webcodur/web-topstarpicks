@@ -18,7 +18,7 @@ import SearchSection from './components/SearchSection';
 import FormFields from './components/FormFields';
 import FormButtons from './components/FormButtons';
 import GPTSection from './components/GPTSection';
-import { TextField, Button, Box } from '@mui/material';
+import { getCountryName } from 'utils/professionUtils';
 
 const CelebForm = ({ showSnackbar }) => {
 	const countriesResponse = useCountries();
@@ -27,21 +27,25 @@ const CelebForm = ({ showSnackbar }) => {
 	const countries = countriesResponse?.data || [];
 	const professionNames = professionResponse?.data || [];
 
+	const [mode, setMode] = useState('create');
 	const [selectedCeleb, setSelectedCeleb] = useState(null);
+
 	const [searchQuery, setSearchQuery] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
+
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-	const [mode, setMode] = useState('create');
 	const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
+
 	const [formData, setFormData] = useState(INITIAL_FORM_DATA);
 	const [isSubmitted, setIsSubmitted] = useState(false);
+
 	const [gptName, setGptName] = useState('');
 	const [gptDesc, setGptDesc] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSearch = () => {
-		if (searchQuery.length < 2) {
-			alert('2글자 이상 입력해주세요.');
+		if (searchQuery.length < 1) {
+			alert('1글자 이상 입력해주세요.');
 			return;
 		}
 
@@ -68,16 +72,16 @@ const CelebForm = ({ showSnackbar }) => {
 					postname: fullCelebData.postname || '',
 					profession_kor: fullCelebData.profession || '',
 					gender: fullCelebData.gender || '',
-					nationality: fullCelebData.nationality || '',
+					nationality: getCountryName(fullCelebData.nationality) || '',
 					birth_date: fullCelebData.birth_date || '',
 					death_date: fullCelebData.death_date || '',
-					biography: fullCelebData.biography || '',
-					img_link: fullCelebData.img_link || '',
-					vid_link: fullCelebData.vid_link || '',
-					book_story: fullCelebData.book_story || '',
-					quotes: fullCelebData.quotes || '',
-					is_real: Boolean(fullCelebData.is_real),
-					is_fictional: Boolean(fullCelebData.is_fictional),
+						biography: fullCelebData.biography || '',
+						img_link: fullCelebData.img_link || '',
+						vid_link: fullCelebData.vid_link || '',
+						book_story: fullCelebData.book_story || '',
+						quotes: fullCelebData.quotes || '',
+						is_real: Boolean(fullCelebData.is_real),
+						is_fictional: Boolean(fullCelebData.is_fictional),
 				});
 				setMode('edit');
 				setSearchResults([]);
@@ -119,7 +123,7 @@ const CelebForm = ({ showSnackbar }) => {
 		} catch (error) {
 			showSnackbar(
 				mode === 'edit'
-					? '유명인사 수정에 실패했습니다.'
+					? '유명인사 수정에 실���했습니다.'
 					: '유명인사 추가에 실패했습니다.',
 				'error'
 			);

@@ -13,7 +13,7 @@ import useCelebNumbers from 'hooks/useCelebNumbers';
 import { useAtom } from 'jotai';
 import { professionNameAtom } from 'store/atom';
 
-const ProfessionFilter = () => {
+const FilterByProfession = () => {
 	const [celebNumbers, celebTotals] = useCelebNumbers();
 	const [profession, setProfession] = useAtom(professionNameAtom);
 
@@ -75,4 +75,4 @@ const ProfessionFilter = () => {
 	);
 };
 
-export default ProfessionFilter;
+export default FilterByProfession;

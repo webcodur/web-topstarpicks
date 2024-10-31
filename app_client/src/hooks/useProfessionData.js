@@ -37,6 +37,7 @@ const isCurrent = (birth, death) => {
 
 const useProfessionData = (profession, contentName, timesName, menuInfo) => {
 	const [professionData, setProfessionData] = useState(null);
+	const [profDataLoaded, setProfDataLoaded] = useState(false);
 
 	useEffect(() => {
 		const loadCelebrities = async () => {
@@ -70,6 +71,8 @@ const useProfessionData = (profession, contentName, timesName, menuInfo) => {
 					);
 					setProfessionData(contentCategorizedData);
 				}
+
+				setProfDataLoaded(true);
 			} catch (error) {
 				console.error('Failed to load celebrity data:', error);
 			}
@@ -78,7 +81,7 @@ const useProfessionData = (profession, contentName, timesName, menuInfo) => {
 		loadCelebrities();
 	}, [profession, contentName, timesName, menuInfo]);
 
-	return professionData;
+	return { profDataLoaded, professionData };
 };
 
 export default useProfessionData;

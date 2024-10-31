@@ -13,10 +13,9 @@ import { timesNameAtom } from 'store/atom';
 import { styled } from '@mui/material/styles';
 import { History, AllInclusive, Today } from '@mui/icons-material';
 
-// Alert 컴포넌트 커스터마이징
 const CustomAlert = styled(Alert)(({ theme }) => ({
 	'&.MuiAlert-filledInfo': {
-		backgroundColor: '#0d47a1', // 파랑
+		backgroundColor: '#0d47a1',
 	},
 	'& .MuiAlert-icon': {
 		color: 'inherit',
@@ -28,14 +27,13 @@ const CustomAlert = styled(Alert)(({ theme }) => ({
 	},
 }));
 
-// 시대 카테고리별 아이콘 설정
 const timesIcons = [
 	{ name: '전체인물', icon: AllInclusive },
 	{ name: '역사인물', icon: History },
 	{ name: '현대인물', icon: Today },
 ];
 
-const CategorySelect = memo(() => {
+const FilterByEra = memo(() => {
 	const [timesType, setTimesType] = useAtom(timesNameAtom);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 	const timesCategories = [
@@ -106,4 +104,4 @@ const CategorySelect = memo(() => {
 	);
 });
 
-export default CategorySelect;
+export default FilterByEra;

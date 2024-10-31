@@ -14,10 +14,9 @@ import { useContentNames } from 'hooks/useContentNames';
 import { styled } from '@mui/material/styles';
 import { contentIcons } from './icons/contentIcons';
 
-// Alert 컴포넌트 커스터마이징
 const CustomAlert = styled(Alert)(({ theme }) => ({
 	'&.MuiAlert-filledInfo': {
-		backgroundColor: '#0d47a1', // 파랑
+		backgroundColor: '#0d47a1',
 	},
 	'& .MuiAlert-icon': {
 		color: 'inherit',
@@ -29,7 +28,7 @@ const CustomAlert = styled(Alert)(({ theme }) => ({
 	},
 }));
 
-const CategorySelect = memo(() => {
+const FilterByContent = memo(() => {
 	const [contentType, setContentType] = useAtom(contentNameAtom);
 	const contentNames = useContentNames();
 	const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -103,4 +102,4 @@ const CategorySelect = memo(() => {
 	);
 });
 
-export default CategorySelect;
+export default FilterByContent; 
