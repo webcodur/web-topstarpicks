@@ -3,21 +3,43 @@ import {
 	Grid,
 	TextField,
 	Autocomplete,
-	Typography,
 	FormControlLabel,
 	Checkbox,
 	Box,
 	CardMedia,
-	FormControl,
-	InputLabel,
-	Select,
-	MenuItem,
-	FormHelperText,
 } from '@mui/material';
-import { formatDateString } from '../../../../../utils/dateUtils';
+import { formatDateString } from 'utils/dateUtils';
 import { styles } from '../CelebForm.styles';
 import { GENDER_OPTIONS } from '../CelebForm.constants';
 import { getProfessionValue } from '../formUtils';
+import { styled } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
+
+const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
+	border: '1px solid rgba(0, 0, 0, 0.23)',
+	borderRadius: '4px',
+	margin: '0',
+	padding: '8.5px 14px',
+	width: '100%',
+	transition: 'background-color 0.3s, border-color 0.3s',
+
+	'&:hover': {
+		borderColor: theme.palette.text.primary,
+	},
+
+	'& .MuiCheckbox-root': {
+		padding: '0 9px 0 0',
+	},
+
+	'& .MuiFormControlLabel-label': {
+		fontSize: '1rem',
+	},
+
+	'&.Mui-checked': {
+		backgroundColor: alpha(theme.palette.primary.main, 0.1),
+		borderColor: theme.palette.primary.main,
+	},
+}));
 
 // 유명인사 정보 입력 필드들을 모아둔 컴포넌트
 // 기본정보, 날짜, 텍스트 영역, 체크박스 등 모든 입력 필드 포함
@@ -41,11 +63,6 @@ const FormFields = ({
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
-	};
-
-	// 국가 선택 시 국가 코드를 저장
-	const handleCountryChange = (event, value) => {
-		setFormData((prev) => ({ ...prev, nationality: value ? value.code : '' }));
 	};
 
 	return (
@@ -298,41 +315,33 @@ const FormFields = ({
 			</Grid>
 
 			{/* Checkboxes */}
-			<Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-				<FormControlLabel
+			<Grid item xs={12} sm={6}>
+				<StyledFormControlLabel
 					control={
 						<Checkbox
-							size="small"
 							checked={formData.is_real}
 							onChange={(e) =>
-								setFormData((prev) => ({
-									...prev,
-									is_real: e.target.checked,
-								}))
+								setFormData({ ...formData, is_real: e.target.checked })
 							}
-							name="is_real"
 						/>
 					}
 					label="실존 인물"
+					className={formData.is_real ? 'Mui-checked' : ''}
 				/>
 			</Grid>
 
-			<Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
-				<FormControlLabel
+			<Grid item xs={12} sm={6}>
+				<StyledFormControlLabel
 					control={
 						<Checkbox
-							size="small"
 							checked={formData.is_fictional}
 							onChange={(e) =>
-								setFormData((prev) => ({
-									...prev,
-									is_fictional: e.target.checked,
-								}))
+								setFormData({ ...formData, is_fictional: e.target.checked })
 							}
-							name="is_fictional"
 						/>
 					}
 					label="가상 인물"
+					className={formData.is_fictional ? 'Mui-checked' : ''}
 				/>
 			</Grid>
 		</Grid>
