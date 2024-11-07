@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material/styles';
-import { MainMenu } from './components/MainMenu';
+import GameUI from '../components/GameUI';
+import * as S from './styles/gamePlayStyles';
 
 const theme = createTheme({
 	palette: {
@@ -14,30 +15,21 @@ const theme = createTheme({
 	},
 });
 
-const Games = () => {
+const GamePlay = () => {
 	const navigate = useNavigate();
-
-	const handleStartGame = () => {
-		navigate('/games/play');
-	};
-
-	const handleShowManual = () => {
-		navigate('/games/manual');
-	};
-
-	const handleShowSettings = () => {
-		navigate('/games/settings');
-	};
 
 	return (
 		<ThemeProvider theme={theme}>
-			<MainMenu
-				onStartGame={handleStartGame}
-				onShowManual={handleShowManual}
-				onShowSettings={handleShowSettings}
-			/>
+			<S.GamePlayContainer>
+				<S.Header>
+					<S.BackButton onClick={() => navigate('/games')}>
+						게임 종료
+					</S.BackButton>
+				</S.Header>
+				<GameUI />
+			</S.GamePlayContainer>
 		</ThemeProvider>
 	);
 };
 
-export default Games;
+export default GamePlay;
