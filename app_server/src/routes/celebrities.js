@@ -52,7 +52,6 @@ router.get(
 	'/',
 	db.asyncHandler(async (req, res) => {
 		const { profession, era, menuType, contentName } = req.query;
-		console.log('Received era:', era);
 
 		// 기본 쿼리 구성
 		let sql = SQL`
