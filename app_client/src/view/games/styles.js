@@ -115,7 +115,7 @@ export const HandSection = styled(Box)`
 
 export const PlayerCard = styled(Paper, {
 	shouldForwardProp: (prop) =>
-		!['shouldTransform', 'isRemoving', 'isSelected'].includes(prop),
+		!['shouldTransform', 'isRemoving', 'isSelected', 'isNew'].includes(prop),
 })`
 	width: 120px;
 	height: 180px;
@@ -133,6 +133,22 @@ export const PlayerCard = styled(Paper, {
 			? '0 0 10px rgba(33, 150, 243, 0.5)'
 			: '0 2px 4px rgba(0, 0, 0, 0.1)'};
 
+	${(props) =>
+		props.isNew &&
+		`
+		animation: fadeInCard 0.5s ease-out;
+		@keyframes fadeInCard {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+	`}
+
 	&:hover {
 		box-shadow: ${(props) =>
 			props.isRemoving
@@ -145,20 +161,6 @@ export const PlayerCard = styled(Paper, {
 			opacity: 1;
 		}
 	}
-
-	${(props) =>
-		props.isNew &&
-		`
-		animation: fadeIn 0.3s ease-out;
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
-			to {
-				opacity: 1;
-			}
-		}
-	`}
 `;
 
 export const ActionSection = styled.div`
@@ -418,6 +420,10 @@ export const CardBack = styled(Box)`
 
 	&:hover {
 		transform: translateY(-5px);
+
+		.effect-tooltip {
+			opacity: 1;
+		}
 	}
 `;
 
@@ -489,13 +495,21 @@ export const BattleContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: ${(props) => (props.phase === 'clash' ? '20px' : '200px')};
-	transition: gap 0.5s ease-in-out;
+	gap: 3rem;
+	animation: fadeIn 0.5s ease-in-out;
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
 `;
 
 export const BattleCard = styled.div`
-	width: 200px;
-	height: 280px;
+	width: 300px;
 	background: white;
 	border-radius: 12px;
 	padding: 20px;
@@ -505,70 +519,10 @@ export const BattleCard = styled.div`
 	gap: 10px;
 	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 	transition: all 0.5s ease-in-out;
-	position: absolute;
-
-	${(props) => {
-		if (props.phase === 'fly') {
-			if (props.isPlayer) {
-				// 플레이어 카드의 시작 위치 설정
-				const left = props.startPosition
-					? `${props.startPosition.left}px`
-					: '50%';
-				const top = props.startPosition
-					? `${props.startPosition.top}px`
-					: '50%';
-				return `
-					left: ${left};
-					top: ${top};
-					transform: translate(-50%, -50%) scale(0.6);
-					opacity: 0;
-				`;
-			}
-			return `
-				right: 20%;
-				top: 20%;
-				transform: translate(50%, -50%) scale(0.6);
-				opacity: 0;
-			`;
-		}
-
-		if (props.phase === 'start') {
-			return `
-				${props.isPlayer ? 'left: 30%' : 'right: 30%'};
-				top: 50%;
-				transform: translate(${props.isPlayer ? '-50%' : '50%'}, -50%);
-				opacity: 1;
-			`;
-		}
-
-		if (props.phase === 'clash') {
-			return `
-				${props.isPlayer ? 'left: 45%' : 'right: 45%'};
-				top: 50%;
-				transform: translate(${props.isPlayer ? '-50%' : '50%'}, -50%) 
-					scale(1.1) rotate(${props.isPlayer ? '-10deg' : '10deg'});
-			`;
-		}
-
-		if (props.phase === 'result') {
-			if (!props.isWinner) {
-				return `
-					${props.isPlayer ? 'left: 45%' : 'right: 45%'};
-					top: 50%;
-					transform: translate(${props.isPlayer ? '-50%' : '50%'}, -50%) 
-						scale(0.8) rotate(${props.isPlayer ? '-30deg' : '30deg'});
-					opacity: 0;
-					filter: blur(10px);
-				`;
-			}
-			return `
-				${props.isPlayer ? 'left: 45%' : 'right: 45%'};
-				top: 50%;
-				transform: translate(${props.isPlayer ? '-50%' : '50%'}, -50%) scale(1.2);
-				box-shadow: 0 0 30px ${props.isPlayer ? '#2196f3' : '#f44336'};
-			`;
-		}
-	}}
+	opacity: ${(props) =>
+		props.phase === 'result' && !props.isWinner ? 0.6 : 1};
+	transform: ${(props) =>
+		props.phase === 'result' && props.isWinner ? 'scale(1.1)' : 'scale(1)'};
 `;
 
 export const BattleVS = styled.div`
@@ -627,13 +581,13 @@ export const SubmitButtonContainer = styled.div`
 
 export const EffectTooltip = styled.div`
 	position: absolute;
-	top: -80px;
+	top: -100px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 0.9);
 	color: white;
-	padding: 8px 12px;
-	border-radius: 4px;
+	padding: 12px 16px;
+	border-radius: 8px;
 	font-size: 0.875rem;
 	pointer-events: none;
 	opacity: 0;
@@ -641,15 +595,158 @@ export const EffectTooltip = styled.div`
 	width: max-content;
 	max-width: 200px;
 	z-index: 1000;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+
+	h4 {
+		color: #2196f3;
+		margin: 0 0 4px 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	p {
+		margin: 0;
+		color: #ffffff;
+		line-height: 1.4;
+	}
 
 	&::after {
 		content: '';
 		position: absolute;
-		bottom: -4px;
+		bottom: -8px;
 		left: 50%;
 		transform: translateX(-50%) rotate(45deg);
-		width: 8px;
-		height: 8px;
-		background: rgba(0, 0, 0, 0.8);
+		width: 12px;
+		height: 12px;
+		background: rgba(0, 0, 0, 0.9);
+		border-right: 1px solid rgba(255, 255, 255, 0.1);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+`;
+
+export const GameOverOverlay = styled.div`
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+`;
+
+export const GameOverContent = styled.div`
+	background: white;
+	padding: 2rem;
+	border-radius: 8px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+`;
+
+export const ModalContainer = styled(Box)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 90%;
+	max-width: 800px;
+	max-height: 90vh;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	outline: none;
+	display: flex;
+	flex-direction: column;
+`;
+
+export const ModalHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 24px;
+	border-bottom: 1px solid #eee;
+`;
+
+export const ManualSection = styled.div`
+	padding: 16px 24px;
+	overflow-y: auto;
+
+	h6 {
+		color: ${(props) => props.theme.palette.primary.main};
+		margin-top: 24px;
+	}
+
+	p {
+		margin: 8px 0;
+		line-height: 1.6;
+	}
+`;
+
+export const EffectList = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin: 8px 0;
+	text-align: center;
+`;
+
+export const EffectText = styled.div`
+	font-size: 0.9rem;
+	color: #666;
+	padding: 4px;
+	background: rgba(0, 0, 0, 0.05);
+	border-radius: 4px;
+
+	&:not(:last-child) {
+		margin-bottom: 4px;
+	}
+`;
+
+export const BattlePreview = styled.div`
+	background: rgba(0, 0, 0, 0.8);
+	padding: 2rem;
+	border-radius: 12px;
+	text-align: center;
+	animation: fadeIn 0.5s ease-in-out;
+`;
+
+export const PreviewText = styled.div`
+	color: white;
+	font-size: 1.5rem;
+	margin: 1rem 0;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+`;
+
+export const ResultText = styled.div`
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: ${(props) => (props.isWinner ? '#4caf50' : '#f44336')};
+	margin-top: 1rem;
+	text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+`;
+
+export const NextButton = styled.button`
+	margin-top: 20px;
+	padding: 12px 24px;
+	background: rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(255, 255, 255, 0.5);
+	border-radius: 8px;
+	color: white;
+	font-size: 1.1rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.3);
+		transform: translateY(-2px);
+	}
+
+	&:active {
+		transform: translateY(0);
 	}
 `;

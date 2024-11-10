@@ -54,7 +54,7 @@ const GameManual = () => {
 						animate="visible"
 						variants={titleVariants}>
 						<Typography variant="h3" component="h1">
-							천하삼국 전략카드대전
+							카드의 전설: 천하쟁패
 						</Typography>
 						<Typography variant="h6" color="textSecondary">
 							게임 플레이 방법
@@ -158,6 +158,45 @@ const GameManual = () => {
 						</S.CardContent>
 					</S.ManualCard>
 
+					{/* 직군별 특수 효과 */}
+					<S.ManualCard variants={cardVariants}>
+						<S.CardHeader>
+							<S.IconWrapper>👥</S.IconWrapper>
+							<Typography variant="h5">직군별 특수 효과</Typography>
+						</S.CardHeader>
+						<S.CardContent>
+							<S.JobEffectGrid>
+								{[
+									['지도자', '군주의 위엄', '모든 행동의 기본 점수 +15'],
+									['정치인', '외교술', '외교 행동 선택 시 +25'],
+									['지휘관', '전술 지휘', '교전 행동 선택 시 +30'],
+									['기업가', '자금력', '통치 행동 선택 시 +25'],
+									['투자자', '시장 조작', '상대방의 점수를 15 감소'],
+									['학자', '전략 분석', '모략 행동 선택 시 +25'],
+									[
+										'예술인',
+										'예술적 영감',
+										'현재 주제와 같은 행동 선택 시 추가로 +15',
+									],
+									[
+										'작가',
+										'서사 창작',
+										'모든 행동의 기본 점수 +10, 주제 보너스 +5',
+									],
+									['배우', '변신', '상대 카드의 직군 점수 보너스를 복사'],
+									['인플루엔서', '여론 주도', '주제 보너스를 2배로 적용'],
+									['스포츠인', '승부욕', '체력이 40 이하일 때 모든 점수 +20'],
+								].map(([job, name, effect]) => (
+									<S.JobEffectBox key={job}>
+										<S.JobTitle>{job}</S.JobTitle>
+										<S.EffectName>{name}</S.EffectName>
+										<S.EffectDescription>{effect}</S.EffectDescription>
+									</S.JobEffectBox>
+								))}
+							</S.JobEffectGrid>
+						</S.CardContent>
+					</S.ManualCard>
+
 					{/* 주제 시스템 */}
 					<S.ManualCard variants={cardVariants}>
 						<S.CardHeader>
@@ -184,53 +223,6 @@ const GameManual = () => {
 									<S.TopicBox next>다음 주제: 외교</S.TopicBox>
 								</S.TopicExample>
 							</S.TopicInfo>
-						</S.CardContent>
-					</S.ManualCard>
-
-					{/* 직군별 행동 보너스 */}
-					<S.ManualCard variants={cardVariants}>
-						<S.CardHeader>
-							<S.IconWrapper>👥</S.IconWrapper>
-							<Typography variant="h5">직군별 행동 보너스</Typography>
-						</S.CardHeader>
-						<S.CardContent>
-							<S.BonusTable>
-								<S.BonusTableRow>
-									<div>직군</div>
-									<div>통치</div>
-									<div>외교</div>
-									<div>교전</div>
-									<div>모략</div>
-								</S.BonusTableRow>
-								<S.BonusTableRow>
-									<div>---</div>
-									<div>---</div>
-									<div>---</div>
-									<div>---</div>
-									<div>---</div>
-								</S.BonusTableRow>
-								{[
-									['지도자', '+25', '+20', '+10', '-10'],
-									['정치인', '+15', '+25', '-5', '+20'],
-									['지휘관', '+10', '-5', '+25', '-10'],
-									['기업가', '+20', '+20', '-10', '+15'],
-									['투자자', '+10', '+20', '-10', '+25'],
-									['학자', '+15', '+15', '-5', '+20'],
-									['예술인', '+5', '+15', '-10', '+25'],
-									['작가', '+5', '+20', '-10', '+20'],
-									['배우', '0', '+15', '-10', '+20'],
-									['인플루엔서', '+5', '+15', '-10', '+15'],
-									['스포츠인', '+10', '-5', '+20', '-10'],
-								].map((row, index) => (
-									<S.BonusTableRow key={index}>
-										<div>{row[0]}</div>
-										<S.BonusCell>{row[1]}</S.BonusCell>
-										<S.BonusCell>{row[2]}</S.BonusCell>
-										<S.BonusCell>{row[3]}</S.BonusCell>
-										<S.BonusCell>{row[4]}</S.BonusCell>
-									</S.BonusTableRow>
-								))}
-							</S.BonusTable>
 						</S.CardContent>
 					</S.ManualCard>
 				</S.ContentGrid>

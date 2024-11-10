@@ -15,7 +15,7 @@ const FilterByPersonType = () => {
 				label="인물 유형">
 				<MenuItem value="all">전체</MenuItem>
 				<MenuItem value="real">실존인물</MenuItem>
-				<MenuItem value="fictional">가상인물</MenuItem>
+				<MenuItem value="legend">가상인물</MenuItem>
 			</Select>
 		</FormControl>
 	);

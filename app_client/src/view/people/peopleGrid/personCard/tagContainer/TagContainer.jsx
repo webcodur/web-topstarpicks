@@ -2,7 +2,7 @@ import React from 'react';
 import { Chip } from '@mui/material';
 import { TagContainerWrapper } from './tagContainer.style';
 
-const TagContainer = ({ profession, isHistorical, isFictional, menuInfo }) => {
+const TagContainer = ({ profession, isHistorical, isLegend, menuInfo }) => {
 	return (
 		<TagContainerWrapper>
 			<Chip
@@ -31,7 +31,7 @@ const TagContainer = ({ profession, isHistorical, isFictional, menuInfo }) => {
 					}}
 				/>
 			)}
-			{isFictional === 1 && menuInfo === '인물도감' && (
+			{isLegend === 1 && menuInfo === '인물도감' && (
 				<Chip
 					label="신화인물"
 					size="small"

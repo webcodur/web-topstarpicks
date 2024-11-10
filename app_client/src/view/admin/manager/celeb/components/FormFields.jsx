@@ -334,14 +334,14 @@ const FormFields = ({
 				<StyledFormControlLabel
 					control={
 						<Checkbox
-							checked={formData.is_fictional}
+							checked={formData.is_legend}
 							onChange={(e) =>
-								setFormData({ ...formData, is_fictional: e.target.checked })
+								setFormData({ ...formData, is_legend: e.target.checked })
 							}
 						/>
 					}
 					label="가상 인물"
-					className={formData.is_fictional ? 'Mui-checked' : ''}
+					className={formData.is_legend ? 'Mui-checked' : ''}
 				/>
 			</Grid>
 		</Grid>

@@ -278,3 +278,44 @@ export const BonusCell = styled.div`
 	}};
 	font-weight: 500;
 `;
+
+export const JobEffectGrid = styled.div`
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 16px;
+	padding: 16px 0;
+`;
+
+export const JobEffectBox = styled.div`
+	background: #f8f9fa;
+	border-radius: 8px;
+	padding: 16px;
+	border: 1px solid #e9ecef;
+	transition: all 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+`;
+
+export const JobTitle = styled.h4`
+	margin: 0 0 8px 0;
+	color: ${(props) => props.theme.palette.primary.main};
+	font-size: 1.1rem;
+	font-weight: 600;
+`;
+
+export const EffectName = styled.h5`
+	margin: 0 0 4px 0;
+	color: ${(props) => props.theme.palette.secondary.main};
+	font-size: 1rem;
+	font-weight: 500;
+`;
+
+export const EffectDescription = styled.p`
+	margin: 0;
+	color: #666;
+	font-size: 0.9rem;
+	line-height: 1.4;
+`;

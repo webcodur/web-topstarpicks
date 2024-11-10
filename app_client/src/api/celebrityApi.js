@@ -1,13 +1,17 @@
 import { axiosInstance, createApiCall } from './apiUtils';
 
 // 유명인사 직군별 데이터 조회
-export const fetchCelebrities = createApiCall(
-	(profession = 'all') =>
-		axiosInstance.get('/celebrities', {
-			params: profession !== 'all' ? { profession } : {},
-		}),
-	'직군별 인물 정보를 가져오는데 실패했습니다:'
-);
+export const fetchCelebrities = createApiCall((params) => {
+	const { profession, timesName, menuInfo, contentName } = params;
+	return axiosInstance.get('/celebrities', {
+		params: {
+			profession: profession === '전체' ? 'all' : profession,
+			era: timesName,
+			menuType: menuInfo,
+			contentName: contentName || '',
+		},
+	});
+}, 'Failed to fetch celebrities');
 
 // 유명인사 인물별 개인정보
 export const fetchPersonInfo = createApiCall(

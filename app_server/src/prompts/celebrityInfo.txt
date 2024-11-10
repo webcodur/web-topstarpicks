@@ -13,7 +13,7 @@
   "death_date": "YYYY-MM-DD 형식 (기원전은 -YYYY-MM-DD, 생존시 빈 문자열)",
   "biography": "직함/주요업적 (단어형 한문장) 인물 설명 (문장형 두 문장)",
   "is_real": true/false,
-  "is_fictional": true/false
+  "is_legend": true/false
 }
 
 주의사항:
@@ -34,7 +34,7 @@
      * 예: 그리스 신화 -> GR, 북유럽 신화 -> NO
 3. 실존/가상 여부는 독립적으로 판단:
    - is_real: 실존 인물의 특성이 있다면 true
-   - is_fictional: 신화/전설/종교적 이야기에서 가공된 특성이 있다면 true
+   - is_legend: 신화/전설/종교적 이야기에서 가공된 특성이 있다면 true
    - 둘 다 true일 수 있음 (예: 예수, 석가모니 등 역사적 실존 인물이지만 신화적/종교적 특성도 가진 경우)
    - 둘 다 false일 수는 없음
 4. biography 작성 예시:

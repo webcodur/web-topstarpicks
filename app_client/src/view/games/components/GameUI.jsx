@@ -11,6 +11,7 @@ import { ScorePreview } from './ScorePreview';
 import { CardBattle } from './CardBattle';
 import { ScoreCalculator } from '../logic/ScoreCalculator';
 import { ActionSection } from './ActionSection';
+import { ManualModal } from './ManualModal';
 
 const GameUI = ({ settings }) => {
 	const {
@@ -24,14 +25,13 @@ const GameUI = ({ settings }) => {
 		removingCardIndex,
 		setShowBattle,
 		setBattleResult,
+		gameOver,
+		newCardIndices,
+		handleBattleFinish,
 	} = useGameState();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const handleBattleFinish = () => {
-		setShowBattle(false);
-		setBattleResult(null);
-	};
+	const [isManualOpen, setIsManualOpen] = useState(false);
 
 	// 게임 상태가 완전히 초기화될 때까지 로딩 표시
 	if (!gameState || !gameState.playerHand) {
@@ -49,6 +49,9 @@ const GameUI = ({ settings }) => {
 			<S.TopButtonSection>
 				<S.LibraryButton onClick={() => setIsModalOpen(true)}>
 					전체 카드
+				</S.LibraryButton>
+				<S.LibraryButton onClick={() => setIsManualOpen(true)}>
+					플레이 방법
 				</S.LibraryButton>
 				<S.InfoText>남은 카드: {gameState.mainDeckCount}</S.InfoText>
 			</S.TopButtonSection>
@@ -78,6 +81,7 @@ const GameUI = ({ settings }) => {
 				selectedCard={selectedCard}
 				onCardSelect={handleCardSelect}
 				removingIndex={removingCardIndex}
+				newCardIndices={newCardIndices}
 			/>
 
 			{/* 플레이어 정보 */}
@@ -94,6 +98,28 @@ const GameUI = ({ settings }) => {
 			{showBattle && battleResult && (
 				<CardBattle {...battleResult} onFinish={handleBattleFinish} />
 			)}
+
+			{/* 게임 종료 시 표시될 오버레이 */}
+			{gameOver && (
+				<S.GameOverOverlay>
+					<S.GameOverContent>
+						<S.InfoText fontSize="2rem" fontWeight="600">
+							게임 종료!
+						</S.InfoText>
+						<S.InfoText fontSize="1.5rem">
+							{gameState.playerHealth <= 0 ? '상대방' : '플레이어'} 승리!
+						</S.InfoText>
+						<S.ActionButton
+							onClick={() => window.location.reload()}
+							variant="contained">
+							다시 시작
+						</S.ActionButton>
+					</S.GameOverContent>
+				</S.GameOverOverlay>
+			)}
+
+			{/* 플레이 방법 모달 */}
+			<ManualModal open={isManualOpen} onClose={() => setIsManualOpen(false)} />
 		</S.GameContainer>
 	);
 };

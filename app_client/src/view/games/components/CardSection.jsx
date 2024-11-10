@@ -7,6 +7,7 @@ export const CardSection = ({
 	selectedCard,
 	onCardSelect,
 	removingIndex,
+	newCardIndices,
 }) => {
 	return (
 		<S.HandSection>
@@ -17,6 +18,7 @@ export const CardSection = ({
 					elevation={3}
 					isSelected={selectedCard && selectedCard.id === card.id}
 					isRemoving={removingIndex === index}
+					isNew={newCardIndices.includes(index)}
 					onClick={() => !card.isEmpty && onCardSelect(card)}>
 					{!card.isEmpty && (
 						<>

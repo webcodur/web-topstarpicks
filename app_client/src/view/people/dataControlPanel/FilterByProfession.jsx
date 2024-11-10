@@ -14,9 +14,10 @@ import { useAtom } from 'jotai';
 import { professionNameAtom } from 'store/atom';
 
 const FilterByProfession = () => {
-	const [celebNumbers, celebTotals] = useCelebNumbers();
+	const [celebNumbers, celebTotals] = useCelebNumbers(); // [celeb Count by Profession, 총원]
 	const [profession, setProfession] = useAtom(professionNameAtom);
 
+	// 직군별 인원 수 반환
 	const getNumberByProfession = (professionName) => {
 		if (professionName === '전체') return celebTotals;
 		const profession = celebNumbers?.find(
@@ -25,14 +26,17 @@ const FilterByProfession = () => {
 		return profession ? profession.profession_count : 0;
 	};
 
+	// 직군 선택 시 상태 변경
 	const handleProfessionChange = (event) => {
 		setProfession(event.target.value);
 	};
 
+	// 직군 데이터가 로드되지 않았을 경우 null 반환
 	if (!celebNumbers || !celebTotals) {
 		return null;
 	}
 
+	// 직군 필터 컴포넌트 반환
 	return (
 		<FormControl>
 			<InputLabel id="profession-select-label">직군 필터</InputLabel>

@@ -75,13 +75,13 @@ const CelebForm = ({ showSnackbar }) => {
 					nationality: getCountryName(fullCelebData.nationality) || '',
 					birth_date: fullCelebData.birth_date || '',
 					death_date: fullCelebData.death_date || '',
-						biography: fullCelebData.biography || '',
-						img_link: fullCelebData.img_link || '',
-						vid_link: fullCelebData.vid_link || '',
-						book_story: fullCelebData.book_story || '',
-						quotes: fullCelebData.quotes || '',
-						is_real: Boolean(fullCelebData.is_real),
-						is_fictional: Boolean(fullCelebData.is_fictional),
+					biography: fullCelebData.biography || '',
+					img_link: fullCelebData.img_link || '',
+					vid_link: fullCelebData.vid_link || '',
+					book_story: fullCelebData.book_story || '',
+					quotes: fullCelebData.quotes || '',
+					is_real: fullCelebData.is_real ?? false,
+					is_legend: fullCelebData.is_legend ?? false,
 				});
 				setMode('edit');
 				setSearchResults([]);
@@ -106,24 +106,42 @@ const CelebForm = ({ showSnackbar }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsSubmitted(true);
+
 		try {
+			const profession_id = getProfession(
+				professionNames,
+				formData.profession_kor
+			);
+
+			if (!profession_id) {
+				showSnackbar('올바른 직업을 선택해주세요.', 'error');
+				return;
+			}
+
 			const celebData = {
 				...formData,
-				profession_id: getProfession(professionNames, formData.profession_kor),
+				profession_id,
+				// boolean 값들의 기본값 설정
+				is_real: formData.is_real || false,
+				is_legend: formData.is_legend || false,
+				// 빈 문자열 대신 null 처리
+				birth_date: formData.birth_date || null,
+				death_date: formData.death_date || null,
 			};
 
-			if (mode === 'edit') {
+			if (mode === 'edit' && selectedCeleb?.id) {
 				await updateCelebrity(selectedCeleb.id, celebData);
-				showSnackbar('유명인사 정보가 수정되었습니다.');
+				showSnackbar('유명인사 정보가 수정되었습니다.', 'success');
 			} else {
 				await createCelebrity(celebData);
-				showSnackbar('새 유명인사가 추가되었습니다.');
+				showSnackbar('새 유명인사가 추가되었습니다.', 'success');
 			}
 			handleReset();
 		} catch (error) {
+			console.error('Submit error:', error);
 			showSnackbar(
 				mode === 'edit'
-					? '유명인사 수정에 실���했습니다.'
+					? '유명인사 수정에 실패했습니다.'
 					: '유명인사 추가에 실패했습니다.',
 				'error'
 			);
@@ -163,15 +181,15 @@ const CelebForm = ({ showSnackbar }) => {
 			);
 
 			setFormData({
-				name: gptName,
+				name: gptName || '',
 				profession_kor: gptData.profession_kor || '',
 				gender: gptData.gender || '',
 				nationality: foundCountry?.name || '',
 				birth_date: gptData.birth_date || '',
 				death_date: gptData.death_date || '',
 				biography: gptData.biography || '',
-				is_real: gptData.is_real,
-				is_fictional: gptData.is_fictional,
+				is_real: gptData.is_real ?? false,
+				is_legend: gptData.is_legend ?? false,
 				prename: '',
 				postname: '',
 				img_link: '',

@@ -13,7 +13,7 @@ export const INITIAL_FORM_DATA = {
 	book_story: '',
 	quotes: '',
 	is_real: false,
-	is_fictional: false,
+	is_legend: false,
 };
 
 export const GENDER_OPTIONS = [

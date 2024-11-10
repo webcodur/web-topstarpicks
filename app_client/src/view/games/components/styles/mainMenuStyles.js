@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import { styled as muiStyled } from '@mui/material/styles';
+import { Typography } from '@mui/material';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -42,19 +44,24 @@ export const TitleSection = styled.div`
 	animation: ${fadeIn} 1s ease-out;
 `;
 
-export const GameTitle = styled.h1`
-	font-size: 4rem;
-	font-weight: bold;
-	margin: 0;
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-	font-family: 'Noto Serif KR', serif;
+export const GameTitle = muiStyled(Typography)`
+	font-family: 'Nanum Myeongjo', serif;
+	font-weight: 700;
+	font-size: 3.5rem;
+	margin-bottom: 1rem;
+	text-align: center;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+	letter-spacing: 0.1em;
 `;
 
-export const SubTitle = styled.h2`
+export const SubTitle = muiStyled(Typography)`
+	font-family: 'Noto Sans KR', sans-serif;
+	text-align: center;
+	opacity: 0.8;
 	font-size: 1.5rem;
-	margin: 10px 0 0;
-	opacity: 0.9;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	font-weight: 300;
+	letter-spacing: 0.05em;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 `;
 
 export const MenuSection = styled.div`

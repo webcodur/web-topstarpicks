@@ -21,20 +21,20 @@ export const ContentWrapper = styled(Box)(({ theme }) => ({
 	display: 'flex',
 	flex: 1,
 	position: 'relative',
-	overflow: 'hidden',
+	overflow: 'auto',
 }));
 
 // 메인 콘텐츠 영역 스타일링
 // - 드로어 상태(open)에 따라 동적으로 변화하는 영역
 export const MainContent = styled(Box)(({ theme, open }) => ({
 	flexGrow: 1,
-	overflowY: 'auto',
+	overflow: 'hidden',
 	// 부드러운 전환 효과 설정 (마진과 너비에 대해)
 	transition: theme.transitions.create(['margin', 'width'], {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen,
 	}),
-	padding: theme.spacing(3),
+
 	backgroundColor: theme.palette.background.paper,
 
 	// 데스크톱 뷰 스타일 (md 브레이크포인트 이상)

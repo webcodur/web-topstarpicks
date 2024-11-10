@@ -2,6 +2,11 @@ import { lazy } from 'react';
 
 export const adminSections = [
 	{
+		id: 'frame test',
+		title: 'frame test',
+		component: lazy(() => import('../manager/FrameTest')),
+	},
+	{
 		id: 'Celeb',
 		title: '셀럽 관리자',
 		component: lazy(() => import('../manager/celeb/CelebForm')),

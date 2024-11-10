@@ -7,150 +7,194 @@ const {
 	getCelebrityInfoByGPT,
 } = require('../services/openai');
 
-// 인물명으로 단일 인물 정보 조회
+/**
+ * 인물명으로 단일 인물 정보 조회
+ * GET /api/celebrities/name?name={인물명}
+ */
 router.get(
 	'/name',
 	db.asyncHandler(async (req, res) => {
 		const { name } = req.query;
-
 		if (!name) {
 			return res.status(400).json({ error: '인물 이름을 제공해야 합니다.' });
 		}
 
 		const sql = SQL`
-    SELECT 
-      cel.id, cel.name, cel.postname, cel.prename,
-      pro.name as profession, cel.gender, cel.nationality, cel.birth_date, cel.death_date, cel.biography, cel.img_link, cel.vid_link, cel.is_real, cel.is_fictional,
-      GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
-    FROM 
-      celebrities cel
-    LEFT JOIN 
-      recommendations rec ON rec.celebrity_id = cel.id
-    LEFT JOIN 
-      profession pro ON pro.id = cel.profession_id
-    LEFT JOIN 
-      content con ON rec.content_id = con.id
-    WHERE 
-      cel.name = ${name}
-    GROUP BY 
-      cel.id
-  `;
+		SELECT 
+			cel.id, cel.name, cel.postname, cel.prename,
+			pro.name as profession, cel.gender, cel.nationality, 
+			cel.birth_date, cel.death_date, cel.biography, 
+			cel.img_link, cel.vid_link, cel.is_real, cel.is_legend,
+			GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names
+		FROM celebrities cel
+		LEFT JOIN recommendations rec ON rec.celebrity_id = cel.id
+		LEFT JOIN profession pro ON pro.id = cel.profession_id
+		LEFT JOIN content con ON rec.content_id = con.id
+		WHERE cel.name = ${name}
+		GROUP BY cel.id
+	`;
 
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
 );
 
-// fetchCelebrities: 유명인사 직군별 데이터 조회
+/**
+ * 유명인사 필터링 조회
+ * GET /api/celebrities
+ * Query Parameters:
+ * - profession: 직업군 (전체: 'all')
+ * - era: 시대 구분 (전체인물/역사인물/현대인물)
+ * - menuType: 메뉴 타입 (인물도감/전설도감/추천정보)
+ * - contentName: 컨텐츠 이름
+ */
 router.get(
 	'/',
 	db.asyncHandler(async (req, res) => {
-		const { profession } = req.query;
+		const { profession, era, menuType, contentName } = req.query;
+		console.log('Received era:', era);
+
+		// 기본 쿼리 구성
 		let sql = SQL`
-    SELECT 
-      cel.id, cel.name, cel.prename, cel.postname,
-      cel.gender, cel.nationality, cel.birth_date, cel.death_date, 
-      cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
-      cel.is_real, cel.is_fictional,
-      GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
+		SELECT 
+			cel.id, cel.name, cel.prename, cel.postname,
+			cel.gender, cel.nationality, cel.birth_date, cel.death_date, 
+			cel.biography, cel.img_link, cel.vid_link, pro.name as profession,
+			cel.is_real, cel.is_legend,
+			GROUP_CONCAT(DISTINCT con.name) AS recommended_content_names,
+			inf.political, inf.strategic, inf.tech, inf.social,
+			inf.economic, inf.cultural, inf.transhistoricity,
+			inf.total_score, inf.political_exp, inf.strategic_exp,
+			inf.tech_exp, inf.social_exp, inf.economic_exp,
+			inf.cultural_exp, inf.transhistoricity_exp, inf.rank
+		FROM celebrities cel
+		LEFT JOIN recommendations rec ON cel.id = rec.celebrity_id
+		LEFT JOIN content con ON rec.content_id = con.id
+		LEFT JOIN profession pro ON pro.id = cel.profession_id
+		LEFT JOIN celebrity_influence inf ON cel.id = inf.celebrity_id
+		WHERE 1=1
+	`;
 
-      inf.political,
-      inf.strategic,
-      inf.tech,
-      inf.social,
-      inf.economic,
-      inf.cultural,
-      inf.transhistoricity,
-      inf.total_score,
-      inf.political_exp,
-      inf.strategic_exp,
-      inf.tech_exp,
-      inf.social_exp,
-      inf.economic_exp,
-      inf.cultural_exp,
-      inf.transhistoricity_exp,
-      inf.rank
-    FROM 
-      celebrities cel
-    LEFT JOIN 
-      recommendations rec ON cel.id = rec.celebrity_id
-    LEFT JOIN 
-      content con ON rec.content_id = con.id
-    LEFT JOIN 
-      profession pro ON pro.id = cel.profession_id
-    LEFT JOIN
-      celebrity_influence inf ON cel.id = inf.celebrity_id
-    `;
-
-		if (profession) {
-			sql = sql.append(SQL` WHERE pro.name = ${profession}`);
+		// 직업 필터링
+		if (profession && profession !== 'all') {
+			sql = sql.append(SQL` AND pro.name = ${profession}`);
 		}
 
+		// 시대 구분 필터링
+		const CURRENT_YEAR = new Date().getFullYear();
+		if (era === '역사인물') {
+			sql = sql.append(SQL`
+			AND (
+				cel.birth_date LIKE '-_%'  -- 기원전 인물
+				OR cel.death_date LIKE '-_%'
+				OR (
+					cel.birth_date IS NOT NULL 
+					AND cel.birth_date != ''
+					AND NOT cel.birth_date LIKE '-_%'
+					AND CAST(SUBSTR(cel.birth_date, 1, 4) AS INTEGER) <= ${CURRENT_YEAR - 100}
+				)
+				OR (
+					cel.death_date IS NOT NULL 
+					AND cel.death_date != ''
+					AND NOT cel.death_date LIKE '-_%'
+					AND CAST(SUBSTR(cel.death_date, 1, 4) AS INTEGER) <= ${CURRENT_YEAR - 30}
+				)
+			)
+		`);
+		} else if (era === '현대인물') {
+			sql = sql.append(SQL`
+			AND NOT (
+				cel.birth_date LIKE '-_%'  -- 기원전 인물 제외
+				OR cel.death_date LIKE '-_%'
+			)
+			AND (
+				(
+					cel.birth_date IS NOT NULL 
+					AND cel.birth_date != ''
+					AND CAST(SUBSTR(cel.birth_date, 1, 4) AS INTEGER) > ${CURRENT_YEAR - 100}
+				)
+				OR (
+					cel.death_date IS NOT NULL 
+					AND cel.death_date != ''
+					AND CAST(SUBSTR(cel.death_date, 1, 4) AS INTEGER) > ${CURRENT_YEAR - 30}
+				)
+			)
+		`);
+		}
+
+		// 메뉴 타입 필터링
+		if (menuType === '인물도감') {
+			sql = sql.append(SQL` AND cel.is_real = 1`);
+		} else if (menuType === '전설도감') {
+			sql = sql.append(SQL` AND cel.is_legend = 1`);
+		} else if (menuType === '추천정보' && contentName) {
+			sql = sql.append(SQL` AND con.name = ${contentName}`);
+		}
+
+		// 결과 정렬
 		sql = sql.append(SQL`
-      GROUP BY 
-        cel.id
-      ORDER BY 
-        cel.name
-    `);
+		GROUP BY cel.id
+		ORDER BY cel.name
+	`);
 
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
 );
 
-// 유명인사 직군별 인원수
+/**
+ * 직군별 인원수 조회
+ * GET /api/celebrities/profession-numbers
+ */
 router.get(
 	'/profession-numbers',
 	db.asyncHandler(async (req, res) => {
 		const sql = SQL`
-    SELECT 
-      pro.id, pro.name, pro.eng_name, COUNT(*) AS profession_count
-    FROM 
-      celebrities cel    
-    LEFT JOIN 
-      profession pro ON pro.id = cel.profession_id
-    GROUP BY 
-      pro.id    
-    ORDER BY 
-      pro.name;
-    `;
+		SELECT 
+			pro.id, pro.name, pro.eng_name, COUNT(*) AS profession_count
+		FROM celebrities cel    
+		LEFT JOIN profession pro ON pro.id = cel.profession_id
+		GROUP BY pro.id    
+		ORDER BY pro.name
+	`;
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
 );
 
-// GET: 모든 Celebrity 조회 (Admin 용)
-// fetchAllCelebrities
+/**
+ * 모든 Celebrity 조회 (Admin 용)
+ * GET /api/celebrities/all
+ */
 router.get(
 	'/all',
 	db.asyncHandler(async (req, res) => {
 		const sql = SQL`
-      SELECT 
-        cel.id, 
-        cel.name as name, 
-        cel.prename, 
-        cel.postname, 
-        cel.gender,
-        cel.nationality,
-        cel.birth_date,
-        cel.biography,
-        cel.img_link,
-        cel.vid_link,
-        cel.death_date,
-        pro.id as profession_id,
-        pro.name as profession_kor,
-        pro.eng_name as profession_eng
-      FROM celebrities cel
-      INNER JOIN profession pro
-      ON pro.id = cel.profession_id
-    `;
+		SELECT 
+			cel.id, 
+			cel.name as name, 
+			cel.prename, 
+			cel.postname, 
+			cel.gender,
+			cel.nationality,
+			cel.birth_date,
+			cel.biography,
+			cel.img_link,
+			cel.vid_link,
+			cel.death_date,
+			pro.id as profession_id,
+			pro.name as profession_kor,
+			pro.eng_name as profession_eng
+		FROM celebrities cel
+		INNER JOIN profession pro ON pro.id = cel.profession_id
+	`;
 
 		const rows = await db.executeQuery(sql);
 		res.json({ message: 'success', data: rows });
 	})
 );
 
-// POST: 새 Celebrity 추가 (Admin 용) createCelebrity - todo: is값 추가 필요
+// POST: 새 Celebrity 추가 (Admin 용)
 router.post(
 	'/',
 	db.asyncHandler(async (req, res) => {
@@ -170,29 +214,43 @@ router.post(
 				book_story,
 				quotes,
 				is_real,
-				is_fictional,
+				is_legend,
 			} = req.body;
+
+			// 필수 필드 검증
+			if (!name || !profession_id) {
+				return res.status(400).json({
+					message: 'error',
+					error: '이름과 직업은 필수 입력 항목입니다.',
+				});
+			}
 
 			const sql = SQL`
         INSERT INTO celebrities (
           name, prename, postname, profession_id, gender, nationality, 
           birth_date, death_date, biography, img_link, vid_link,
-          book_story, quotes, is_real, is_fictional
+          book_story, quotes, is_real, is_legend
         )
         VALUES (
-          ${name}, ${prename}, ${postname}, ${profession_id}, ${gender}, ${nationality}, 
-          ${birth_date}, ${death_date}, ${biography}, ${img_link}, ${vid_link},
-          ${book_story}, ${quotes}, ${is_real}, ${is_fictional}
+          ${name}, ${prename || ''}, ${postname || ''}, ${profession_id}, 
+          ${gender || ''}, ${nationality || ''}, ${birth_date || ''}, 
+          ${death_date || ''}, ${biography || ''}, ${img_link || ''}, 
+          ${vid_link || ''}, ${book_story || ''}, ${quotes || ''}, 
+          ${is_real || 0}, ${is_legend || 0}
         )
       `;
 
 			const result = await db.executeQuery(sql);
-			res.json({ message: 'success', data: { id: result.lastID } });
+			res.json({
+				message: 'success',
+				data: { id: result.lastID },
+			});
 		} catch (error) {
 			console.error('Error creating celebrity:', error);
-			res
-				.status(500)
-				.json({ message: 'Error creating celebrity', error: error.message });
+			res.status(500).json({
+				message: 'error',
+				error: '유명인사 생성 중 오류가 발생했습니다.',
+			});
 		}
 	})
 );
@@ -327,7 +385,6 @@ router.post('/gpt-info', async (req, res) => {
 		}
 
 		const celebrityInfo = await getCelebrityInfoByGPT(name, description);
-		console.log('Server - Raw GPT Response:', celebrityInfo);
 
 		const validatedResponse = {
 			name: celebrityInfo.name || '',
@@ -341,7 +398,6 @@ router.post('/gpt-info', async (req, res) => {
 			is_fictional: celebrityInfo.is_fictional || false,
 		};
 
-		console.log('Server - Validated Response:', validatedResponse);
 		res.json({ message: 'success', data: validatedResponse });
 	} catch (error) {
 		console.error('Error in /gpt-info:', error);

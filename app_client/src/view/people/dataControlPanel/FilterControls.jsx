@@ -1,12 +1,12 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useAtom } from 'jotai';
 import { menuInfoAtom, professionNameAtom } from 'store/atom';
 
 // 필터 컴포넌트들 import
 import FilterByProfession from './FilterByProfession';
-import FilterByPersonType from './FilterByPersonType';
+// import FilterByPersonType from './FilterByPersonType';
 import FilterByContent from './FilterByContent';
 import FilterByEra from './FilterByEra';
 import SortControls from './SortControls';
@@ -62,7 +62,7 @@ const FilterControls = ({
 		<>
 			<FilterContainer>
 				<FilterByProfession currentProfession={profession} />
-				{menuInfo === '인물도감' && <FilterByPersonType />}
+				{/* {menuInfo === '인물도감' && <FilterByPersonType />} */}
 				{menuInfo === '추천정보' && <FilterByContent />}
 				<FilterByEra />
 				<SortControls

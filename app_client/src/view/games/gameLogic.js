@@ -1,5 +1,6 @@
 // gameLogic.js
 import { generateFullCardData } from './gameData';
+import { JOB_EFFECTS } from './constants/jobEffects';
 
 /**
  * ===================================
@@ -103,20 +104,44 @@ export class GameManager {
 	 * 3.1 점수 계산
 	 * ---------------------------------
 	 */
-	calculateScore(card, action) {
+	calculateScore(
+		card,
+		action,
+		isPlayer = true,
+		opponentCard = null,
+		opponentScore = 0
+	) {
 		if (!card || !action) return 0;
 
-		// 기본 점수 계산
+		// 기본 점수 (등급 점수)
 		let score = card.rankScore;
-
-		// 직업 보너스 점수 추가
-		if (card.bonus && card.bonus[action]) {
-			score += card.bonus[action];
-		}
 
 		// 주제 보너스
 		if (action === this.gameState.currentTopic) {
 			score += 20;
+		}
+
+		// 직군 특수 효과 적용
+		const jobEffect = JOB_EFFECTS[card.type];
+		if (jobEffect && jobEffect.effect) {
+			const effectResult = jobEffect.effect(
+				score,
+				opponentScore,
+				this.gameState,
+				opponentCard,
+				isPlayer
+			);
+
+			// 효과가 배열인 경우 [playerScore, opponentScore] 형태로 반환
+			if (Array.isArray(effectResult)) {
+				score = effectResult[0];
+				if (effectResult[1] !== undefined) {
+					this.gameState.pendingOpponentScoreModifier =
+						effectResult[1] - opponentScore;
+				}
+			} else {
+				score = effectResult;
+			}
 		}
 
 		return score;
@@ -134,28 +159,46 @@ export class GameManager {
 		playerIndex,
 		opponentIndex
 	) {
-		// 1. 카드 제거 및 사용된 카드 더미로 이동
-		this.gameState.usedCards.push(playerCard, opponentCard);
+		// 카드 사용 처리
+		this.useCard(playerCard);
+		this.useCard(opponentCard);
 
-		// 2. 점수 계산
-		const playerScore = this.calculateScore(playerCard, playerAction);
-		const opponentScore = this.calculateScore(opponentCard, opponentAction);
+		// 점수 계산 (상호 참조를 위해 두 단계로 나눔)
+		let playerScore = this.calculateScore(
+			playerCard,
+			playerAction,
+			true,
+			opponentCard
+		);
+		let opponentScore = this.calculateScore(
+			opponentCard,
+			opponentAction,
+			false,
+			playerCard
+		);
 
-		// 3. 효과 적용
+		// 보류된 점수 수정자 적용
+		if (this.gameState.pendingOpponentScoreModifier) {
+			opponentScore += this.gameState.pendingOpponentScoreModifier;
+			this.gameState.pendingOpponentScoreModifier = 0;
+		}
+
+		// 효과 적용
 		this.applyEffects(playerScore, opponentScore, playerAction, opponentAction);
 
-		// 4. 새 카드 뽑기
+		// 특수 효과로 인한 추가 동작 처리
+		this.handleSpecialEffects(playerCard, opponentCard);
+
+		// 새 카드 뽑기
 		const newPlayerCard = this.drawCard();
 		const newOpponentCard = this.drawCard();
 
-		// 5. 손패 업데이트
+		// 손패 업데이트
 		this.gameState.playerHand[playerIndex] = newPlayerCard;
 		this.gameState.opponentHand[opponentIndex] = newOpponentCard;
 
-		// 6. 다음 턴 준비
-		this.gameState.turn += 1;
-		this.gameState.currentTopic = this.gameState.nextTopic;
-		this.gameState.nextTopic = this.getRandomTopic();
+		// 다음 턴 준비
+		this.prepareNextTurn();
 
 		return { ...this.gameState };
 	}
@@ -293,5 +336,32 @@ export class GameManager {
 
 	isValidCard(card) {
 		return this.fullDeck.some((c) => c.id === card.id);
+	}
+
+	/**
+	 * 특수 효과 추가 처리
+	 */
+	handleSpecialEffects(playerCard, opponentCard) {
+		// 예술인: 추가 드로우
+		if (playerCard.type === '예술인' && this.gameState.shouldDrawExtra) {
+			const extraCard = this.drawCard();
+			if (extraCard) {
+				this.gameState.playerHand.push(extraCard);
+			}
+			this.gameState.shouldDrawExtra = false;
+		}
+
+		// 학자: 다음 카드 미리보기
+		if (playerCard.type === '학자') {
+			this.gameState.revealOpponentNextCard = true;
+		}
+
+		// 인플루엔서: 다음 주제 변경
+		if (playerCard.type === '인플루엔서' && this.gameState.canChangeNextTopic) {
+			const topics = ['rule', 'diplomacy', 'battle', 'strategy'];
+			this.gameState.nextTopic =
+				topics[Math.floor(Math.random() * topics.length)];
+			this.gameState.canChangeNextTopic = false;
+		}
 	}
 }
