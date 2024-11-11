@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { Box, Container, Typography, IconButton } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
 import { styled } from '@mui/material/styles';
+
 import CelebGallery from './components/CelebGallery';
+import { useAtom } from 'jotai';
+import { menuInfoAtom } from 'store/atom';
 
 // 셀럽 이미지 URL 배열 수정
 const CELEB_IMAGES = [
@@ -28,11 +30,11 @@ const CELEB_IMAGES = [
 	},
 	{
 		imageUrl: 'https://ik.imagekit.io/wnivma72t/closeup/4.png',
-		path: '/마고-로비/책',
+		path: '/빌-게이츠/책',
 	},
 	{
 		imageUrl: 'https://ik.imagekit.io/wnivma72t/closeup/5.png',
-		path: '/워렌-버핏/책',
+		path: '/마고-로비/책',
 	},
 	{
 		imageUrl: 'https://ik.imagekit.io/wnivma72t/closeup/6.png',
@@ -41,7 +43,6 @@ const CELEB_IMAGES = [
 ];
 
 // 카드 배경색 변수 추가 (파일 상단)
-const CARD_BACKGROUND = 'linear-gradient(145deg, #42A5F5 0%, #64B5F6 100%)';
 
 // 스타일 컴포넌트 추가
 const ServiceIconWrapper = styled(Box)(({ theme }) => ({
@@ -68,12 +69,12 @@ const ServiceInfo = styled(Box)(({ theme }) => ({
 	left: '50%',
 	transform: 'translateX(-50%) translateY(10px)',
 	backgroundColor: 'rgba(255, 255, 255, 0.98)',
-	padding: theme.spacing(2),
+	padding: theme.spacing(1.5),
 	borderRadius: theme.spacing(1),
 	boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
 	opacity: 0,
 	transition: 'all 0.3s ease',
-	width: '200px',
+	width: '180px',
 	textAlign: 'center',
 	zIndex: 10,
 }));
@@ -113,6 +114,7 @@ const services = [
 
 const Home = () => {
 	const [images, setImages] = useState(CELEB_IMAGES);
+	const [, setMenuInfo] = useAtom(menuInfoAtom);
 
 	// 우측으로 이동하는 함수
 	const moveRight = () => {
@@ -132,6 +134,11 @@ const Home = () => {
 			newImages.unshift(last);
 			return newImages;
 		});
+	};
+
+	// handleNavigate 함수 추가
+	const handleNavigate = (path, title) => {
+		setMenuInfo(title);
 	};
 
 	return (
@@ -173,7 +180,7 @@ const Home = () => {
 								variant="h1"
 								sx={{
 									color: '#000',
-									fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
+									fontSize: { xs: '1.5rem', sm: '2rem', md: '2.8rem' },
 									fontWeight: 'bold',
 									mb: 1,
 									fontFamily: "'Noto Sans KR', sans-serif",
@@ -185,7 +192,7 @@ const Home = () => {
 								variant="h4"
 								sx={{
 									color: 'rgba(0, 0, 0, 0.9)',
-									fontSize: { xs: '1rem', sm: '1.2rem', md: '1.6rem' },
+									fontSize: { xs: '0.9rem', sm: '1rem', md: '1.3rem' },
 									mb: 2,
 									fontFamily: "'Song Myung', serif",
 								}}>
@@ -203,123 +210,137 @@ const Home = () => {
 						</motion.div>
 					</Box>
 
-					{/* CelebGallery 컴포넌트로 교체 */}
+					{/* CelebGallery 컴포넌트와 우측 섹션 */}
 					<Box
 						sx={{
 							display: 'flex',
 							width: '100%',
 							mt: 2,
-							gap: 4,
+							gap: { xs: 4, md: 6 },
+							flexDirection: 'column',
+							alignItems: 'center',
 						}}>
-						<CelebGallery
-							images={images}
-							moveLeft={moveLeft}
-							moveRight={moveRight}
-						/>
-
-						{/* 통계 섹션 (우측) */}
+						{/* CelebGallery 컴포넌트 */}
 						<Box
 							sx={{
-								width: '33%',
+								width: '100%',
+								display: 'flex',
+								justifyContent: 'center',
+							}}>
+							<CelebGallery
+								images={images}
+								moveLeft={moveLeft}
+								moveRight={moveRight}
+							/>
+						</Box>
+
+						{/* 통계와 서비스 아이콘 섹션 */}
+						<Box
+							sx={{
 								display: 'flex',
 								flexDirection: 'column',
-								justifyContent: 'center',
-								gap: 2,
+								gap: 4,
+								width: '100%',
+								maxWidth: '1200px',
 							}}>
-							{[
-								{ number: '1000+', label: '셀럽 프로필' },
-								{ number: '5000+', label: '인사이트' },
-								{ number: '10K+', label: '월간 사용자' },
-							].map((stat, index) => (
-								<motion.div
-									key={index}
-									initial={{ opacity: 0, x: 20 }}
-									animate={{ opacity: 1, x: 0 }}
-									transition={{ delay: index * 0.2 + 1 }}>
-									<Box
-										sx={{
-											color: '#000',
-										}}>
-										<Typography
-											variant="h3"
+							{/* 통계 섹션 */}
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+									gap: { xs: 3, md: 6 },
+									width: '100%',
+								}}>
+								{[
+									{ number: '1000+', label: '셀럽 프로필' },
+									{ number: '5000+', label: '인사이트' },
+									{ number: '10K+', label: '월간 사용자' },
+								].map((stat, index) => (
+									<motion.div
+										key={index}
+										initial={{ opacity: 0, y: 20 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={{ delay: index * 0.2 }}>
+										<Box
 											sx={{
-												fontSize: { xs: '1.8rem', md: '2.5rem' },
-												fontWeight: 'bold',
-												mb: 1,
+												textAlign: 'center',
+												color: '#000',
 											}}>
-											{stat.number}
-										</Typography>
-										<Typography
-											sx={{
-												fontSize: { xs: '0.9rem', md: '1.1rem' },
-												opacity: 0.8,
-											}}>
-											{stat.label}
-										</Typography>
-									</Box>
-								</motion.div>
-							))}
+											<Typography
+												variant="h3"
+												sx={{
+													fontSize: { xs: '1.4rem', md: '2rem' },
+													fontWeight: 'bold',
+													mb: 1,
+												}}>
+												{stat.number}
+											</Typography>
+											<Typography
+												sx={{
+													fontSize: { xs: '0.8rem', md: '0.9rem' },
+													opacity: 0.8,
+												}}>
+												{stat.label}
+											</Typography>
+										</Box>
+									</motion.div>
+								))}
+							</Box>
+
+							{/* 서비스 아이콘 섹션 */}
+							<Box
+								sx={{
+									display: 'flex',
+									justifyContent: 'center',
+									gap: { xs: 2, md: 4 },
+									flexWrap: 'wrap',
+									width: '100%',
+								}}>
+								{services.map((service, index) => (
+									<motion.div
+										key={index}
+										initial={{ opacity: 0, y: 20 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={{ delay: index * 0.1 }}>
+										<Link
+											to={service.path}
+											style={{ textDecoration: 'none' }}
+											onClick={() =>
+												handleNavigate(service.path, service.title)
+											}>
+											<ServiceIconWrapper>
+												<Box
+													sx={{
+														color: '#000000',
+														transition: 'transform 0.3s ease',
+														'&:hover': {
+															transform: 'scale(1.1)',
+														},
+													}}>
+													{React.cloneElement(service.icon, {
+														sx: { fontSize: 28 },
+													})}
+												</Box>
+												<ServiceInfo className="service-info">
+													<Typography
+														variant="h6"
+														sx={{ color: '#000000' }}
+														gutterBottom>
+														{service.title}
+													</Typography>
+													<Typography variant="body2" color="text.secondary">
+														{service.description}
+													</Typography>
+												</ServiceInfo>
+											</ServiceIconWrapper>
+										</Link>
+									</motion.div>
+								))}
+							</Box>
 						</Box>
 					</Box>
 				</Box>
 			</Container>
-
-			{/* 서비스 아이콘 섹션 추가 */}
-			<Box
-				sx={{
-					position: 'absolute',
-					bottom: '120px',
-					left: '50%',
-					transform: 'translateX(-50%)',
-					width: '100%',
-					maxWidth: '1200px',
-				}}>
-				<Container maxWidth="lg">
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-							gap: 1,
-						}}>
-						{services.map((service, index) => (
-							<motion.div
-								key={index}
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ delay: index * 0.1 + 0.5 }}>
-								<Link to={service.path} style={{ textDecoration: 'none' }}>
-									<ServiceIconWrapper>
-										<Box
-											sx={{
-												color: '#000000',
-												transition: 'transform 0.3s ease',
-												'&:hover': {
-													transform: 'scale(1.1)',
-												},
-											}}>
-											{React.cloneElement(service.icon, {
-												sx: { fontSize: 35 },
-											})}
-										</Box>
-										<ServiceInfo className="service-info">
-											<Typography
-												variant="h6"
-												sx={{ color: '#000000' }}
-												gutterBottom>
-												{service.title}
-											</Typography>
-											<Typography variant="body2" color="text.secondary">
-												{service.description}
-											</Typography>
-										</ServiceInfo>
-									</ServiceIconWrapper>
-								</Link>
-							</motion.div>
-						))}
-					</Box>
-				</Container>
-			</Box>
 		</Box>
 	);
 };
