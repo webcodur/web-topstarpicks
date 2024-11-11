@@ -2,7 +2,6 @@ import { styled } from '@mui/material/styles';
 import { Box, AccordionSummary } from '@mui/material';
 
 export const StyledBox = styled(Box)(({ theme }) => ({
-	height: 400,
 	display: 'flex',
 	alignContent: 'center',
 	flexDirection: 'column',
