@@ -12,7 +12,6 @@ const PeopleGrid = ({
 	contentName,
 	onModalOpen,
 }) => {
-
 	const groupedData = useMemo(
 		() =>
 			getSortedAndGroupedData(

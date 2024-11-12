@@ -3,7 +3,6 @@ import { axiosInstance, createApiCall } from './apiUtils';
 export const fetchProfessions = async () => {
 	try {
 		const response = await axiosInstance.get('/profession');
-		console.log('Profession API Response:', response);
 		return response;
 	} catch (error) {
 		console.error('Profession API Error:', error);

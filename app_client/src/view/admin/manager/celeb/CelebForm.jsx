@@ -51,6 +51,7 @@ const CelebForm = ({ showSnackbar }) => {
 
 		searchCelebrities(searchQuery)
 			.then((response) => {
+				console.log('response', response);
 				response.length === 1
 					? handleResultClick(response[0])
 					: setSearchResults(response);

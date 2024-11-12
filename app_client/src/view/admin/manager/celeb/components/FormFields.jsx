@@ -65,6 +65,10 @@ const FormFields = ({
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
+	// formData의 체크박스 값을 boolean으로 확실하게 변환
+	const isReal = Boolean(formData.is_real);
+	const isLegend = Boolean(formData.is_legend);
+
 	return (
 		<Grid container spacing={2} sx={styles.formContainer}>
 			<Grid item xs={3}>
@@ -75,6 +79,7 @@ const FormFields = ({
 					name="prename"
 					value={formData.prename}
 					onChange={handleChange}
+					required
 				/>
 			</Grid>
 
@@ -319,14 +324,14 @@ const FormFields = ({
 				<StyledFormControlLabel
 					control={
 						<Checkbox
-							checked={formData.is_real}
+							checked={isReal}
 							onChange={(e) =>
 								setFormData({ ...formData, is_real: e.target.checked })
 							}
 						/>
 					}
 					label="실존 인물"
-					className={formData.is_real ? 'Mui-checked' : ''}
+					className={isReal ? 'Mui-checked' : ''}
 				/>
 			</Grid>
 
@@ -334,14 +339,14 @@ const FormFields = ({
 				<StyledFormControlLabel
 					control={
 						<Checkbox
-							checked={formData.is_legend}
+							checked={isLegend}
 							onChange={(e) =>
 								setFormData({ ...formData, is_legend: e.target.checked })
 							}
 						/>
 					}
 					label="가상 인물"
-					className={formData.is_legend ? 'Mui-checked' : ''}
+					className={isLegend ? 'Mui-checked' : ''}
 				/>
 			</Grid>
 		</Grid>

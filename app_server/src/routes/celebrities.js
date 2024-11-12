@@ -272,7 +272,7 @@ router.put(
 			book_story,
 			quotes,
 			is_real,
-			is_fictional,
+			is_legend,
 		} = req.body;
 
 		const sql = SQL`
@@ -290,7 +290,7 @@ router.put(
         book_story = ${book_story},
         quotes = ${quotes},
         is_real = ${is_real},
-        is_fictional = ${is_fictional}
+        is_legend = ${is_legend}
     WHERE id = ${req.params.id}
   `;
 
@@ -356,7 +356,7 @@ router.get(
         pro.name as profession, cel.gender, cel.nationality, 
         cel.birth_date, cel.death_date, cel.biography, 
         cel.img_link, cel.vid_link, cel.book_story, cel.quotes,
-        cel.is_real, cel.is_fictional,
+        cel.is_real, cel.is_legend,
         pro.id as profession_id
       FROM 
         celebrities cel
@@ -394,7 +394,7 @@ router.post('/gpt-info', async (req, res) => {
 			death_date: celebrityInfo.death_date || '',
 			biography: celebrityInfo.biography || '',
 			is_real: celebrityInfo.is_real || false,
-			is_fictional: celebrityInfo.is_fictional || false,
+			is_legend: celebrityInfo.is_legend || false,
 		};
 
 		res.json({ message: 'success', data: validatedResponse });
