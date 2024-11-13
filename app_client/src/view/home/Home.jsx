@@ -183,7 +183,7 @@ const Home = () => {
 									fontSize: { xs: '1.5rem', sm: '2rem', md: '2.8rem' },
 									fontWeight: 'bold',
 									mb: 1,
-									fontFamily: "'Noto Sans KR', sans-serif",
+									fontFamily: "'Song Myung', serif",
 									letterSpacing: '-0.5px',
 								}}>
 								Top Star Picks
