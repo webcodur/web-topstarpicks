@@ -1,82 +1,105 @@
 import React from 'react';
 import { Box, IconButton } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-// 1. 카드 스타일 상수
+// 1. 카드 스타일 상수 - 모든 스타일 값을 한 곳에서 관리
 const CARD_STYLES = {
 	BACKGROUND: 'linear-gradient(145deg, #42A5F5 0%, #64B5F6 100%)', // 카드 배경 그라데이션
-	WIDTH: 200,      // 데스크톱 기준 카드 너비
-	HEIGHT: 280,     // 데스크톱 기준 카드 높이
-	SPACING: 30,     // 카드 간 수평 간격
+	WIDTH: 200, // 데스크톱 기준 카드 너비
+	HEIGHT: 280, // 데스크톱 기준 카드 높이
+	SPACING: 20, // 카드 간 수평 간격
 	VERTICAL_OFFSET: 15, // 카드 간 수직 간격
 	MOBILE: {
-		SCALE: 0.8,        // 모바일에서 카드 크기 축소 비율
-		ROTATION: 3,       // 모바일에서 카드 회전 각도
-		Z_TRANSLATION: 15  // 모바일에서 Z축 이동 거리
+		SCALE: 0.8, // 모바일에서 카드 크기를 80%로 축소
+		ROTATION: 3, // 모바일에서 각 카드의 Y축 회전 각도
+		Z_TRANSLATION: 15, // 모바일에서 카드 간 Z축 거리
 	},
 	DESKTOP: {
-		ROTATION: 5,       // 데스크톱에서 카드 회전 각도
-		Z_TRANSLATION: 20  // 데스크톱에서 Z축 이동 거리
-	}
+		ROTATION: 5, // 데스크톱에서 각 카드의 Y축 회전 각도
+		Z_TRANSLATION: 20, // 데스크톱에서 카드 간 Z축 거리
+	},
 };
 
 // 2. 카드 위치 계산 함수
 const calculateCardPosition = (index, totalCards) => {
-	// 중앙 카드의 인덱스 계산 (예: 7장일 경우 3)
+	// 예: 7장의 카드가 있다면 centerIndex는 3
 	const centerIndex = Math.floor(totalCards / 2);
-	// 현재 카드가 중앙으로부터 얼마나 떨어져 있는지 계산
+	// 현재 카드가 중앙에서 얼마나 떨어져 있는지 계산 (음수=왼쪽, 양수=오른쪽)
 	const distanceFromCenter = index - centerIndex;
-	
+
 	return {
-		// X축 위치: 중앙으로부터의 거리 * 간격
+		// X축 위치: 중앙으로부터의 거리 * 간격으로 계산
 		xPos: distanceFromCenter * CARD_STYLES.SPACING,
-		// Y축 위치: 각 카드를 살짝 위로 올리면서 전체적으로 중앙 정렬
-		yPos: index * CARD_STYLES.VERTICAL_OFFSET - 
-			  ((totalCards - 1) * CARD_STYLES.VERTICAL_OFFSET) / 2
+		// Y축 위치: 각 카드를 위로 조금씩 올리면서 전체적으로 중앙 정렬
+		yPos:
+			index * CARD_STYLES.VERTICAL_OFFSET -
+			((totalCards - 1) * CARD_STYLES.VERTICAL_OFFSET) / 2,
 	};
 };
 
 // 3. 네비게이션 버튼 컴포넌트
 const NavigationButton = ({ direction, onClick }) => (
-	// 좌우 화살표 버튼 렌더링
-	// direction prop에 따라 'left' 또는 'right' 위치에 배치
 	<IconButton
 		onClick={onClick}
 		sx={{
 			position: 'absolute',
-			[direction]: '40px',
-			color: '#42A5F5',
-			zIndex: 2,
+			[direction]: '0px',
+			bottom:
+				direction === 'left'
+					? '0px'
+					: 'auto',
+			top:
+				direction === 'right'
+					? '0px'
+					: 'auto',
+			color: 'white',
+			zIndex: 10,
+			backgroundColor: '#42A5F5',
 			'&:hover': {
-				backgroundColor: 'rgba(66, 165, 245, 0.1)',
+				backgroundColor: '#42A5F5',
 			},
+			width: '40px',
+			height: '40px',
+			padding: '8px',
+			borderRadius: '50%',
 		}}>
-		{direction === 'left' ? 
-			<ChevronLeftIcon fontSize="large" /> : 
-			<ChevronRightIcon fontSize="large" />}
+		{direction === 'left' ? (
+			<ChevronLeftIcon fontSize="large" />
+		) : (
+			<ChevronRightIcon fontSize="large" />
+		)}
 	</IconButton>
 );
 
 // 4. 개별 카드 컴포넌트
-const CelebCard = ({ imageData, xPos, yPos, index }) => (
+const CelebCard = ({ imageData, xPos, yPos, index, onClick }) => (
 	<Box
+		onClick={index === 0 ? onClick : undefined}
 		sx={{
 			position: 'absolute',
-			width: { 
-				xs: `${CARD_STYLES.WIDTH * CARD_STYLES.MOBILE.SCALE}px`, 
-					md: `${CARD_STYLES.WIDTH}px` 
+			// 반응형 너비: 모바일에서는 축소된 크기, 데스크톱에서는 원래 크기
+			width: {
+				xs: `${CARD_STYLES.WIDTH * CARD_STYLES.MOBILE.SCALE}px`,
+				md: `${CARD_STYLES.WIDTH}px`,
 			},
-			height: { 
-				xs: `${CARD_STYLES.HEIGHT * CARD_STYLES.MOBILE.SCALE}px`, 
-					md: `${CARD_STYLES.HEIGHT}px` 
+			height: {
+				xs: `${CARD_STYLES.HEIGHT * CARD_STYLES.MOBILE.SCALE}px`,
+				md: `${CARD_STYLES.HEIGHT}px`,
 			},
+			// 3D 변환: translate(-50%, -50%)로 중앙 정렬 후 회전과 Z축 이동
 			transform: {
-				xs: `translate(-50%, -50%) rotateY(${index * CARD_STYLES.MOBILE.ROTATION}deg) translateZ(${index * CARD_STYLES.MOBILE.Z_TRANSLATION}px)`,
-				md: `translate(-50%, -50%) rotateY(${index * CARD_STYLES.DESKTOP.ROTATION}deg) translateZ(${index * CARD_STYLES.DESKTOP.Z_TRANSLATION}px)`,
+				xs: `translate(-50%, -50%) rotateY(${
+					index * CARD_STYLES.MOBILE.ROTATION
+				}deg) 
+					 translateZ(${index * CARD_STYLES.MOBILE.Z_TRANSLATION}px)`,
+				md: `translate(-50%, -50%) rotateY(${
+					index * CARD_STYLES.DESKTOP.ROTATION
+				}deg) 
+					 translateZ(${index * CARD_STYLES.DESKTOP.Z_TRANSLATION}px)`,
 			},
+			// 카드 위치 계산: 50%는 컨테이너 중앙, xPos/yPos로 상대적 위치 조정
 			left: {
 				xs: `calc(50% + ${xPos * CARD_STYLES.MOBILE.SCALE}px)`,
 				md: `calc(50% + ${xPos}px)`,
@@ -95,7 +118,8 @@ const CelebCard = ({ imageData, xPos, yPos, index }) => (
 				content: '""',
 				position: 'absolute',
 				inset: 0,
-				background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)',
+				background:
+					'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)',
 				zIndex: 1,
 			},
 		}}>
@@ -113,89 +137,72 @@ const CelebCard = ({ imageData, xPos, yPos, index }) => (
 	</Box>
 );
 
-// 5. 메인 갤러리 컴포넌트
-const CelebGallery = ({ images, moveLeft, moveRight }) => (
-	<Box
-		sx={{
-			display: 'flex',
-			perspective: '1000px',
-			height: { 
-				xs: `${CARD_STYLES.HEIGHT * CARD_STYLES.MOBILE.SCALE}px`, 
-				md: `${CARD_STYLES.HEIGHT + 70}px` 
-			},
-			position: 'relative',
-			width: { xs: '100%', md: '60%' },
-		}}>
+// 5. 단순화된 갤러리 컴포넌트
+const CelebGallery = ({ images, moveLeft, moveRight, onFirstCardClick }) => {
+	return (
 		<Box
 			sx={{
-				position: 'absolute',
-				inset: '50% auto auto 50%',
-				transform: 'translate(-50%, -50%)',
-				width: { xs: '100%', md: '600px' },
-				height: { xs: '250px', md: '350px' },
+				position: 'relative',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
+				perspective: '1000px',
+				width: {
+					xs: '240px', // 모바일에서는 더 작은 너비
+					md: '300px', // 데스크톱에서는 원래 크기
+				},
+				height: {
+					xs: '296px', // 모바일에서는 더 작은 높이 (370px * 0.8)
+					md: '370px', // 데스크톱에서는 원래 크기
+				},
+				margin: 'auto',
+				borderRadius: '10px',
 			}}>
+			{/* 네비게이션 버튼들 */}
 			<NavigationButton direction="left" onClick={moveLeft} />
-			
-			<Box
-				sx={{
-					position: 'relative',
-					width: '100%',
-					height: '100%',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}>
-				{images.map((imageData, index) => {
-					const { xPos, yPos } = calculateCardPosition(index, images.length);
-					
-					return (
-						<motion.div
-							key={imageData.imageUrl}
-							initial={{ opacity: 0, rotateY: -30, z: -100 }}
-							animate={{
-								opacity: 1,
-								rotateY: 0,
-								z: 0,
-								transition: { duration: 0.5 },
-							}}
-							whileHover={index === 0 ? {
-								scale: 1.05,
-								rotateY: 10,
-								z: 50,
-								zIndex: 10,
-							} : {}}
-							style={{
-								position: 'relative',
-								zIndex: images.length - index,
-							}}>
-							{index === 0 ? (
-								<Link to={imageData.path} style={{ textDecoration: 'none' }}>
-									<CelebCard
-										imageData={imageData}
-										xPos={xPos}
-										yPos={yPos}
-										index={index}
-									/>
-								</Link>
-							) : (
-								<CelebCard
-									imageData={imageData}
-									xPos={xPos}
-									yPos={yPos}
-									index={index}
-								/>
-							)}
-						</motion.div>
-					);
-				})}
-			</Box>
-			
+
+			{/* 카드들을 직접 렌더링 */}
+			{images.map((imageData, index) => {
+				const { xPos, yPos } = calculateCardPosition(index, images.length);
+
+				return (
+					<motion.div
+						key={imageData.imageUrl}
+						initial={{ opacity: 0, rotateY: -30, z: -100 }}
+						animate={{
+							opacity: 1,
+							rotateY: 0,
+							z: 0,
+							transition: { duration: 0.5 },
+						}}
+						whileHover={
+							index === 0
+								? {
+										scale: 1.05,
+										rotateY: 10,
+										z: 50,
+										zIndex: 10,
+								  }
+								: {}
+						}
+						style={{
+							position: 'absolute',
+							zIndex: images.length - index,
+						}}>
+						<CelebCard
+							imageData={imageData}
+							xPos={xPos}
+							yPos={yPos}
+							index={index}
+							onClick={onFirstCardClick}
+						/>
+					</motion.div>
+				);
+			})}
+
 			<NavigationButton direction="right" onClick={moveRight} />
 		</Box>
-	</Box>
-);
+	);
+};
 
 export default CelebGallery;

@@ -59,10 +59,10 @@ const professionIcons = [
 		to: '스포츠인',
 	},
 	{
-		key: '인플루언서',
-		text: '인플루언서',
+		key: '인플루엔서',
+		text: '인플루엔서',
 		icon: <MicIcon />,
-		to: '인플루언서',
+		to: '인플루엔서',
 	},
 ];
 

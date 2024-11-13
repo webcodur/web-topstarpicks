@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Container, Typography, IconButton } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
@@ -42,8 +42,6 @@ const CELEB_IMAGES = [
 	},
 ];
 
-// 카드 배경색 변수 추가 (파일 상단)
-
 // 스타일 컴포넌트 추가
 const ServiceIconWrapper = styled(Box)(({ theme }) => ({
 	position: 'relative',
@@ -51,8 +49,8 @@ const ServiceIconWrapper = styled(Box)(({ theme }) => ({
 	flexDirection: 'column',
 	alignItems: 'center',
 	cursor: 'pointer',
-	padding: '10px 15px',
-	borderRadius: '12px',
+	padding: '3px',
+	borderRadius: '6px',
 	transition: 'all 0.3s ease',
 	'&:hover': {
 		backgroundColor: 'rgba(66, 165, 245, 0.08)',
@@ -69,12 +67,12 @@ const ServiceInfo = styled(Box)(({ theme }) => ({
 	left: '50%',
 	transform: 'translateX(-50%) translateY(10px)',
 	backgroundColor: 'rgba(255, 255, 255, 0.98)',
-	padding: theme.spacing(1.5),
+	padding: theme.spacing(1),
 	borderRadius: theme.spacing(1),
 	boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
 	opacity: 0,
 	transition: 'all 0.3s ease',
-	width: '180px',
+	width: '120px',
 	textAlign: 'center',
 	zIndex: 10,
 }));
@@ -83,31 +81,26 @@ const services = [
 	{
 		icon: <AutoStoriesIcon sx={{ fontSize: 45 }} />,
 		title: '추천정보',
-		description: '영향력 있는 인물들의 책과 영화 추천',
 		path: '/people',
 	},
 	{
 		icon: <SportsEsportsIcon sx={{ fontSize: 45 }} />,
 		title: '카드게임',
-		description: '인물 카드로 즐기는 재미있는 게임',
 		path: '/games',
 	},
 	{
 		icon: <AccountBoxIcon sx={{ fontSize: 45 }} />,
 		title: '인물도감',
-		description: '역사 속 인물들의 프로필과 이야기',
 		path: '/people/history',
 	},
 	{
 		icon: <AccountBalanceIcon sx={{ fontSize: 45 }} />,
 		title: '전설도감',
-		description: '이야기 속 인물들의 프로필과 이야기',
 		path: '/people/legend',
 	},
 	{
 		icon: <TempleBuddhistIcon sx={{ fontSize: 45 }} />,
 		title: '신화도감',
-		description: '이야기 속 신들의 프로필과 이야기',
 		path: '/people/myth',
 	},
 ];
@@ -115,6 +108,14 @@ const services = [
 const Home = () => {
 	const [images, setImages] = useState(CELEB_IMAGES);
 	const [, setMenuInfo] = useAtom(menuInfoAtom);
+	const navigate = useNavigate();
+
+	// 첫 번째 카드 클릭 핸들러 수정
+	const handleFirstCardClick = () => {
+		if (images[0] && images[0].path) {
+			navigate(images[0].path);
+		}
+	};
 
 	// 우측으로 이동하는 함수
 	const moveRight = () => {
@@ -157,13 +158,12 @@ const Home = () => {
 					display: 'flex',
 					flexDirection: 'column',
 					position: 'relative',
-					pt: { xs: 4, md: 6 },
+					pt: { xs: 2, md: 4 },
 				}}>
 				<Box
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
-						gap: { xs: 2, md: 3 },
 						alignItems: 'center',
 					}}>
 					{/* 텍스트 섹션 */}
@@ -199,18 +199,12 @@ const Home = () => {
 								<Box
 									component="span"
 									sx={{ display: { xs: 'block', md: 'inline' } }}>
-									영감을 주는 셀럽들의{' '}
-								</Box>
-								<Box
-									component="span"
-									sx={{ display: { xs: 'block', md: 'inline' } }}>
-									인사이트
+									영감을 주는 셀럽들의 인사이트
 								</Box>
 							</Typography>
 						</motion.div>
 					</Box>
 
-					{/* CelebGallery 컴포넌트와 우측 섹션 */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -231,6 +225,7 @@ const Home = () => {
 								images={images}
 								moveLeft={moveLeft}
 								moveRight={moveRight}
+								onFirstCardClick={handleFirstCardClick}
 							/>
 						</Box>
 
@@ -254,7 +249,7 @@ const Home = () => {
 								{[
 									{ number: '1000+', label: '셀럽 프로필' },
 									{ number: '5000+', label: '인사이트' },
-									{ number: '10K+', label: '월간 사용자' },
+									{ number: '10K+', label: '월 사용자' },
 								].map((stat, index) => (
 									<motion.div
 										key={index}
@@ -292,7 +287,7 @@ const Home = () => {
 								sx={{
 									display: 'flex',
 									justifyContent: 'center',
-									gap: { xs: 2, md: 4 },
+									gap: { xs: 1, md: 4 },
 									flexWrap: 'wrap',
 									width: '100%',
 								}}>
@@ -318,18 +313,17 @@ const Home = () => {
 														},
 													}}>
 													{React.cloneElement(service.icon, {
-														sx: { fontSize: 28 },
+														sx: { fontSize: { xs: 24, md: 28 } },
 													})}
 												</Box>
 												<ServiceInfo className="service-info">
 													<Typography
 														variant="h6"
-														sx={{ color: '#000000' }}
-														gutterBottom>
+														sx={{
+															color: '#000000',
+															fontSize: { xs: '0.9rem', md: '1.1rem' },
+														}}>
 														{service.title}
-													</Typography>
-													<Typography variant="body2" color="text.secondary">
-														{service.description}
 													</Typography>
 												</ServiceInfo>
 											</ServiceIconWrapper>
