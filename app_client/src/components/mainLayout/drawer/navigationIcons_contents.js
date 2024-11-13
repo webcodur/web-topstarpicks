@@ -2,38 +2,40 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import StyleIcon from '@mui/icons-material/Style';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
 
 const navigationIcons = [
 	{
 		key: 'recommendations',
 		text: '추천정보',
-		icon: <MenuBookIcon />,
+		icon: <AutoStoriesIcon />,
 		to: '/people',
 	},
-
 	{
 		key: 'history',
 		text: '인물도감',
-		icon: <HistoryEduIcon />,
+		icon: <AccountBoxIcon />,
 		to: '/people/history',
 	},
 	{
 		key: 'legend',
 		text: '전설도감',
-		icon: <AutoStoriesIcon />,
+		icon: <AccountBalanceIcon />,
 		to: '/people/legend',
 	},
 	{
 		key: 'myth',
 		text: '신화도감',
-		icon: <AutoAwesomeIcon />,
+		icon: <TempleBuddhistIcon />,
 		to: '/people/myth',
 	},
 	{
 		key: 'games',
 		text: '카드게임',
-		icon: <SportsEsportsIcon />,
+		icon: <StyleIcon />,
 		to: '/games',
 	},
 ];

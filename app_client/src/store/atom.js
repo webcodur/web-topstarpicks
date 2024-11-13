@@ -14,3 +14,8 @@ export const languageAtom = atomWithStorage('language', 'ko');
 // 현재 미사용
 export const isAdminAtom = atom(false);
 export const isLoggedInAtom = atomWithStorage('isLoggedIn', false);
+
+export const viewTypeAtom = atom({
+	key: 'viewTypeAtom',
+	default: 'large', // 'large' | 'small' | 'list'
+});

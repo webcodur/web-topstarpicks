@@ -2,7 +2,9 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useAtom } from 'jotai';
-import { menuInfoAtom, professionNameAtom } from 'store/atom';
+import { menuInfoAtom, professionNameAtom, viewTypeAtom } from 'store/atom';
+import { IconButton, Tooltip } from '@mui/material';
+import { GridView, ViewList, ViewModule } from '@mui/icons-material'; // MUI 아이콘 사용
 
 // 필터 컴포넌트들 import
 import FilterByProfession from './FilterByProfession';
@@ -49,6 +51,38 @@ const FilterContainer = styled(Box)(({ theme }) => ({
 	},
 }));
 
+const ViewTypeControls = () => {
+	const [viewType, setViewType] = useAtom(viewTypeAtom);
+
+	return (
+		<div style={{ display: 'flex', gap: '8px' }}>
+			<Tooltip title="큰 이미지 보기">
+				<IconButton
+					onClick={() => setViewType('large')}
+					color={viewType === 'large' ? 'primary' : 'default'}>
+					<GridView />
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="작은 이미지 보기">
+				<IconButton
+					onClick={() => setViewType('small')}
+					color={viewType === 'small' ? 'primary' : 'default'}>
+					<ViewModule />
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="리스트 보기">
+				<IconButton
+					onClick={() => setViewType('list')}
+					color={viewType === 'list' ? 'primary' : 'default'}>
+					<ViewList />
+				</IconButton>
+			</Tooltip>
+		</div>
+	);
+};
+
 const FilterControls = ({
 	sortCriteria,
 	setSortCriteria,
@@ -71,6 +105,7 @@ const FilterControls = ({
 					sortOrder={sortOrder}
 					setSortOrder={setSortOrder}
 				/>
+				<ViewTypeControls />
 			</FilterContainer>
 		</>
 	);

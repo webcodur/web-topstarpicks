@@ -8,6 +8,7 @@ import {
 	timesNameAtom,
 	professionNameAtom,
 	menuInfoAtom,
+	viewTypeAtom,
 } from 'store/atom';
 
 // 커스텀 훅
@@ -46,6 +47,7 @@ const People = () => {
 	const [timesName] = useAtom(timesNameAtom);
 	const [profession] = useAtom(professionNameAtom);
 	const [menuInfo] = useAtom(menuInfoAtom);
+	const [viewType] = useAtom(viewTypeAtom);
 
 	const { profDataLoaded, professionData } = useProfessionData(
 		profession,
@@ -81,6 +83,7 @@ const People = () => {
 				setSortCriteria={setSortCriteria}
 				sortOrder={sortOrder}
 				setSortOrder={setSortOrder}
+				viewType={viewType}
 			/>
 
 			<Divider />
@@ -111,6 +114,7 @@ const People = () => {
 						eraBoundaries={eraBoundaries}
 						contentName={contentName}
 						onModalOpen={handleModalOpen}
+						viewType={viewType}
 					/>
 
 					<ScoreModal
