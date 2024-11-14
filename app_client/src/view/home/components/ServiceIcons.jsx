@@ -1,62 +1,53 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import * as Icons from '@mui/icons-material';
-import { ServiceIconWrapper, ServiceInfo } from '../styles';
-import { services } from '../constants';
+import { Link } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { menuInfoAtom } from 'store/atom';
+import { services } from 'view/home/constants';
+import {
+	ServiceIconWrapper,
+	ServiceInfo,
+	IconsContainer,
+	IconBox,
+	ServiceText,
+	StyledIcon,
+	IconWrapperSx,
+	ContainerSx,
+} from 'view/home/styles/ServiceIconsStyles';
 
-const ServiceIcons = ({ onNavigate }) => {
-	return (
-		<Box
-			sx={{
-				display: 'flex',
-				justifyContent: 'center',
-				gap: { xs: 2, md: 4 },
-				flexWrap: 'wrap',
-				width: '100%',
-			}}>
-			{services.map((service, index) => {
-				const Icon = Icons[service.icon];
-				return (
-					<motion.div
-						key={index}
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: index * 0.1 }}>
-						<Link
-							to={service.path}
-							style={{ textDecoration: 'none' }}
-							onClick={() => onNavigate(service.path, service.title)}>
-							<ServiceIconWrapper>
-								<Box
-									sx={{
-										color: '#000000',
-										transition: 'transform 0.3s ease',
-										'&:hover': {
-											transform: 'scale(1.1)',
-										},
-									}}>
-									<Icon sx={{ fontSize: 28 }} />
-								</Box>
-								<ServiceInfo className="service-info">
-									<Typography
-										variant="h6"
-										sx={{ color: '#000000' }}
-										gutterBottom>
-										{service.title}
-									</Typography>
-									<Typography variant="body2" color="text.secondary">
-										{service.description}
-									</Typography>
-								</ServiceInfo>
-							</ServiceIconWrapper>
-						</Link>
-					</motion.div>
-				);
-			})}
-		</Box>
+const ServiceIcons = React.memo(() => {
+	const [, setMenuInfo] = useAtom(menuInfoAtom);
+
+	const handleNavigate = useCallback(
+		(path, title) => {
+			setMenuInfo(title);
+		},
+		[setMenuInfo]
 	);
-};
+
+	const memoizedServices = useMemo(() => services, []);
+
+	return (
+		<IconsContainer sx={ContainerSx}>
+			{memoizedServices.map((service, index) => (
+				<motion.div key={index}>
+					<Link
+						to={service.path}
+						style={{ textDecoration: 'none' }}
+						onClick={() => handleNavigate(service.path, service.title)}>
+						<ServiceIconWrapper sx={IconWrapperSx}>
+							<IconBox>
+								{React.cloneElement(service.icon, { sx: StyledIcon })}
+							</IconBox>
+							<ServiceInfo>
+								<ServiceText variant="h6">{service.title}</ServiceText>
+							</ServiceInfo>
+						</ServiceIconWrapper>
+					</Link>
+				</motion.div>
+			))}
+		</IconsContainer>
+	);
+});
 
 export default ServiceIcons;

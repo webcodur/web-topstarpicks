@@ -1,3 +1,9 @@
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import StyleIcon from '@mui/icons-material/Style';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
+
 export const CELEB_IMAGES = [
 	{
 		imageUrl: 'https://ik.imagekit.io/wnivma72t/closeup/1.png',
@@ -27,10 +33,28 @@ export const CELEB_IMAGES = [
 
 export const services = [
 	{
-		icon: 'AutoStoriesIcon',
+		icon: <AutoStoriesIcon sx={{ fontSize: 45 }} />,
 		title: '추천정보',
-		description: '영향력 있는 인물들의 책과 영화 추천',
 		path: '/people',
 	},
-	// ... 나머지 서비스 항목들
+	{
+		icon: <AccountBoxIcon sx={{ fontSize: 45 }} />,
+		title: '인물도감',
+		path: '/people/history',
+	},
+	{
+		icon: <AccountBalanceIcon sx={{ fontSize: 45 }} />,
+		title: '전설도감',
+		path: '/people/legend',
+	},
+	{
+		icon: <TempleBuddhistIcon sx={{ fontSize: 45 }} />,
+		title: '신화도감',
+		path: '/people/myth',
+	},
+	{
+		icon: <StyleIcon sx={{ fontSize: 45 }} />,
+		title: '카드게임',
+		path: '/games',
+	},
 ];

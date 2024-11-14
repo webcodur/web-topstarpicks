@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import AppBar from './appBar/AppBar';
 import Drawer from './drawer/Drawer';
 import {
@@ -12,6 +12,8 @@ import {
 const MainLayout = React.memo(() => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
+	const isHomePage = location.pathname === '/';
 
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen((prev) => !prev);
@@ -42,7 +44,7 @@ const MainLayout = React.memo(() => {
 
 	return (
 		<RootContainer>
-			<AppBar toggleSidebar={toggleSidebar} />
+			{!isHomePage && <AppBar toggleSidebar={toggleSidebar} />}
 			<ContentWrapper>
 				<StyledDrawer open={isSidebarOpen}>
 					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
