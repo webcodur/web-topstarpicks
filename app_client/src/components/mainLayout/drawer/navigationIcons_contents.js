@@ -26,12 +26,12 @@ const navigationIcons = [
 		icon: <AccountBalanceIcon />,
 		to: '/people/legend',
 	},
-	{
-		key: 'myth',
-		text: '신화도감',
-		icon: <TempleBuddhistIcon />,
-		to: '/people/myth',
-	},
+	// {
+	// 	key: 'myth',
+	// 	text: '신화도감',
+	// 	icon: <TempleBuddhistIcon />,
+	// 	to: '/people/myth',
+	// },
 	{
 		key: 'games',
 		text: '카드게임',

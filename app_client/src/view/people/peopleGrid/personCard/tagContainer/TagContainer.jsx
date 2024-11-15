@@ -33,7 +33,7 @@ const TagContainer = ({ profession, isHistorical, isLegend, menuInfo }) => {
 			)}
 			{isLegend === 1 && menuInfo === '인물도감' && (
 				<Chip
-					label="신화인물"
+					label="전설인물"
 					size="small"
 					sx={{
 						backgroundColor: 'lightyellow',

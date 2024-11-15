@@ -47,11 +47,11 @@ export const services = [
 		title: '전설도감',
 		path: '/people/legend',
 	},
-	{
-		icon: <TempleBuddhistIcon sx={{ fontSize: 45 }} />,
-		title: '신화도감',
-		path: '/people/myth',
-	},
+	// {
+	// 	icon: <TempleBuddhistIcon sx={{ fontSize: 45 }} />,
+	// 	title: '신화도감',
+	// 	path: '/people/myth',
+	// },
 	{
 		icon: <StyleIcon sx={{ fontSize: 45 }} />,
 		title: '카드게임',
