@@ -5,11 +5,11 @@ export const ContentWrapper = styled('div')(({ theme }) => ({
 	width: '100%',
 	minHeight: '100vh',
 	background: 'linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)',
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
 	padding: theme.spacing(3),
 	position: 'relative',
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
 	'&::before': {
 		content: '""',
 		position: 'absolute',
@@ -26,6 +26,16 @@ export const ContentWrapper = styled('div')(({ theme }) => ({
 	},
 }));
 
+export const CenterContainer = styled(Box)({
+	maxWidth: '1200px',
+	width: '100%',
+	margin: '0 auto',
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	// backgroundColor: 'green',
+});
+
 export const GallerySection = styled(Box)({
 	width: '100%',
 	display: 'flex',
@@ -37,10 +47,4 @@ export const ContentSection = styled(Box)(({ theme }) => ({
 	width: '100%',
 	flexDirection: 'column',
 	alignItems: 'center',
-	[theme.breakpoints.up('xs')]: {
-		gap: theme.spacing(3),
-	},
-	[theme.breakpoints.up('md')]: {
-		gap: theme.spacing(4),
-	},
 }));

@@ -9,6 +9,8 @@ import {
 	professionNameAtom,
 	menuInfoAtom,
 	viewTypeAtom,
+	profDataLoadedAtom,
+	showContentAtom,
 } from 'store/atom';
 
 // 커스텀 훅
@@ -48,8 +50,10 @@ const People = () => {
 	const [profession] = useAtom(professionNameAtom);
 	const [menuInfo] = useAtom(menuInfoAtom);
 	const [viewType] = useAtom(viewTypeAtom);
+	const [showContent, setShowContent] = useAtom(showContentAtom);
+	const [profDataLoaded] = useAtom(profDataLoadedAtom);
 
-	const { profDataLoaded, professionData } = useProfessionData(
+	const { professionData } = useProfessionData(
 		profession,
 		contentName,
 		timesName,
@@ -72,8 +76,28 @@ const People = () => {
 		return () => resizeObserver.disconnect();
 	}, []);
 
-	if (!profDataLoaded)
-		return <LoadingScreen loadingStatus={'데이터 로딩중...'} />;
+	useEffect(() => {
+		let timer;
+		if (profDataLoaded) {
+			timer = setTimeout(() => {
+				setShowContent(true);
+			}, 3000); // 로딩 애니메이션(1초) + 표시(1초) + 페이드아웃(1초) = 3초
+		}
+		return () => {
+			clearTimeout(timer);
+			setShowContent(false);
+		};
+	}, [profDataLoaded, setShowContent]);
+
+	if (!showContent) {
+		return (
+			<LoadingScreen
+				loadingStatus={'데이터 로딩중...'}
+				isLoaded={profDataLoaded}
+				menuType={menuInfo}
+			/>
+		);
+	}
 
 	return (
 		<ContentWrapper ref={containerRef}>
@@ -95,7 +119,9 @@ const People = () => {
 			)}
 
 			{menuInfo === '신화도감' && (
-				<LoadingMessageBox loadingStatus={'신화 도감 업데이트 준비중...'} />
+				<LoadingMessageBox
+					loadingStatus={'신화 도감은 업데이트 준비중입니다...'}
+				/>
 			)}
 
 			{menuInfo !== '신화도감' && professionData?.length > 0 && (

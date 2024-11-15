@@ -6,6 +6,5 @@ export const HeaderContainer = styled(Box)(({ theme }) => ({
 	flexDirection: 'column',
 	alignItems: 'center',
 	justifyContent: 'center',
-	padding: theme.spacing(3),
 	textAlign: 'center',
 }));

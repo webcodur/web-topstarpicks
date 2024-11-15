@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useAtom } from 'jotai';
+import { showContentAtom, profDataLoadedAtom } from '../../store/atom';
 import AppBar from './appBar/AppBar';
 import Drawer from './drawer/Drawer';
 import {
@@ -14,6 +16,14 @@ const MainLayout = React.memo(() => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const isHomePage = location.pathname === '/';
+	const [showContent] = useAtom(showContentAtom);
+	const [profDataLoaded] = useAtom(profDataLoadedAtom);
+
+	useEffect(() => {
+		if (isHomePage && isSidebarOpen) {
+			setIsSidebarOpen(false);
+		}
+	}, [location, isHomePage, isSidebarOpen]);
 
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen((prev) => !prev);
@@ -25,7 +35,7 @@ const MainLayout = React.memo(() => {
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
-			if (event.ctrlKey && event.key === 'q') {
+			if (event.ctrlKey && event.altKey && event.key === 'q') {
 				event.preventDefault();
 				navigate('/admin');
 			}
@@ -44,7 +54,9 @@ const MainLayout = React.memo(() => {
 
 	return (
 		<RootContainer>
-			{!isHomePage && <AppBar toggleSidebar={toggleSidebar} />}
+			{!isHomePage && showContent && profDataLoaded && (
+				<AppBar toggleSidebar={toggleSidebar} />
+			)}
 			<ContentWrapper>
 				<StyledDrawer open={isSidebarOpen}>
 					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />

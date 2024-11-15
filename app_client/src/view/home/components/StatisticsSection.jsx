@@ -51,7 +51,7 @@ const StatisticsSection = React.memo(() => {
 	// 통계 데이터 배열 수정
 	const stats = useMemo(
 		() => [
-			{ ref: profileCountRef, label: '셀럽 프로필', value: 1000 },
+			{ ref: profileCountRef, label: '셀럽', value: 1000 },
 			{ ref: insightCountRef, label: '인사이트', value: 5000 },
 			{ ref: userCountRef, label: '월 사용자', value: 10000, format: 'K' },
 		],

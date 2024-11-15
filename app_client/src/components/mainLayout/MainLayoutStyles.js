@@ -22,6 +22,7 @@ export const ContentWrapper = styled(Box)(({ theme }) => ({
 	flex: 1,
 	position: 'relative',
 	overflow: 'auto',
+	marginTop: '64px',
 }));
 
 // 메인 콘텐츠 영역 스타일링
@@ -54,11 +55,12 @@ export const MainContent = styled(Box)(({ theme, open }) => ({
 
 // 사이드 드로어 스타일링
 export const StyledDrawer = styled(Box)(({ theme, open }) => ({
-	position: 'fixed', // 고정 위치
-	top: 64, // 상단 AppBar 높이만큼 여백
+	position: 'fixed',
+	top: 0,
 	left: 0,
 	bottom: 0,
-	zIndex: theme.zIndex.drawer, // 드로어의 z-index 설정
+	paddingTop: '64px',
+	zIndex: theme.zIndex.drawer,
 	flexShrink: 0,
 	whiteSpace: 'nowrap',
 	boxSizing: 'border-box',

@@ -10,6 +10,7 @@ import {
 	ContentWrapper,
 	GallerySection,
 	ContentSection,
+	CenterContainer,
 } from './styles/LayoutStyles';
 import { CELEB_IMAGES } from './constants';
 
@@ -44,27 +45,29 @@ const Home = () => {
 
 	return (
 		<ContentWrapper>
-			{/* 1.1 상단 헤더 섹션: 타이틀과 서브타이틀 */}
-			<HeaderSection />
+			<CenterContainer>
+				{/* 1.1 상단 헤더 섹션: 타이틀과 서브타이틀 */}
+				<HeaderSection />
 
-			{/* 1.2 메인 콘텐츠 영역: 갤러리, 통계, 서비스 아이콘 */}
-			<ContentSection>
-				{/* 1.2.1 셀럽 이미지 갤러리 섹션 */}
-				<GallerySection>
-					<CelebGallery
-						images={images}
-						moveLeft={moveLeft}
-						moveRight={moveRight}
-						onFirstCardClick={handleFirstCardClick}
-					/>
-				</GallerySection>
+				{/* 1.2 메인 콘텐츠 영역: 갤러리, 통계, 서비스 아이콘 */}
+				<ContentSection>
+					{/* 1.2.1 셀럽 이미지 갤러리 섹션 */}
+					<GallerySection>
+						<CelebGallery
+							images={images}
+							moveLeft={moveLeft}
+							moveRight={moveRight}
+							onFirstCardClick={handleFirstCardClick}
+						/>
+					</GallerySection>
 
-				{/* 1.2.2 주요 통계 수치 표시 섹션 */}
-				<StatisticsSection />
+					{/* 1.2.2 주요 통계 수치 표시 섹션 */}
+					<StatisticsSection />
 
-				{/* 1.2.3 서비스 주요 기능 아이콘 섹션 */}
-				<ServiceIcons />
-			</ContentSection>
+					{/* 1.2.3 서비스 주요 기능 아이콘 섹션 */}
+					<ServiceIcons />
+				</ContentSection>
+			</CenterContainer>
 		</ContentWrapper>
 	);
 };
