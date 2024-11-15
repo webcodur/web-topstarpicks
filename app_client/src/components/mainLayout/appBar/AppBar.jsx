@@ -16,6 +16,8 @@ import {
 	IconButtonContainer,
 	MenuIconButton,
 } from './AppBarStyles';
+import { useAtom } from 'jotai';
+import { isSidebarOpenAtom } from '../../../store/atom';
 
 /**
  * 애플리케이션의 상단 네비게이션 바 컴포넌트
@@ -30,6 +32,7 @@ const AppBar = memo(({ toggleSidebar }) => {
 	const [openSettings, setOpenSettings] = useState(false);
 	const [openAdminLogin, setOpenAdminLogin] = useState(false);
 	const { t } = useTranslation();
+	const [, setIsSidebarOpen] = useAtom(isSidebarOpenAtom);
 
 	const handleOpenSettings = () => setOpenSettings(true);
 	const handleCloseSettings = () => setOpenSettings(false);
@@ -37,20 +40,19 @@ const AppBar = memo(({ toggleSidebar }) => {
 	const handleOpenAdminLogin = () => setOpenAdminLogin(true);
 	const handleCloseAdminLogin = () => setOpenAdminLogin(false);
 
+	const handleToggleSidebar = () => {
+		setIsSidebarOpen((prev) => !prev);
+	};
+
 	return (
-		<StyledAppBar
-			as={motion.div}
-			variant="square"
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			transition={{ duration: 0.5 }}>
+		<StyledAppBar as={motion.div} variant="square">
 			<StyledToolbar>
 				<MenuButtonContainer>
 					<MenuIconButton
 						edge="start"
 						color="inherit"
 						aria-label="menu"
-						onClick={toggleSidebar}>
+						onClick={handleToggleSidebar}>
 						<MenuIcon />
 					</MenuIconButton>
 				</MenuButtonContainer>

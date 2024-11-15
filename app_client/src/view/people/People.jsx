@@ -10,7 +10,6 @@ import {
 	menuInfoAtom,
 	viewTypeAtom,
 	profDataLoadedAtom,
-	showContentAtom,
 } from 'store/atom';
 
 // 커스텀 훅
@@ -19,38 +18,21 @@ import { useModalState } from 'hooks/useModalState';
 import { useEraBoundaries } from 'hooks/useEraBoundaries';
 
 // 컴포넌트
-import LoadingScreen from 'components/ui/loading/LoadingScreen';
-import LoadingMessageBox from 'components/ui/loading/LoadingMessageBox';
 import AgeBoundaries from './AgeBoundaries';
 import PeopleGrid from './peopleGrid/PeopleGrid';
 import ScoreModal from './scoreModal/ScoreModal';
-import FilterControls from './dataControlPanel/FilterControls';
+import DataControlPanel from './dataControlPanel/DataControlPanel';
+import Title from './Title';
 
 // 스타일
-import { PageTitle, ContentWrapper, Divider, Spacer } from './People.styles';
-
-const Title = ({ menu }) => (
-	<>
-		<PageTitle variant="h3" component="h1" align="center">
-			{menu === '추천정보' && '유명인사 추천정보'}
-			{menu.includes('도감') && menu}
-		</PageTitle>
-
-		<PageTitle variant="h5" component="h3" align="center">
-			{menu === '추천정보' && '인물별 컨텐츠 추천정보를 확인하세요!'}
-			{menu.includes('도감') &&
-				'인물별 능력치를 확인하고 카드 게임에 활용하세요!'}
-		</PageTitle>
-	</>
-);
+import { ContentWrapper, Divider, Spacer } from './People.styles';
 
 const People = () => {
 	const [contentName] = useAtom(contentNameAtom);
 	const [timesName] = useAtom(timesNameAtom);
 	const [profession] = useAtom(professionNameAtom);
 	const [menuInfo] = useAtom(menuInfoAtom);
-	const [viewType] = useAtom(viewTypeAtom);
-	const [showContent, setShowContent] = useAtom(showContentAtom);
+	const [viewType, setViewType] = useAtom(viewTypeAtom);
 	const [profDataLoaded] = useAtom(profDataLoadedAtom);
 
 	const { professionData } = useProfessionData(
@@ -76,52 +58,34 @@ const People = () => {
 		return () => resizeObserver.disconnect();
 	}, []);
 
-	useEffect(() => {
-		let timer;
-		if (profDataLoaded) {
-			timer = setTimeout(() => {
-				setShowContent(true);
-			}, 3000); // 로딩 애니메이션(1초) + 표시(1초) + 페이드아웃(1초) = 3초
-		}
-		return () => {
-			clearTimeout(timer);
-			setShowContent(false);
-		};
-	}, [profDataLoaded, setShowContent]);
+	const handleViewTypeChange = (newViewType) => {
+		setViewType(newViewType);
+	};
 
-	if (!showContent) {
-		return (
-			<LoadingScreen
-				loadingStatus={'데이터 로딩중...'}
-				isLoaded={profDataLoaded}
-				menuType={menuInfo}
-			/>
-		);
+	if (!profDataLoaded) {
+		return <div>로딩중...</div>;
 	}
 
 	return (
 		<ContentWrapper ref={containerRef}>
 			<Title menu={menuInfo} />
-			<FilterControls
+			<DataControlPanel
 				sortCriteria={sortCriteria}
 				setSortCriteria={setSortCriteria}
 				sortOrder={sortOrder}
 				setSortOrder={setSortOrder}
 				viewType={viewType}
+				onViewTypeChange={handleViewTypeChange}
 			/>
 
 			<Divider />
 			<Spacer />
 			<Spacer />
 
-			{professionData?.length === 0 && (
-				<LoadingMessageBox loadingStatus={'해당 데이터가 없습니다.'} />
-			)}
+			{professionData?.length === 0 && <div>해당 데이터가 없습니다.</div>}
 
 			{menuInfo === '신화도감' && (
-				<LoadingMessageBox
-					loadingStatus={'신화 도감은 업데이트 준비중입니다...'}
-				/>
+				<div>신화 도감은 업데이트 준비중입니다...</div>
 			)}
 
 			{menuInfo !== '신화도감' && professionData?.length > 0 && (
@@ -147,6 +111,7 @@ const People = () => {
 						person={selectedPerson}
 						open={modalOpen}
 						onClose={handleModalClose}
+						container={document.body}
 					/>
 				</>
 			)}

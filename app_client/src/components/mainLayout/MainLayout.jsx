@@ -1,7 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { showContentAtom, profDataLoadedAtom } from '../../store/atom';
+import {
+	profDataLoadedAtom,
+	isSidebarOpenAtom,
+	isAppBarOpenAtom,
+} from 'store/atom';
 import AppBar from './appBar/AppBar';
 import Drawer from './drawer/Drawer';
 import {
@@ -12,26 +16,39 @@ import {
 } from './MainLayoutStyles';
 
 const MainLayout = React.memo(() => {
-	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
 	const location = useLocation();
+	const path = location.pathname;
 	const isHomePage = location.pathname === '/';
-	const [showContent] = useAtom(showContentAtom);
+
+	const [isSidebarOpen, setIsSidebarOpen] = useAtom(isSidebarOpenAtom);
+	const [isAppBarOpen, setIsAppBarOpen] = useAtom(isAppBarOpenAtom);
+
 	const [profDataLoaded] = useAtom(profDataLoadedAtom);
+
+	useEffect(() => {
+		if (path.includes('people')) {
+			setIsAppBarOpen(profDataLoaded);
+		} else if (path === '/') {
+			setIsAppBarOpen(false);
+		} else{
+      setIsAppBarOpen(true);
+    }
+	}, [profDataLoaded, setIsAppBarOpen, path]);
 
 	useEffect(() => {
 		if (isHomePage && isSidebarOpen) {
 			setIsSidebarOpen(false);
 		}
-	}, [location, isHomePage, isSidebarOpen]);
+	}, [location, isHomePage, isSidebarOpen, setIsSidebarOpen]);
 
 	const toggleSidebar = useCallback(() => {
 		setIsSidebarOpen((prev) => !prev);
-	}, []);
+	}, [setIsSidebarOpen]);
 
 	const closeMenu = useCallback(() => {
-		setIsSidebarOpen((prev) => !prev);
-	}, []);
+		setIsSidebarOpen(false);
+	}, [setIsSidebarOpen]);
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
@@ -54,14 +71,12 @@ const MainLayout = React.memo(() => {
 
 	return (
 		<RootContainer>
-			{!isHomePage && showContent && profDataLoaded && (
-				<AppBar toggleSidebar={toggleSidebar} />
-			)}
-			<ContentWrapper>
+			{isAppBarOpen && <AppBar toggleSidebar={toggleSidebar} />}
+			<ContentWrapper hasAppBar={isAppBarOpen}>
 				<StyledDrawer open={isSidebarOpen}>
 					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
 				</StyledDrawer>
-				<MainContent open={isSidebarOpen}>
+				<MainContent>
 					<Outlet />
 				</MainContent>
 			</ContentWrapper>

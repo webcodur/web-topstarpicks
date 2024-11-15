@@ -7,6 +7,8 @@ export const PageTitle = styled(Typography)`
 	margin-bottom: 32px;
 	font-family: 'Gowun Batang', serif;
 	font-weight: bold;
+	word-break: keep-all;
+	word-wrap: break-word;
 
 	@media screen and (max-width: 768px) {
 		font-size: 1.5rem;
@@ -16,8 +18,9 @@ export const PageTitle = styled(Typography)`
 `;
 
 export const ContentWrapper = styled.div`
-	// 여기에 필요한 스타일을 추가할 수 있습니다.
-	// 예: padding, margin 등
+	max-width: 100%;
+	padding: 0 16px;
+	box-sizing: border-box;
 `;
 
 export const Divider = styled.hr`

@@ -1,5 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
+import {
+	professionNameAtom,
+	contentNameAtom,
+	timesNameAtom,
+} from '../../store/atom';
 import CelebGallery from './components/CelebGallery';
 import HeaderSection from './components/HeaderSection';
 import StatisticsSection from './components/StatisticsSection';
@@ -17,6 +23,18 @@ import { CELEB_IMAGES } from './constants';
 const Home = () => {
 	const [images, setImages] = useState(CELEB_IMAGES);
 	const navigate = useNavigate();
+
+	// atom setter 함수들 정의
+	const setProfessionName = useSetAtom(professionNameAtom);
+	const setContentName = useSetAtom(contentNameAtom);
+	const setTimesName = useSetAtom(timesNameAtom);
+
+	// 컴포넌트 마운트 시 필터 초기화
+	useEffect(() => {
+		setProfessionName('전체');
+		setContentName('책');
+		setTimesName('전체인물');
+	}, [setProfessionName, setContentName, setTimesName]);
 
 	// useCallback을 사용하여 함수 메모이제이션
 	const moveRight = useCallback(() => {
