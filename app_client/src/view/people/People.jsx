@@ -63,7 +63,7 @@ const People = () => {
 	};
 
 	if (!profDataLoaded) {
-		return <div>로딩중...</div>;
+		return <div></div>;
 	}
 
 	return (
