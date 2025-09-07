@@ -1,23 +1,13 @@
 import React, { memo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SettingsIcon from '@mui/icons-material/Settings';
-import BuildIcon from '@mui/icons-material/Build';
+import { Menu, Settings, Wrench } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import SettingsModal from './SettingsModal';
 import AdminLoginModal from './AdminLoginModal';
 import { Link } from 'react-router-dom';
-import {
-	StyledAppBar,
-	StyledToolbar,
-	MenuButtonContainer,
-	LogoImage,
-	IconButtonContainer,
-	MenuIconButton,
-} from './AppBarStyles';
 import { useAtom } from 'jotai';
 import { isSidebarOpenAtom } from '../../../store/atom';
+import { Button } from '../../ui/button';
 
 /**
  * 애플리케이션의 상단 네비게이션 바 컴포넌트
@@ -45,45 +35,65 @@ const AppBar = memo(({ toggleSidebar }) => {
 	};
 
 	return (
-		<StyledAppBar as={motion.div} variant="square">
-			<StyledToolbar>
-				<MenuButtonContainer>
-					<MenuIconButton
-						edge="start"
-						color="inherit"
+		<motion.header 
+			className="bg-primary-main text-white shadow-md sticky top-0 z-40"
+			initial={{ y: -100 }}
+			animate={{ y: 0 }}
+			transition={{ type: "spring", stiffness: 100 }}
+		>
+			<div className="flex items-center justify-between h-16 px-4">
+				{/* Menu Button */}
+				<div className="flex items-center">
+					<Button
+						variant="ghost"
+						size="icon"
+						className="text-white hover:bg-white/10"
+						onClick={handleToggleSidebar}
 						aria-label="menu"
-						onClick={handleToggleSidebar}>
-						<MenuIcon />
-					</MenuIconButton>
-				</MenuButtonContainer>
+					>
+						<Menu className="h-6 w-6" />
+					</Button>
+				</div>
 
-				<Link to="/" style={{ textDecoration: 'none' }}>
-					<LogoImage component="img" src="/logo.png" alt={t('app_name')} />
+				{/* Logo */}
+				<Link to="/" className="flex items-center">
+					<img 
+						src="/logo.png" 
+						alt={t('app_name')} 
+						className="h-10 w-auto"
+					/>
 				</Link>
 
-				<IconButtonContainer>
-					<IconButton
-						color="inherit"
+				{/* Settings and Admin Buttons */}
+				<div className="flex items-center space-x-2">
+					<Button
+						variant="ghost"
+						size="icon"
+						className="text-white hover:bg-white/10"
+						onClick={handleOpenSettings}
 						aria-label="settings"
-						onClick={handleOpenSettings}>
-						<SettingsIcon />
-					</IconButton>
+					>
+						<Settings className="h-5 w-5" />
+					</Button>
 
-					<IconButton
-						color="inherit"
+					<Button
+						variant="ghost"
+						size="icon"
+						className="text-white hover:bg-white/10"
+						onClick={handleOpenAdminLogin}
 						aria-label="admin"
-						onClick={handleOpenAdminLogin}>
-						<BuildIcon />
-					</IconButton>
-				</IconButtonContainer>
+					>
+						<Wrench className="h-5 w-5" />
+					</Button>
+				</div>
 
 				<SettingsModal open={openSettings} onClose={handleCloseSettings} />
 				<AdminLoginModal
 					open={openAdminLogin}
 					onClose={handleCloseAdminLogin}
 				/>
-			</StyledToolbar>
-		</StyledAppBar>
+			</div>
+		</motion.header>
 	);
 });
 

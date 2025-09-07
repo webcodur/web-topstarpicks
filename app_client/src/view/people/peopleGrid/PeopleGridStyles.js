@@ -1,22 +1,3 @@
-import styled from '@emotion/styled';
-import { Typography } from '@mui/material';
-
-export const StencilTypography = styled(Typography)`
-	text-align: center;
-	font-family: 'Gowun Batang', sans-serif;
-	color: black;
-	font-weight: bold;
-	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
-		1px 1px 0 #fff;
-	letter-spacing: 2px;
-	text-transform: uppercase;
-	font-size: 1.5rem;
-
-	@media (min-width: 600px) {
-		font-size: 2rem;
-	}
-
-	@media (min-width: 960px) {
-		font-size: 2.5rem;
-	}
-`;
+// This file previously contained MUI styled components
+// The StencilTypography component has been replaced with Tailwind CSS classes
+// The equivalent styling is now available as the 'stencil-font' class in global CSS

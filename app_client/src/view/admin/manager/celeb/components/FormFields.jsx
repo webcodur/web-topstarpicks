@@ -1,45 +1,18 @@
 import React from 'react';
+import { Input } from '../../../../../components/ui/input';
+import { Label } from '../../../../../components/ui/label';
+import { Button } from '../../../../../components/ui/button';
+import { Checkbox } from '../../../../../components/ui/checkbox';
 import {
-	Grid,
-	TextField,
-	Autocomplete,
-	FormControlLabel,
-	Checkbox,
-	Box,
-	CardMedia,
-} from '@mui/material';
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '../../../../../components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
 import { formatDateString } from 'utils/dateUtils';
-import { styles } from '../CelebForm.styles';
 import { GENDER_OPTIONS } from '../CelebForm.constants';
 import { getProfessionValue } from '../formUtils';
-import { styled } from '@mui/material/styles';
-import { alpha } from '@mui/material/styles';
-
-const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
-	border: '1px solid rgba(0, 0, 0, 0.23)',
-	borderRadius: '4px',
-	margin: '0',
-	padding: '8.5px 14px',
-	width: '100%',
-	transition: 'background-color 0.3s, border-color 0.3s',
-
-	'&:hover': {
-		borderColor: theme.palette.text.primary,
-	},
-
-	'& .MuiCheckbox-root': {
-		padding: '0 9px 0 0',
-	},
-
-	'& .MuiFormControlLabel-label': {
-		fontSize: '1rem',
-	},
-
-	'&.Mui-checked': {
-		backgroundColor: alpha(theme.palette.primary.main, 0.1),
-		borderColor: theme.palette.primary.main,
-	},
-}));
 
 // 유명인사 정보 입력 필드들을 모아둔 컴포넌트
 // 기본정보, 날짜, 텍스트 영역, 체크박스 등 모든 입력 필드 포함
@@ -69,286 +42,340 @@ const FormFields = ({
 	const isReal = Boolean(formData.is_real);
 	const isLegend = Boolean(formData.is_legend);
 
+	// 직업 선택 핸들러
+	const handleProfessionSelect = (profession) => {
+		setFormData((prev) => ({
+			...prev,
+			profession_kor: profession.name,
+		}));
+	};
+
+	// 성별 선택 핸들러
+	const handleGenderSelect = (gender) => {
+		setFormData((prev) => ({
+			...prev,
+			gender: gender.value,
+		}));
+	};
+
+	// 국적 선택 핸들러
+	const handleCountrySelect = (country) => {
+		setFormData((prev) => ({
+			...prev,
+			nationality: country.name,
+		}));
+	};
+
+	const selectedProfession = professionOptions.find(
+		(p) => p.name === formData.profession_kor
+	);
+	const selectedGender = GENDER_OPTIONS.find(
+		(g) => g.value === formData.gender
+	);
+	const selectedCountry = countryOptions.find(
+		(c) => c.name === formData.nationality
+	);
+
 	return (
-		<Grid container spacing={2} sx={styles.formContainer}>
-			<Grid item xs={3}>
-				<TextField
-					size="small"
-					fullWidth
-					label="prename"
-					name="prename"
-					value={formData.prename}
-					onChange={handleChange}
-				/>
-			</Grid>
+		<div className="space-y-6">
+			{/* Basic Information Row */}
+			<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor="prename">Prename</Label>
+					<Input
+						id="prename"
+						name="prename"
+						value={formData.prename}
+						onChange={handleChange}
+						placeholder="Enter prename"
+					/>
+				</div>
 
-			<Grid item xs={3}>
-				<TextField
-					size="small"
-					fullWidth
-					label="이름"
-					name="name"
-					value={formData.name}
-					onChange={handleChange}
-					required
-				/>
-			</Grid>
-
-			<Grid item xs={3}>
-				<TextField
-					size="small"
-					fullWidth
-					label="postname"
-					name="postname"
-					value={formData.postname}
-					onChange={handleChange}
-				/>
-			</Grid>
-
-			<Grid item xs={3}>
-				<Autocomplete
-					size="small"
-					options={professionOptions}
-					getOptionLabel={(option) => option?.name || ''}
-					value={getProfessionValue(professionOptions, formData.profession_kor)}
-					onChange={(event, newValue) => {
-						setFormData((prev) => ({
-							...prev,
-							profession_kor: newValue ? newValue.name : '',
-						}));
-					}}
-					renderInput={(params) => (
-						<TextField
-							{...params}
-							label="직군"
-							required
-							error={isSubmitted && !formData.profession_kor}
-							helperText={
-								isSubmitted && !formData.profession_kor
-									? '직군을 선택해주세요'
-									: ''
-							}
-						/>
+				<div className="space-y-2">
+					<Label htmlFor="name">이름 *</Label>
+					<Input
+						id="name"
+						name="name"
+						value={formData.name}
+						onChange={handleChange}
+						placeholder="이름을 입력하세요"
+						required
+						className={isSubmitted && !formData.name ? 'border-red-500' : ''}
+					/>
+					{isSubmitted && !formData.name && (
+						<p className="text-sm text-red-500">이름을 입력해주세요</p>
 					)}
-					isOptionEqualToValue={(option, value) => option?.id === value?.id}
-					selectOnFocus
-					handleHomeEndKeys
-				/>
-			</Grid>
+				</div>
 
-			<Grid item xs={3}>
-				<Autocomplete
-					size="small"
-					options={GENDER_OPTIONS}
-					getOptionLabel={(option) => option.label}
-					value={
-						GENDER_OPTIONS.find((g) => g.value === formData.gender) || null
-					}
-					onChange={(event, newValue) => {
-						setFormData((prev) => ({
-							...prev,
-							gender: newValue ? newValue.value : '',
-						}));
-					}}
-					renderInput={(params) => (
-						<TextField
-							{...params}
-							label="성별"
-							required
-							onKeyDown={(e) => {
-								if (e.key === 'Enter') {
-									e.stopPropagation();
-								}
-							}}
-						/>
-					)}
-					selectOnFocus
-					handleHomeEndKeys
-				/>
-			</Grid>
+				<div className="space-y-2">
+					<Label htmlFor="postname">Postname</Label>
+					<Input
+						id="postname"
+						name="postname"
+						value={formData.postname}
+						onChange={handleChange}
+						placeholder="Enter postname"
+					/>
+				</div>
 
-			<Grid item xs={6}>
-				<Autocomplete
-					size="small"
-					options={countryOptions}
-					getOptionLabel={(option) => `${option.name} (${option.code})`}
-					value={
-						countryOptions.find(
-							(country) => country.name === formData.nationality
-						) || null
-					}
-					onChange={(event, newValue) => {
-						setFormData((prev) => ({
-							...prev,
-							nationality: newValue ? newValue.name : '',
-						}));
-					}}
-					renderInput={(params) => (
-						<TextField
-							{...params}
-							label="국적"
-							required
-							error={isSubmitted && !formData.nationality}
-							helperText={
-								isSubmitted && !formData.nationality
-									? '국적을 선택해주세요'
-									: ''
-							}
-						/>
+				<div className="space-y-2">
+					<Label>직군 *</Label>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant="outline"
+								className={`w-full justify-between ${
+									isSubmitted && !formData.profession_kor ? 'border-red-500' : ''
+								}`}
+							>
+								{selectedProfession?.name || '직군을 선택하세요'}
+								<ChevronDown className="h-4 w-4 opacity-50" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-full">
+							{professionOptions.map((profession) => (
+								<DropdownMenuItem
+									key={profession.id}
+									onSelect={() => handleProfessionSelect(profession)}
+								>
+									{profession.name}
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+					{isSubmitted && !formData.profession_kor && (
+						<p className="text-sm text-red-500">직군을 선택해주세요</p>
 					)}
-					isOptionEqualToValue={(option, value) => option.name === value.name}
-				/>
-			</Grid>
+				</div>
+			</div>
+
+			{/* Gender and Nationality Row */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label>성별 *</Label>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="outline" className="w-full justify-between">
+								{selectedGender?.label || '성별을 선택하세요'}
+								<ChevronDown className="h-4 w-4 opacity-50" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-full">
+							{GENDER_OPTIONS.map((gender) => (
+								<DropdownMenuItem
+									key={gender.value}
+									onSelect={() => handleGenderSelect(gender)}
+								>
+									{gender.label}
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</div>
+
+				<div className="space-y-2">
+					<Label>국적 *</Label>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant="outline"
+								className={`w-full justify-between ${
+									isSubmitted && !formData.nationality ? 'border-red-500' : ''
+								}`}
+							>
+								{selectedCountry
+									? `${selectedCountry.name} (${selectedCountry.code})`
+									: '국적을 선택하세요'}
+								<ChevronDown className="h-4 w-4 opacity-50" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-full">
+							{countryOptions.map((country) => (
+								<DropdownMenuItem
+									key={country.code}
+									onSelect={() => handleCountrySelect(country)}
+								>
+									{country.name} ({country.code})
+								</DropdownMenuItem>
+							))}
+						</DropdownMenuContent>
+					</DropdownMenu>
+					{isSubmitted && !formData.nationality && (
+						<p className="text-sm text-red-500">국적을 선택해주세요</p>
+					)}
+				</div>
+			</div>
 
 			{/* Date Fields */}
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="출생일"
-					name="birth_date"
-					type="text"
-					value={formData.birth_date}
-					onChange={handleChange}
-					onBlur={(e) => {
-						const formattedDate = formatDateString(e.target.value);
-						setFormData((prev) => ({
-							...prev,
-							birth_date: formattedDate,
-						}));
-					}}
-					InputLabelProps={{ shrink: true }}
-				/>
-			</Grid>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor="birth_date">출생일</Label>
+					<Input
+						id="birth_date"
+						name="birth_date"
+						type="text"
+						value={formData.birth_date}
+						onChange={handleChange}
+						onBlur={(e) => {
+							const formattedDate = formatDateString(e.target.value);
+							setFormData((prev) => ({
+								...prev,
+								birth_date: formattedDate,
+							}));
+						}}
+						placeholder="YYYY-MM-DD"
+					/>
+				</div>
 
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="사망일"
-					name="death_date"
-					type="text"
-					value={formData.death_date}
-					onChange={handleChange}
-					onBlur={(e) => {
-						const formattedDate = formatDateString(e.target.value);
-						setFormData((prev) => ({
-							...prev,
-							death_date: formattedDate,
-						}));
-					}}
-					InputLabelProps={{ shrink: true }}
-				/>
-			</Grid>
+				<div className="space-y-2">
+					<Label htmlFor="death_date">사망일</Label>
+					<Input
+						id="death_date"
+						name="death_date"
+						type="text"
+						value={formData.death_date}
+						onChange={handleChange}
+						onBlur={(e) => {
+							const formattedDate = formatDateString(e.target.value);
+							setFormData((prev) => ({
+								...prev,
+								death_date: formattedDate,
+							}));
+						}}
+						placeholder="YYYY-MM-DD"
+					/>
+				</div>
+			</div>
 
-			{/* Text Fields */}
-			<Grid item xs={12}>
-				<TextField
-					size="small"
-					fullWidth
-					label="약력"
+			{/* Biography */}
+			<div className="space-y-2">
+				<Label htmlFor="biography">약력</Label>
+				<textarea
+					id="biography"
 					name="biography"
 					value={formData.biography}
 					onChange={handleChange}
-					multiline
 					rows={3}
+					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+					placeholder="약력을 입력하세요"
 				/>
-			</Grid>
+			</div>
 
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="이미지 링크"
-					name="img_link"
-					value={formData.img_link}
-					onChange={handleChange}
-				/>
-				{formData.img_link && (
-					<Box sx={{ mt: 1, position: 'relative' }}>
-						<CardMedia
-							component="img"
-							image={formData.img_link}
-							alt="Celebrity preview"
-							sx={styles.previewImage}
-							onClick={() => setPreviewDialogOpen(true)}
-							onError={(e) => {
-								e.target.onerror = null;
-								e.target.src = '/placeholder-image.jpg';
-							}}
-						/>
-					</Box>
-				)}
-			</Grid>
+			{/* Image and Video Links */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor="img_link">이미지 링크</Label>
+					<Input
+						id="img_link"
+						name="img_link"
+						value={formData.img_link}
+						onChange={handleChange}
+						placeholder="이미지 URL을 입력하세요"
+					/>
+					{formData.img_link && (
+						<div className="mt-2 relative">
+							<img
+								src={formData.img_link}
+								alt="Celebrity preview"
+								className="w-full h-32 object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity"
+								onClick={() => setPreviewDialogOpen(true)}
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.src = '/placeholder-image.jpg';
+								}}
+							/>
+						</div>
+					)}
+				</div>
 
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="비디오 링크"
-					name="vid_link"
-					value={formData.vid_link}
-					onChange={handleChange}
-				/>
-			</Grid>
+				<div className="space-y-2">
+					<Label htmlFor="vid_link">비디오 링크</Label>
+					<Input
+						id="vid_link"
+						name="vid_link"
+						value={formData.vid_link}
+						onChange={handleChange}
+						placeholder="비디오 URL을 입력하세요"
+					/>
+				</div>
+			</div>
 
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="도서/이야기"
-					name="book_story"
-					value={formData.book_story}
-					onChange={handleChange}
-					multiline
-					rows={3}
-				/>
-			</Grid>
+			{/* Text Areas */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="space-y-2">
+					<Label htmlFor="book_story">도서/이야기</Label>
+					<textarea
+						id="book_story"
+						name="book_story"
+						value={formData.book_story}
+						onChange={handleChange}
+						rows={3}
+						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+						placeholder="도서나 이야기를 입력하세요"
+					/>
+				</div>
 
-			<Grid item xs={6}>
-				<TextField
-					size="small"
-					fullWidth
-					label="명언"
-					name="quotes"
-					value={formData.quotes}
-					onChange={handleChange}
-					multiline
-					rows={3}
-				/>
-			</Grid>
+				<div className="space-y-2">
+					<Label htmlFor="quotes">명언</Label>
+					<textarea
+						id="quotes"
+						name="quotes"
+						value={formData.quotes}
+						onChange={handleChange}
+						rows={3}
+						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+						placeholder="명언을 입력하세요"
+					/>
+				</div>
+			</div>
 
 			{/* Checkboxes */}
-			<Grid item xs={12} sm={6}>
-				<StyledFormControlLabel
-					control={
-						<Checkbox
-							checked={isReal}
-							onChange={(e) =>
-								setFormData({ ...formData, is_real: e.target.checked })
-							}
-						/>
-					}
-					label="실존 인물"
-					className={isReal ? 'Mui-checked' : ''}
-				/>
-			</Grid>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div
+					className={`flex items-center space-x-3 p-3 border rounded-md transition-colors ${
+						isReal
+							? 'border-blue-500 bg-blue-50'
+							: 'border-gray-300 hover:border-gray-400'
+					}`}
+				>
+					<Checkbox
+						id="is_real"
+						checked={isReal}
+						onCheckedChange={(checked) =>
+							setFormData({ ...formData, is_real: checked })
+						}
+					/>
+					<Label
+						htmlFor="is_real"
+						className="flex-1 cursor-pointer select-none"
+					>
+						실존 인물
+					</Label>
+				</div>
 
-			<Grid item xs={12} sm={6}>
-				<StyledFormControlLabel
-					control={
-						<Checkbox
-							checked={isLegend}
-							onChange={(e) =>
-								setFormData({ ...formData, is_legend: e.target.checked })
-							}
-						/>
-					}
-					label="가상 인물"
-					className={isLegend ? 'Mui-checked' : ''}
-				/>
-			</Grid>
-		</Grid>
+				<div
+					className={`flex items-center space-x-3 p-3 border rounded-md transition-colors ${
+						isLegend
+							? 'border-blue-500 bg-blue-50'
+							: 'border-gray-300 hover:border-gray-400'
+					}`}
+				>
+					<Checkbox
+						id="is_legend"
+						checked={isLegend}
+						onCheckedChange={(checked) =>
+							setFormData({ ...formData, is_legend: checked })
+						}
+					/>
+					<Label
+						htmlFor="is_legend"
+						className="flex-1 cursor-pointer select-none"
+					>
+						가상 인물
+					</Label>
+				</div>
+			</div>
+		</div>
 	);
 };
 

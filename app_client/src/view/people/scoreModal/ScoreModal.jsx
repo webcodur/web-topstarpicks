@@ -1,31 +1,15 @@
 import React, { useState } from 'react';
-import {
-	Modal,
-	Tooltip,
-	IconButton,
-	Tabs,
-	Tab,
-	Typography,
-	useMediaQuery,
-	useTheme,
-} from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
+import { Dialog, DialogContent } from '../../../components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import { Button } from '../../../components/ui/button';
+import { Info } from 'lucide-react';
 import RadarChart from './raderChart/RadarChart';
 import BarChart from './barChart/BarChart';
 import TotalScoreComponent from './totlaScore/TotalScoreComponent';
 import { calculateGrade } from './scoreUtils';
-import {
-	ModalContent,
-	FlexCenter,
-	Title,
-	ContentWrapper,
-	TabPanel,
-} from './ScoreModalStyles';
 
 const ScoreModal = ({ person, open, onClose }) => {
-	const [tabValue, setTabValue] = useState(0);
-	const theme = useTheme();
-	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+	const [activeTab, setActiveTab] = useState('category');
 
 	const categoryScore =
 		person?.political +
@@ -40,74 +24,55 @@ const ScoreModal = ({ person, open, onClose }) => {
 	const grade = calculateGrade(totalScore);
 	person.grade = grade;
 
-	const handleTabChange = (_, newValue) => {
-		setTabValue(newValue);
-	};
-
 	return (
-		<Modal
-			open={open}
-			onClose={onClose}
-			aria-labelledby="score-modal-title"
-			aria-describedby="score-modal-description">
-			<ModalContent>
-				<FlexCenter>
-					<Title id="score-modal-title" align="center">
+		<Dialog open={open} onOpenChange={onClose}>
+			<DialogContent className="max-w-md w-[340px] max-h-[800px] overflow-y-auto">
+				<div className="flex items-center justify-center mb-5">
+					<h2 className="text-xl font-bold text-center">
 						{person.name}의 영향력
-					</Title>
-					<Tooltip
-						enterTouchDelay={0}
-						leaveTouchDelay={3000}
-						title={
-							<Typography fontSize="1rem">
-								영향력 스펙트럼은 chatGPT를 통해 인물별 영향력 지표를 시각화한
-								것입니다.
-							</Typography>
-						}
-						arrow>
-						<IconButton size="small">
-							<InfoIcon color="primary" />
-						</IconButton>
-					</Tooltip>
-				</FlexCenter>
-
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						flexDirection: 'column',
-					}}>
-					<Tabs
-						value={tabValue}
-						onChange={handleTabChange}
-						centered
-						variant={isMobile ? 'fullWidth' : 'standard'}>
-						<Tab label={`분야별: ${categoryScore}`} />
-						<Tab label={`통시성: ${person.transhistoricity}`} />
-						<Tab label={`총점: ${person.total_score}`} />
-					</Tabs>
+					</h2>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="ml-2 p-2 h-auto"
+						title="영향력 스펙트럼은 chatGPT를 통해 인물별 영향력 지표를 시각화한 것입니다.">
+						<Info className="h-4 w-4" />
+					</Button>
 				</div>
 
-				<ContentWrapper>
-					{/* 레이더 차트 */}
-					<TabPanel value={tabValue} index={0}>
-						<RadarChart person={person} />
-					</TabPanel>
-					{/* 바 차트*/}
-					<TabPanel value={tabValue} index={1}>
-						<BarChart
-							transhistoricity={person.transhistoricity}
-							exp={person.transhistoricity_exp}
-						/>
-					</TabPanel>
-					{/* 총점 */}
-					<TabPanel value={tabValue} index={2}>
-						<TotalScoreComponent person={person} />
-					</TabPanel>
-				</ContentWrapper>
-			</ModalContent>
-		</Modal>
+				<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+					<TabsList className="grid w-full grid-cols-3 mb-5">
+						<TabsTrigger value="category" className="text-xs p-2">
+							분야별: {categoryScore}
+						</TabsTrigger>
+						<TabsTrigger value="trans" className="text-xs p-2">
+							통시성: {person.transhistoricity}
+						</TabsTrigger>
+						<TabsTrigger value="total" className="text-xs p-2">
+							총점: {person.total_score}
+						</TabsTrigger>
+					</TabsList>
+
+					<div className="flex-grow overflow-y-auto mt-5">
+						{/* 레이더 차트 */}
+						<TabsContent value="category" className="py-5">
+							<RadarChart person={person} />
+						</TabsContent>
+						{/* 바 차트*/}
+						<TabsContent value="trans" className="py-5">
+							<BarChart
+								transhistoricity={person.transhistoricity}
+								exp={person.transhistoricity_exp}
+							/>
+						</TabsContent>
+						{/* 총점 */}
+						<TabsContent value="total" className="py-5">
+							<TotalScoreComponent person={person} />
+						</TabsContent>
+					</div>
+				</Tabs>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

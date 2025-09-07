@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
-import { Box, Paper } from '@mui/material';
+import { Card } from '../../../components/ui/card';
 
 // 액자 설정 데이터
 const frameSettings = [
@@ -60,89 +59,79 @@ const FrameTest = () => {
 	const [selectedFrame, setSelectedFrame] = useState(frameSettings[0]);
 
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, p: 2 }}>
-			<Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+		<div className="flex flex-col gap-6 p-4">
+			<div className="flex gap-2 mb-4">
 				{frameSettings.map((frame) => (
-					<Paper
+					<Card
 						key={frame.id}
-						elevation={selectedFrame.id === frame.id ? 8 : 1}
-						sx={{
-							cursor: 'pointer',
-							border: (theme) =>
-								selectedFrame.id === frame.id
-									? `2px solid ${theme.palette.primary.main}`
-									: '2px solid transparent',
-							p: 0.5,
-						}}
+						className={`cursor-pointer p-2 transition-all hover:shadow-lg ${
+							selectedFrame.id === frame.id
+								? 'border-2 border-primary shadow-lg'
+								: 'border-2 border-transparent'
+						}`}
 						onClick={() => setSelectedFrame(frame)}>
-						<Box
-							component="img"
+						<img
 							src={frame.frameUrl}
 							alt={`프레임 ${frame.id}`}
-							sx={{
-								width: 80,
-								height: 120,
-								objectFit: 'fill',
-							}}
+							className="w-20 h-30 object-fill"
 						/>
-					</Paper>
+					</Card>
 				))}
-			</Box>
+			</div>
 
-			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+			<div className="flex justify-center">
 				<Frame
 					frameUrl={selectedFrame.frameUrl}
 					scale={selectedFrame.scale}
 					frameExpand={selectedFrame.frameExpand}>
 					<DisplayImage src={testImage} alt="테스트 이미지" />
 				</Frame>
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 };
 
-const FrameWrapper = styled.div`
-	position: relative;
-	width: fit-content;
-`;
+// Tailwind CSS equivalent components
+const FrameWrapper = ({ children }) => (
+	<div className="relative w-fit">{children}</div>
+);
 
-const FrameContainer = styled.div`
-	width: 400px;
-	height: 600px;
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`;
+const FrameContainer = ({ children }) => (
+	<div className="w-[400px] h-[600px] relative flex items-center justify-center">
+		{children}
+	</div>
+);
 
-const FrameImage = styled.img`
-	width: 100%;
-	height: 100%;
-	object-fit: fill;
-	position: relative;
-	z-index: 2;
-	transform: scale(${(props) => props.frameExpand});
-	transform-origin: center;
-`;
+const FrameImage = ({ src, frameExpand, alt }) => (
+	<img
+		src={src}
+		alt={alt}
+		className="w-full h-full object-fill relative z-20"
+		style={{
+			transform: `scale(${frameExpand})`,
+			transformOrigin: 'center'
+		}}
+	/>
+);
 
-const ImageContainer = styled.div`
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: ${(props) => props.scale * 100}%;
-	height: ${(props) => props.scale * 100}%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 1;
-	aspect-ratio: 2/3;
-`;
+const ImageContainer = ({ scale, children }) => (
+	<div 
+		className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10 aspect-[2/3]"
+		style={{
+			width: `${scale * 100}%`,
+			height: `${scale * 100}%`
+		}}
+	>
+		{children}
+	</div>
+);
 
-const DisplayImage = styled.img`
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-`;
+const DisplayImage = ({ src, alt }) => (
+	<img
+		src={src}
+		alt={alt}
+		className="w-full h-full object-cover"
+	/>
+);
 
 export default FrameTest;

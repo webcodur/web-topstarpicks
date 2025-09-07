@@ -1,0 +1,5 @@
+
+> web-topstarpicks@0.1.0 start C:\Users\webco\바탕 화면\PRJ\web-topstarpicks\app_client
+> cross-env PORT=3002 react-scripts start
+
+Something is already running on port 3002.

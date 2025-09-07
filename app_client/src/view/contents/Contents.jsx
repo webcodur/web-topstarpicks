@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
+import { Loader2 } from 'lucide-react';
 import { parseNameFromUrl } from 'utils/urlUtils';
 import { fetchPersonInfo } from 'api/celebrityApi';
 import { fetchRecommendations } from 'api/recommendationApi';
@@ -9,16 +9,6 @@ import TableOfContents from './tableOfContents/TableOfContents';
 import FloatingMenu from './floatingMenu/FloatingMenu';
 import RecommendationCard from './card/RecommendationCard';
 import Title from './Title';
-
-import {
-	PageContainer,
-	PersonInfoContainer,
-	PersonName,
-	ErrorMessage,
-	StyledImage,
-	ImageContainer,
-	PersonInfoText,
-} from './ContentsStyle';
 
 const ContentPage = () => {
 	const { personName, contentName } = useParams();
@@ -81,33 +71,46 @@ const ContentPage = () => {
 		setIsMenuOpen(!isMenuOpen);
 	};
 
-	if (loading) return <CircularProgress />;
-	if (error) return <ErrorMessage>{error}</ErrorMessage>;
-	if (!personInfo) return <ErrorMessage>인물을 찾을 수 없습니다.</ErrorMessage>;
+	if (loading) return (
+		<div className="flex justify-center items-center min-h-screen">
+			<Loader2 className="animate-spin h-8 w-8" />
+		</div>
+	);
+	if (error) return (
+		<p className="text-red-500 text-center animate-fade-in">{error}</p>
+	);
+	if (!personInfo) return (
+		<p className="text-red-500 text-center animate-fade-in">인물을 찾을 수 없습니다.</p>
+	);
 
 	return (
-		<PageContainer>
+		<div className="max-w-4xl mx-auto py-8 px-4 animate-fade-in">
 			<Title
 				name={personInfo.name}
 				length={recommendations.length}
 				contentName={contentName}
 			/>
 
-			<PersonInfoContainer>
-				<ImageContainer>
-					<StyledImage src={personInfo.img_link} alt={personInfo.name} />
-				</ImageContainer>
-				<PersonName>{personInfo.name}</PersonName>
+			<div className="flex flex-col items-center mb-10 animate-slide-in">
+				<div className="rounded-lg p-1 mb-4 overflow-hidden">
+					<img 
+						src={personInfo.img_link} 
+						alt={personInfo.name}
+						className="max-w-sm h-auto object-cover transition-transform duration-300 hover:scale-105 rounded-lg"
+					/>
+				</div>
+				<h1 className="font-['Song_Myung'] text-center text-3xl mb-4 animate-fade-in">{personInfo.name}</h1>
 
-				<PersonInfoText>
-					({personInfo.birth_date || '???'}) ~ ({personInfo.death_date || '???'}
-					)
-				</PersonInfoText>
-				<PersonInfoText>
+				<p className="my-1 text-gray-600 dark:text-gray-400 transition-colors duration-300">
+					({personInfo.birth_date || '???'}) ~ ({personInfo.death_date || '???'})
+				</p>
+				<p className="my-1 text-gray-600 dark:text-gray-400 transition-colors duration-300">
 					{personInfo.nationality} {personInfo.profession}
-				</PersonInfoText>
-				<PersonInfoText>{personInfo.biography}</PersonInfoText>
-			</PersonInfoContainer>
+				</p>
+				<p className="my-1 text-gray-600 dark:text-gray-400 transition-colors duration-300 text-center max-w-2xl">
+					{personInfo.biography}
+				</p>
+			</div>
 
 			<TableOfContents
 				recommendations={recommendations}
@@ -134,7 +137,7 @@ const ContentPage = () => {
 				recommendations={recommendations}
 				onItemClick={scrollToContent}
 			/>
-		</PageContainer>
+		</div>
 	);
 };
 

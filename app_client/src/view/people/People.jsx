@@ -24,8 +24,6 @@ import ScoreModal from './scoreModal/ScoreModal';
 import DataControlPanel from './dataControlPanel/DataControlPanel';
 import Title from './Title';
 
-// 스타일
-import { ContentWrapper, Divider, Spacer } from './People.styles';
 
 const People = () => {
 	const [contentName] = useAtom(contentNameAtom);
@@ -67,7 +65,7 @@ const People = () => {
 	}
 
 	return (
-		<ContentWrapper ref={containerRef}>
+		<div ref={containerRef} className="max-w-full px-4 box-border">
 			<Title menu={menuInfo} />
 			<DataControlPanel
 				sortCriteria={sortCriteria}
@@ -78,14 +76,15 @@ const People = () => {
 				onViewTypeChange={handleViewTypeChange}
 			/>
 
-			<Divider />
-			<Spacer />
-			<Spacer />
+			<hr className="border-gray-300 my-4" />
+			<div className="h-8"></div>
 
-			{professionData?.length === 0 && <div>해당 데이터가 없습니다.</div>}
+			{professionData?.length === 0 && (
+				<div className="text-gray-600 text-center py-8">해당 데이터가 없습니다.</div>
+			)}
 
 			{menuInfo === '신화도감' && (
-				<div>신화 도감은 업데이트 준비중입니다...</div>
+				<div className="text-gray-600 text-center py-8">신화 도감은 업데이트 준비중입니다...</div>
 			)}
 
 			{menuInfo !== '신화도감' && professionData?.length > 0 && (
@@ -115,7 +114,7 @@ const People = () => {
 					/>
 				</>
 			)}
-		</ContentWrapper>
+		</div>
 	);
 };
 

@@ -1,106 +1,29 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Typography } from '@mui/material';
-
-const curtainLeft = keyframes`
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-`;
-
-const curtainRight = keyframes`
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
-`;
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
-const Container = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	z-index: 1000;
-	overflow: hidden;
-`;
-
-const CurtainLeft = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 50%;
-	height: 100%;
-	background: #000;
-	z-index: 1;
-	animation: ${curtainLeft} 1.5s cubic-bezier(0.8, 0, 0.2, 1) forwards;
-`;
-
-const CurtainRight = styled.div`
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 50%;
-	height: 100%;
-	background: #000;
-	z-index: 1;
-	animation: ${curtainRight} 1.5s cubic-bezier(0.8, 0, 0.2, 1) forwards;
-`;
-
-const Content = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	z-index: 2;
-	animation: ${fadeIn} 0.5s ease-out 1s forwards;
-	opacity: 0;
-`;
-
-const LoadingText = styled(Typography)`
-	color: white;
-	margin-top: 20px;
-	font-family: 'Nanum Myeongjo', serif;
-	font-size: 1.5rem;
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-`;
-
-const Background = styled.div`
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.85);
-	z-index: 0;
-`;
+import { Loader2 } from 'lucide-react';
 
 const LoadingScreen = () => {
 	return (
-		<Container>
-			<Background />
-			<CurtainLeft />
-			<CurtainRight />
-			<Content>
-				<CircularProgress
+		<div className="fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center z-50 overflow-hidden">
+			{/* Background */}
+			<div className="absolute top-0 left-0 w-full h-full bg-black/85 z-0"></div>
+			
+			{/* Left Curtain */}
+			<div className="absolute top-0 left-0 w-1/2 h-full bg-black z-10 animate-[curtain-left_1.5s_cubic-bezier(0.8,0,0.2,1)_forwards]"></div>
+			
+			{/* Right Curtain */}
+			<div className="absolute top-0 right-0 w-1/2 h-full bg-black z-10 animate-[curtain-right_1.5s_cubic-bezier(0.8,0,0.2,1)_forwards]"></div>
+			
+			{/* Content */}
+			<div className="flex flex-col items-center justify-center z-20 opacity-0 animate-[fade-in_0.5s_ease-out_1s_forwards]">
+				<Loader2 
 					size={70}
-					thickness={4}
-					sx={{
-						color: 'white',
-						filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))',
-					}}
+					className="animate-spin text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
 				/>
-				<LoadingText>데모 게임 생성중입니다...</LoadingText>
-			</Content>
-		</Container>
+				<p className="text-white mt-5 font-serif text-2xl shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
+					데모 게임 생성중입니다...
+				</p>
+			</div>
+		</div>
 	);
 };
 

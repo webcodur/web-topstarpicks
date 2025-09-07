@@ -1,34 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material/styles';
 import GameUI from '../components/GameUI';
-import * as S from './styles/gamePlayStyles';
-
-const theme = createTheme({
-	palette: {
-		primary: { main: '#2196f3', dark: '#1976d2' },
-		error: { main: '#f44336', dark: '#d32f2f' },
-		warning: { main: '#ff9800', dark: '#f57c00' },
-		info: { main: '#03a9f4', dark: '#0288d1' },
-		success: { main: '#4caf50', dark: '#388e3c' },
-	},
-});
+import { Button } from '../../../components/ui/button';
 
 const GamePlay = () => {
 	const navigate = useNavigate();
 
 	return (
-		<ThemeProvider theme={theme}>
-			<S.GamePlayContainer>
-				<S.Header>
-					<S.BackButton onClick={() => navigate('/games')}>
-						게임 종료
-					</S.BackButton>
-				</S.Header>
-				<GameUI />
-			</S.GamePlayContainer>
-		</ThemeProvider>
+		<div className="w-full min-h-screen bg-gray-900 relative">
+			<div className="absolute top-5 left-5 z-[100]">
+				<Button
+					onClick={() => navigate('/games')}
+					variant="outline"
+					className="bg-white/10 text-white border-white/30 hover:bg-white/20 hover:border-white/50"
+				>
+					게임 종료
+				</Button>
+			</div>
+			<GameUI />
+		</div>
 	);
 };
 

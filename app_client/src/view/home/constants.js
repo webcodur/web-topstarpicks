@@ -1,8 +1,4 @@
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import StyleIcon from '@mui/icons-material/Style';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
+import { BookOpen, CreditCard, Building, User, Church } from 'lucide-react';
 
 export const CELEB_IMAGES = [
 	{
@@ -33,27 +29,27 @@ export const CELEB_IMAGES = [
 
 export const services = [
 	{
-		icon: <AutoStoriesIcon sx={{ fontSize: 45 }} />,
+		icon: <BookOpen size={45} />,
 		title: '추천정보',
 		path: '/people',
 	},
 	{
-		icon: <AccountBoxIcon sx={{ fontSize: 45 }} />,
+		icon: <User size={45} />,
 		title: '인물도감',
 		path: '/people/history',
 	},
 	{
-		icon: <AccountBalanceIcon sx={{ fontSize: 45 }} />,
+		icon: <Building size={45} />,
 		title: '전설도감',
 		path: '/people/legend',
 	},
 	// {
-	// 	icon: <TempleBuddhistIcon sx={{ fontSize: 45 }} />,
+	// 	icon: <Church size={45} />,
 	// 	title: '신화도감',
 	// 	path: '/people/myth',
 	// },
 	{
-		icon: <StyleIcon sx={{ fontSize: 45 }} />,
+		icon: <CreditCard size={45} />,
 		title: '카드게임',
 		path: '/games',
 	},

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
 	profDataLoadedAtom,
 	isSidebarOpenAtom,
@@ -8,12 +9,8 @@ import {
 } from 'store/atom';
 import AppBar from './appBar/AppBar';
 import Drawer from './drawer/Drawer';
-import {
-	RootContainer,
-	ContentWrapper,
-	MainContent,
-	StyledDrawer,
-} from './MainLayoutStyles';
+import { cn } from '../../lib/utils';
+import { Sheet, SheetContent } from '../ui/sheet';
 
 const MainLayout = React.memo(() => {
 	const navigate = useNavigate();
@@ -70,17 +67,37 @@ const MainLayout = React.memo(() => {
 	}, [navigate]);
 
 	return (
-		<RootContainer>
-			{isAppBarOpen && <AppBar toggleSidebar={toggleSidebar} />}
-			<ContentWrapper hasAppBar={isAppBarOpen}>
-				<StyledDrawer open={isSidebarOpen}>
-					<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
-				</StyledDrawer>
-				<MainContent>
-					<Outlet />
-				</MainContent>
-			</ContentWrapper>
-		</RootContainer>
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+			{/* AppBar */}
+			<AnimatePresence>
+				{isAppBarOpen && <AppBar toggleSidebar={toggleSidebar} />}
+			</AnimatePresence>
+
+			{/* Content Wrapper */}
+			<div className={cn(
+				"flex relative",
+				isAppBarOpen ? "pt-16" : ""
+			)}>
+				{/* Sidebar Sheet */}
+				<Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+					<SheetContent side="left" className="w-64 p-0">
+						<Drawer isOpen={isSidebarOpen} closeMenu={closeMenu} />
+					</SheetContent>
+				</Sheet>
+
+				{/* Main Content */}
+				<motion.main 
+					className="flex-1 w-full"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.3 }}
+				>
+					<div className="container mx-auto px-4 py-6">
+						<Outlet />
+					</div>
+				</motion.main>
+			</div>
+		</div>
 	);
 });
 

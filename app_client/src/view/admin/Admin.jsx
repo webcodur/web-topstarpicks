@@ -1,11 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { Snackbar } from '@mui/material';
-import { StyledBox } from './AdminStyles';
+import { useToast } from '../../hooks/use-toast';
 import AccordionSection from './AccordionSection';
 import { adminSections } from './config/adminSections';
 
 const Admin = () => {
-	const [snackbar, setSnackbar] = useState({ open: false, message: '' });
+	const { toast } = useToast();
 	const [expanded, setExpanded] = useState(false);
 
 	const handleChange = useCallback(
@@ -16,15 +15,14 @@ const Admin = () => {
 	);
 
 	const showSnackbar = useCallback((message) => {
-		setSnackbar({ open: true, message });
-	}, []);
-
-	const handleSnackbarClose = useCallback(() => {
-		setSnackbar((prev) => ({ ...prev, open: false }));
-	}, []);
+		toast({ 
+			title: message,
+			duration: 6000 
+		});
+	}, [toast]);
 
 	return (
-		<StyledBox>
+		<div className="flex flex-col gap-4 w-full items-center">
 			{adminSections.map(({ id, title, component: Component }) => (
 				<AccordionSection
 					key={id}
@@ -34,14 +32,7 @@ const Admin = () => {
 					{expanded === id && <Component showSnackbar={showSnackbar} />}
 				</AccordionSection>
 			))}
-
-			<Snackbar
-				open={snackbar.open}
-				autoHideDuration={6000}
-				onClose={handleSnackbarClose}
-				message={snackbar.message}
-			/>
-		</StyledBox>
+		</div>
 	);
 };
 

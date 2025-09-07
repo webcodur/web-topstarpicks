@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Score, Hexagon, Description } from '@mui/icons-material';
+import { Award, Hexagon, FileText } from 'lucide-react';
+import { Button } from 'components/ui/button';
 import { formatNameForUrl } from 'utils/urlUtils';
 import CelebImage from './celebImage/CelebImage';
 import LifespanDisplay from './LifespanDisplay';
 import BiographyModal from './BiographyModal';
 import TagContainer from './tagContainer/TagContainer';
-import {
-	StyledCard,
-	StyledCardContent,
-	Introduction,
-	ButtonContainer,
-	StyledButton,
-	PersonPreName,
-	PersonName,
-	PersonInfo,
-	BiographyText,
-	ReadMoreButton,
-	BiographyContainer,
-} from './personCard.style';
 
 import { useAtom } from 'jotai';
-import { menuInfoAtom } from 'store/atom';
+import { menuInfoAtom, darkModeAtom } from 'store/atom';
 
 const MAX_BIOGRAPHY_LENGTH = 40;
 const NO_DATA = '';
@@ -30,6 +18,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 	const [isBiographyModalOpen, setIsBiographyModalOpen] = useState(false);
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [menuInfo] = useAtom(menuInfoAtom);
+	const [darkMode] = useAtom(darkModeAtom);
 
 	const contentNames = person.recommended_content_names
 		? person.recommended_content_names.split(',')
@@ -56,8 +45,13 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 			: person.biography;
 
 	return (
-		<StyledCard>
-			<StyledCardContent>
+		<div className={`
+			h-full flex flex-col rounded-2xl overflow-hidden 
+			shadow-lg transition-all duration-100 ease-in-out 
+			hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gray-500/50
+			${darkMode ? 'bg-gray-800' : 'bg-white'}
+		`}>
+			<div className="p-4">
 				<CelebImage
 					imgLink={person.img_link}
 					vidLink={person.vid_link}
@@ -65,52 +59,53 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 					rank={person.rank}
 				/>
 
-				<PersonPreName>
+				<div className={`text-center text-lg mt-4 font-serif ${
+					darkMode ? 'text-gray-200' : 'text-gray-800'
+				}`}>
 					{person.prename}
 					{person.prename && <br />}
-				</PersonPreName>
+				</div>
 
-				<PersonName>
+				<div className={`text-center text-xl font-extrabold mb-2 font-serif ${
+					darkMode ? 'text-gray-100' : 'text-gray-900'
+				}`}>
 					{person.name} {person.postname}
-				</PersonName>
+				</div>
 
-				<Introduction>
-					<PersonInfo>
-						<Score fontSize="small" />
+				<div className={`mb-4 flex-grow ${
+					darkMode ? 'text-gray-300' : 'text-gray-800'
+				}`}>
+					<div className="mb-1 flex items-center">
+						<Award className="w-4 h-4 mr-2.5" />
 						{person.total_score || NO_DATA}점
 						<Hexagon
-							fontSize="small"
-							sx={{
-								color: 'orange',
-								marginLeft: '8px',
-								cursor: 'pointer',
-							}}
+							className="w-4 h-4 ml-2 text-orange-500 cursor-pointer"
 							onClick={() => onModalOpen(person)}
 						/>
-					</PersonInfo>
+					</div>
 
 					<LifespanDisplay
 						BIRTH={person.birth_date}
 						DEATH={person.death_date}
 					/>
 
-					<PersonInfo component="div">
-						<Description fontSize="small" />
-						<BiographyContainer>
-							<BiographyText component="span">
+					<div className="mb-1 flex">
+						<FileText className="w-4 h-4 mr-2.5 mt-0.5 flex-shrink-0" />
+						<div className="relative">
+							<span className="text-sm leading-relaxed max-h-[7.2em] overflow-hidden block">
 								{isExpanded ? person.biography : truncatedBiography}
 								{person.biography &&
 									person.biography.length > MAX_BIOGRAPHY_LENGTH && (
-										<ReadMoreButton
+										<button
 											onClick={handleReadMoreClick}
-											variant="span">
+											className="p-0 ml-1 text-sm text-blue-500 hover:underline bg-transparent border-none cursor-pointer inline">
 											더 보기
-										</ReadMoreButton>
+										</button>
 									)}
-							</BiographyText>
-						</BiographyContainer>
-					</PersonInfo>
-				</Introduction>
+							</span>
+						</div>
+					</div>
+				</div>
 
 				<TagContainer
 					profession={person.profession}
@@ -120,7 +115,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				/>
 
 				{menuInfo === '추천정보' && (
-					<ButtonContainer style={{ marginTop: '16px' }}>
+					<div className="flex gap-2 flex-wrap mt-4">
 						{contentNames
 							.filter(
 								(content) => contentName === '전체' || content === contentName
@@ -129,13 +124,21 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 								<Link
 									key={`${person.name}-${content}`}
 									to={getContentLink(person.name, content)}
-									style={{ textDecoration: 'none' }}>
-									<StyledButton>{content}</StyledButton>
+									className="no-underline">
+									<Button 
+										variant="ghost" 
+										className={`
+											rounded-lg h-14 transition-all duration-100 
+											hover:bg-blue-100 hover:text-white dark:hover:bg-blue-600
+											${darkMode ? 'bg-gray-700 text-gray-200 hover:bg-blue-600' : 'bg-gray-100 text-gray-800 hover:bg-blue-500'}
+										`}>
+										{content}
+									</Button>
 								</Link>
 							))}
-					</ButtonContainer>
+					</div>
 				)}
-			</StyledCardContent>
+			</div>
 
 			<BiographyModal
 				isOpen={isBiographyModalOpen}
@@ -143,7 +146,7 @@ const PersonCard = ({ person, contentName, onModalOpen }) => {
 				biography={person.biography}
 				name={person.name}
 			/>
-		</StyledCard>
+		</div>
 	);
 };
 

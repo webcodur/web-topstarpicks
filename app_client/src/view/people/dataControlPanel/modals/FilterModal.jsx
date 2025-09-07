@@ -1,41 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
-	List,
-	ListItem,
-	ListItemIcon,
-	Chip,
-	Typography,
-	Box,
-	Divider,
-	Button,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useAtom } from 'jotai';
 import { professionNameAtom, contentNameAtom, timesNameAtom } from 'store/atom';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from 'components/ui/dialog';
+import { Button } from 'components/ui/button';
+import { Separator } from 'components/ui/separator';
 
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-	'& .MuiDialogContent-root': {
-		padding: theme.spacing(3),
-	},
-	'& .MuiList-root': {
-		display: 'flex',
-		flexWrap: 'wrap',
-		gap: theme.spacing(1),
-		padding: theme.spacing(2),
-	},
-	'& .MuiListItem-root': {
-		width: 'auto',
-		padding: 0,
-	},
-}));
-
-const FilterSection = styled(Box)(({ theme }) => ({
-	marginBottom: theme.spacing(3),
-}));
 
 const FilterModal = ({
 	open,
@@ -107,113 +76,111 @@ const FilterModal = ({
 	};
 
 	return (
-		<StyledDialog
-			open={open}
-			onClose={handleCancel}
-			maxWidth="md"
-			fullWidth
-			// 포커스 트랩 관련 props 추가
-			disableEnforceFocus
-			disableAutoFocus
-			keepMounted={false}>
-			<DialogTitle>필터 설정</DialogTitle>
-			<DialogContent>
-				<FilterSection>
-					<Typography variant="h6" gutterBottom>
-						직군
-					</Typography>
-					<Divider />
-					<List>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleCancel()}>
+			<DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+				<DialogHeader>
+					<DialogTitle>필터 설정</DialogTitle>
+				</DialogHeader>
+
+				{/* 직군 섹션 */}
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold mb-2">직군</h3>
+					<Separator className="mb-4" />
+					<div className="flex flex-wrap gap-2 p-2">
 						{professionList?.map((item) => (
-							<ListItem key={item.value}>
-								<Chip
-									icon={item.icon}
-									label={item.label}
-									onClick={() => handleProfessionClick(item.value)}
-									color={tempProfession === item.value ? 'primary' : 'default'}
-									variant={
-										tempProfession === item.value ? 'filled' : 'outlined'
-									}
-								/>
-							</ListItem>
+							<button
+								key={item.value}
+								onClick={() => handleProfessionClick(item.value)}
+								className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+									tempProfession === item.value
+										? 'bg-blue-600 text-white hover:bg-blue-700'
+										: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+								}`}
+							>
+								{item.icon && <span className="mr-1">{item.icon}</span>}
+								{item.label}
+							</button>
 						))}
-					</List>
-				</FilterSection>
+					</div>
+				</div>
 
+				{/* 컨텐츠 섹션 */}
 				{menuInfo === '추천정보' && (
-					<FilterSection>
-						<Typography variant="h6" gutterBottom>
-							컨텐츠
-						</Typography>
-						<Divider />
-						<List>
+					<div className="mb-6">
+						<h3 className="text-lg font-semibold mb-2">컨텐츠</h3>
+						<Separator className="mb-4" />
+						<div className="flex flex-wrap gap-2 p-2">
 							{contentList?.map((item) => (
-								<ListItem key={item.value}>
-									<Chip
-										label={item.label}
-										onClick={() => handleContentClick(item.value)}
-										color={tempContent === item.value ? 'primary' : 'default'}
-										variant={tempContent === item.value ? 'filled' : 'outlined'}
-									/>
-								</ListItem>
+								<button
+									key={item.value}
+									onClick={() => handleContentClick(item.value)}
+									className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+										tempContent === item.value
+											? 'bg-blue-600 text-white hover:bg-blue-700'
+											: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+									}`}
+								>
+									{item.label}
+								</button>
 							))}
-						</List>
-					</FilterSection>
+						</div>
+					</div>
 				)}
 
-				<FilterSection>
-					<Typography variant="h6" gutterBottom>
-						시대
-					</Typography>
-					<Divider />
-					<List>
+				{/* 시대 섹션 */}
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold mb-2">시대</h3>
+					<Separator className="mb-4" />
+					<div className="flex flex-wrap gap-2 p-2">
 						{eraList?.map((item) => (
-							<ListItem key={item.value}>
-								<Chip
-									label={item.label}
-									onClick={() => handleEraClick(item.value)}
-									color={tempEra === item.value ? 'primary' : 'default'}
-									variant={tempEra === item.value ? 'filled' : 'outlined'}
-								/>
-							</ListItem>
+							<button
+								key={item.value}
+								onClick={() => handleEraClick(item.value)}
+								className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+									tempEra === item.value
+										? 'bg-blue-600 text-white hover:bg-blue-700'
+										: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+								}`}
+							>
+								{item.label}
+							</button>
 						))}
-					</List>
-				</FilterSection>
+					</div>
+				</div>
 
+				{/* 인물 유형 섹션 */}
 				{(menuInfo === '인물도감' || menuInfo === '전설도감') && (
-					<FilterSection>
-						<Typography variant="h6" gutterBottom>
-							인물 유형
-						</Typography>
-						<Divider />
-						<List>
+					<div className="mb-6">
+						<h3 className="text-lg font-semibold mb-2">인물 유형</h3>
+						<Separator className="mb-4" />
+						<div className="flex flex-wrap gap-2 p-2">
 							{personTypeList?.map((item) => (
-								<ListItem key={item.value}>
-									<Chip
-										label={item.label}
-										onClick={() => handlePersonTypeClick(item.value)}
-										color={
-											tempPersonType === item.value ? 'primary' : 'default'
-										}
-										variant={
-											tempPersonType === item.value ? 'filled' : 'outlined'
-										}
-									/>
-								</ListItem>
+								<button
+									key={item.value}
+									onClick={() => handlePersonTypeClick(item.value)}
+									className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+										tempPersonType === item.value
+											? 'bg-blue-600 text-white hover:bg-blue-700'
+											: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+									}`}
+								>
+									{item.label}
+								</button>
 							))}
-						</List>
-					</FilterSection>
+						</div>
+					</div>
 				)}
+
+				<DialogFooter>
+					<Button variant="outline" onClick={handleCancel}>
+						취소
+					</Button>
+					<Button onClick={handleConfirm}>
+						확인
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleCancel} color="inherit">
-					취소
-				</Button>
-				<Button onClick={handleConfirm} color="primary" variant="contained">
-					확인
-				</Button>
-			</DialogActions>
-		</StyledDialog>
+		</Dialog>
 	);
 };
 

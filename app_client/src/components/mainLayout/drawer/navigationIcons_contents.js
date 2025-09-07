@@ -1,41 +1,34 @@
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import StyleIcon from '@mui/icons-material/Style';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
+import { BookOpen, History, BookMarked, Sparkles, Layers, User, Building, Home } from 'lucide-react';
 
 const navigationIcons = [
 	{
 		key: 'recommendations',
 		text: '추천정보',
-		icon: <AutoStoriesIcon />,
+		icon: <BookMarked className="w-5 h-5" />,
 		to: '/people',
 	},
 	{
 		key: 'history',
 		text: '인물도감',
-		icon: <AccountBoxIcon />,
+		icon: <User className="w-5 h-5" />,
 		to: '/people/history',
 	},
 	{
 		key: 'legend',
 		text: '전설도감',
-		icon: <AccountBalanceIcon />,
+		icon: <Building className="w-5 h-5" />,
 		to: '/people/legend',
 	},
 	// {
 	// 	key: 'myth',
 	// 	text: '신화도감',
-	// 	icon: <TempleBuddhistIcon />,
+	// 	icon: <Home className="w-5 h-5" />,
 	// 	to: '/people/myth',
 	// },
 	{
 		key: 'games',
 		text: '카드게임',
-		icon: <StyleIcon />,
+		icon: <Layers className="w-5 h-5" />,
 		to: '/games',
 	},
 ];

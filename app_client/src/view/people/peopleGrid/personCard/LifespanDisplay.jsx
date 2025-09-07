@@ -1,16 +1,21 @@
 import React from 'react';
 import { calculateAge, formatYear } from 'utils/date';
-import { CalendarToday } from '@mui/icons-material';
-import { PersonInfo } from './personCard.style';
+import { Calendar } from 'lucide-react';
+import { useAtom } from 'jotai';
+import { darkModeAtom } from '../../../../store/atom';
 
 const LifespanDisplay = ({ BIRTH, DEATH }) => {
+	const [darkMode] = useAtom(darkModeAtom);
+
 	// 생년월일과 사망일 모두 없는 경우
 	if (!BIRTH && !DEATH) {
 		return (
-			<PersonInfo>
-				<CalendarToday fontSize="small" />
+			<div className={`mb-1 flex items-center ${
+				darkMode ? 'text-gray-300' : 'text-gray-800'
+			}`}>
+				<Calendar className="w-4 h-4 mr-2.5" />
 				??? ~ ???
-			</PersonInfo>
+			</div>
 		);
 	}
 
@@ -18,10 +23,12 @@ const LifespanDisplay = ({ BIRTH, DEATH }) => {
 	if (BIRTH && !DEATH) {
 		const age = calculateAge(BIRTH);
 		return (
-			<PersonInfo>
-				<CalendarToday fontSize="small" />
+			<div className={`mb-1 flex items-center ${
+				darkMode ? 'text-gray-300' : 'text-gray-800'
+			}`}>
+				<Calendar className="w-4 h-4 mr-2.5" />
 				{age !== null ? `${age}세` : '알 수 없음'}
-			</PersonInfo>
+			</div>
 		);
 	}
 
@@ -30,10 +37,12 @@ const LifespanDisplay = ({ BIRTH, DEATH }) => {
 	const deathYear = DEATH ? formatYear(DEATH) : '???';
 
 	return (
-		<PersonInfo>
-			<CalendarToday fontSize="small" />
+		<div className={`mb-1 flex items-center ${
+			darkMode ? 'text-gray-300' : 'text-gray-800'
+		}`}>
+			<Calendar className="w-4 h-4 mr-2.5" />
 			{birthYear} - {deathYear}
-		</PersonInfo>
+		</div>
 	);
 };
 

@@ -1,46 +1,35 @@
 import React from 'react';
-import { Modal, Box, Typography, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import styled from '@emotion/styled';
-
-const ModalContent = styled(Box)`
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 80%;
-	max-width: 600px;
-	background-color: ${(props) => props.theme.palette.background.paper};
-	border-radius: 8px;
-	padding: 32px;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-`;
-
-const ModalTitle = styled(Typography)`
-	font-size: 1.5rem;
-	font-weight: 600;
-	margin-bottom: 16px;
-	text-align: center;
-	font-family: 'Song Myung';
-`;
-
-const CloseButton = styled(IconButton)`
-	position: absolute;
-	top: 8px;
-	right: 8px;
-`;
+import { Dialog, DialogContent } from 'components/ui/dialog';
+import { Button } from 'components/ui/button';
+import { X } from 'lucide-react';
+import { useAtom } from 'jotai';
+import { darkModeAtom } from '../../../../store/atom';
 
 const BiographyModal = ({ isOpen, onClose, biography, name }) => {
+	const [darkMode] = useAtom(darkModeAtom);
+
 	return (
-		<Modal open={isOpen} onClose={onClose}>
-			<ModalContent>
-				<CloseButton onClick={onClose}>
-					<CloseIcon />
-				</CloseButton>
-				<ModalTitle>{name} </ModalTitle>
-				<Typography>{biography || '정보가 없습니다.'}</Typography>
-			</ModalContent>
-		</Modal>
+		<Dialog open={isOpen} onOpenChange={onClose}>
+			<DialogContent className="max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+				<Button
+					variant="ghost"
+					size="sm"
+					className="absolute top-2 right-2 p-2 h-auto"
+					onClick={onClose}>
+					<X className="h-4 w-4" />
+				</Button>
+				<h2 className={`text-2xl font-semibold mb-4 text-center font-['Song_Myung'] ${
+					darkMode ? 'text-gray-200' : 'text-gray-800'
+				}`}>
+					{name}
+				</h2>
+				<p className={`leading-relaxed ${
+					darkMode ? 'text-gray-300' : 'text-gray-700'
+				}`}>
+					{biography || '정보가 없습니다.'}
+				</p>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

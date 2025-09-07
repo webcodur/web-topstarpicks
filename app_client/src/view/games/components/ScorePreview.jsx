@@ -1,6 +1,4 @@
 import React from 'react';
-import { Box } from '@mui/material';
-import * as S from '../styles';
 import { ScoreCalculator } from '../logic/ScoreCalculator';
 
 export const ScorePreview = ({ card, action, currentTopic }) => {
@@ -12,21 +10,23 @@ export const ScorePreview = ({ card, action, currentTopic }) => {
 	const topicBonus = action === currentTopic ? 20 : 0;
 
 	return (
-		<S.ScorePreview>
-			<S.InfoText fontSize="1rem" fontWeight="600">
+		<div className="fixed right-5 top-25 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg flex flex-col gap-2.5 min-w-[150px] z-[5]">
+			<p className="m-0 text-base font-semibold text-gray-800 dark:text-gray-200">
 				예상 점수
-			</S.InfoText>
-			<Box>
-				<S.InfoText>기본 점수: {baseScore}</S.InfoText>
-				<S.InfoText>
+			</p>
+			<div className="flex flex-col gap-1.5 text-left">
+				<p className="m-0 text-sm text-gray-700 dark:text-gray-300">기본 점수: {baseScore}</p>
+				<p className="m-0 text-sm text-gray-700 dark:text-gray-300">
 					직업 보너스: {bonusScore > 0 ? '+' : ''}
 					{bonusScore}
-				</S.InfoText>
-				{topicBonus > 0 && <S.InfoText>주제 보너스: +{topicBonus}</S.InfoText>}
-				<S.InfoText fontSize="1.2rem" fontWeight="600">
+				</p>
+				{topicBonus > 0 && (
+					<p className="m-0 text-sm text-gray-700 dark:text-gray-300">주제 보너스: +{topicBonus}</p>
+				)}
+				<p className="m-0 text-lg font-semibold text-gray-800 dark:text-gray-200">
 					총점: {score}
-				</S.InfoText>
-			</Box>
-		</S.ScorePreview>
+				</p>
+			</div>
+		</div>
 	);
 };

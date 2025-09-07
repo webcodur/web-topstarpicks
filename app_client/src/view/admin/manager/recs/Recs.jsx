@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import { fetchAllCelebrities } from 'api/celebrityApi';
 import {
 	fetchAllRecommendations,
 	updateRecommendation,
 	deleteRecommendation,
 } from 'api/recommendationApi';
-import getRecsColumns from './recsColumns';
+import { RecsTableRow } from './recsColumns';
 
 const categoriesMap = {
 	book: '책',
@@ -74,25 +73,12 @@ const Recs = ({ showSnackbar }) => {
 		[showSnackbar]
 	);
 
-	const processRowUpdate = useCallback((newRow, oldRow) => {
-		const hasChanged = Object.keys(newRow).some(
-			(field) => newRow[field] !== oldRow[field] && field !== 'isEdited'
-		);
-
-		const updatedRow = hasChanged
-			? { ...newRow, isEdited: true }
-			: { ...newRow, isEdited: oldRow.isEdited };
-
-		// content_name이 변경되었다면 content_id도 업데이트
-		if (newRow.content_name !== oldRow.content_name) {
-			updatedRow.content_id = contentIdMap[newRow.content_name] || '';
-		}
-
+	const handleUpdateRow = useCallback((id, newData) => {
 		setRows((prevRows) =>
-			prevRows.map((row) => (row.id === updatedRow.id ? updatedRow : row))
+			prevRows.map((row) =>
+				row.id === id ? { ...row, ...newData, isEdited: true } : row
+			)
 		);
-
-		return updatedRow;
 	}, []);
 
 	const handleSaveRow = useCallback(
@@ -115,24 +101,67 @@ const Recs = ({ showSnackbar }) => {
 		[rows, fetchRecommendations, showSnackbar]
 	);
 
-	const columns = getRecsColumns(
-		celebrities,
-		categoriesMap,
-		contentIdMap,
-		processRowUpdate,
-		handleSaveRow,
-		handleDeleteRecommendation
-	);
-
 	return (
-		<DataGrid
-			rows={rows}
-			columns={columns}
-			pageSize={5}
-			processRowUpdate={processRowUpdate}
-			scrollbarSize={0}
-			experimentalFeatures={{ newEditingApi: true }}
-		/>
+		<div className="w-full overflow-x-auto">
+			<table className="w-full border border-gray-300 bg-white text-sm">
+				<thead className="bg-gray-50">
+					<tr>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							유명인사
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							컨텐츠 타입
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							제목
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							제작자
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							출시일
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							추천 이유
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							출처
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							이미지 링크
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							제휴 링크
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							미디어 설명
+						</th>
+						<th className="p-3 text-left font-semibold text-gray-900 border-b">
+							작업
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{rows.map((row) => (
+						<RecsTableRow
+							key={row.id}
+							row={row}
+							celebrities={celebrities}
+							categoriesMap={categoriesMap}
+							contentIdMap={contentIdMap}
+							onSave={handleSaveRow}
+							onDelete={handleDeleteRecommendation}
+							onUpdate={handleUpdateRow}
+						/>
+					))}
+				</tbody>
+			</table>
+			{rows.length === 0 && (
+				<div className="p-8 text-center text-gray-500">
+					추천 정보가 없습니다.
+				</div>
+			)}
+		</div>
 	);
 };
 

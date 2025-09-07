@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import {
-	LoadingContainer,
-	LoadingTextWrapper,
-	LoadingText,
-	Underline,
-} from './Loading.styles';
+import { AnimatePresence, motion } from 'framer-motion';
 import { backgroundImages, getLoadingMessage } from './loadingUtils';
 
 /**
@@ -48,40 +42,52 @@ const LoadingScreen = ({
 	 * 데이터가 로드되었고, 최소 표시 시간이 지났을 때만 숨김
 	 */
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (isLoaded) {
+		let timer;
+		if (isLoaded) {
+			timer = setTimeout(() => {
 				setShouldShow(false);
-			}
-		}, forceMinDuration);
-
+			}, forceMinDuration);
+		}
 		return () => clearTimeout(timer);
 	}, [isLoaded, forceMinDuration]);
+
+	// 로딩 메시지 가져오기
+	const message = getLoadingMessage(menuType);
 
 	return (
 		<AnimatePresence>
 			{shouldShow && (
-				<LoadingContainer
+				<motion.div
+					className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center bg-cover bg-center bg-no-repeat z-50"
 					style={{ backgroundImage: `url(${bgImage})` }}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
+					initial={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
-					transition={{ duration: 0.3 }}>
-					<LoadingTextWrapper
-						initial={{ y: 20, opacity: 0 }}
-						animate={{ y: 0, opacity: 1 }}
-						exit={{ y: -20, opacity: 0 }}
-						transition={{ duration: 0.3 }}>
-						<LoadingText>{getLoadingMessage(menuType)}</LoadingText>
-						<Underline
+					transition={{ duration: 0.3 }}
+				>
+					<motion.div
+						className="relative inline-block"
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.2, duration: 0.5 }}
+					>
+						<motion.div
+							className="text-white text-4xl md:text-5xl bg-black bg-opacity-30 px-8 py-4 rounded-lg"
+							style={{
+								fontFamily: "'Song Myung', serif",
+								textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+							}}
+						>
+							{message}
+						</motion.div>
+						<motion.div
+							className="absolute bottom-3 left-8 right-8 h-1 bg-white rounded-full"
 							initial={{ scaleX: 0 }}
 							animate={{ scaleX: 1 }}
-							transition={{
-								duration: 0.3,
-								ease: 'easeOut',
-							}}
+							transition={{ delay: 0.5, duration: 0.5 }}
+							style={{ transformOrigin: 'left' }}
 						/>
-					</LoadingTextWrapper>
-				</LoadingContainer>
+					</motion.div>
+				</motion.div>
 			)}
 		</AnimatePresence>
 	);

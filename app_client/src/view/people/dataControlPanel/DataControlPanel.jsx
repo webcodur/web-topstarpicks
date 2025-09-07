@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
-import { Box, IconButton, Tooltip } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useAtom } from 'jotai';
 import { menuInfoAtom, viewTypeAtom } from 'store/atom';
-import {
-	GridView,
-	ViewList,
-	ViewModule,
-	FilterList,
-	Sort,
-	Visibility,
-	Search as SearchIcon,
-} from '@mui/icons-material';
+import { Filter, ArrowUpDown, Eye, Search } from 'lucide-react';
 import FilterModal from './modals/FilterModal';
 import useCelebNumbers from 'hooks/useCelebNumbers';
 import { useContentNames } from 'hooks/useContentNames';
@@ -19,14 +9,6 @@ import professionIcons from './icons/professionIcons';
 import SortModal from './modals/SortModal';
 import ViewTypeModal from './modals/ViewTypeModal';
 import SearchModal from './modals/SearchModal';
-
-const ControlsContainer = styled(Box)(({ theme }) => ({
-	display: 'flex',
-	gap: '8px',
-	justifyContent: 'center',
-	alignItems: 'center',
-	padding: '20px',
-}));
 
 const FilterControls = ({
 	sortCriteria,
@@ -86,33 +68,63 @@ const FilterControls = ({
 	];
 
 	return (
-		<ControlsContainer>
-			<Tooltip title="필터">
-				<IconButton onClick={() => setActiveModal('filter')}>
-					<FilterList />
-				</IconButton>
-			</Tooltip>
+		<div className="flex gap-2 justify-center items-center p-5">
+			<div className="relative group">
+				<button 
+					onClick={() => setActiveModal('filter')}
+					className="p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group-hover:bg-gray-50"
+					title="필터"
+				>
+					<Filter className="w-5 h-5 text-gray-600" />
+				</button>
+				<div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+					필터
+				</div>
+			</div>
 
-			<Tooltip title="정렬">
-				<IconButton onClick={() => setActiveModal('sort')}>
-					<Sort />
-				</IconButton>
-			</Tooltip>
+			<div className="relative group">
+				<button 
+					onClick={() => setActiveModal('sort')}
+					className="p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group-hover:bg-gray-50"
+					title="정렬"
+				>
+					<ArrowUpDown className="w-5 h-5 text-gray-600" />
+				</button>
+				<div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+					정렬
+				</div>
+			</div>
 
-			<Tooltip title="보기 방식">
-				<IconButton
+			<div className="relative group">
+				<button 
 					disabled={isChanging}
 					onClick={() => setActiveModal('viewType')}
-					color="default">
-					<Visibility />
-				</IconButton>
-			</Tooltip>
+					className={`p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow duration-200 ${
+						isChanging 
+							? 'opacity-50 cursor-not-allowed' 
+							: 'group-hover:bg-gray-50'
+					}`}
+					title="보기 방식"
+				>
+					<Eye className="w-5 h-5 text-gray-600" />
+				</button>
+				<div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+					보기 방식
+				</div>
+			</div>
 
-			<Tooltip title="검색">
-				<IconButton onClick={() => setActiveModal('search')}>
-					<SearchIcon />
-				</IconButton>
-			</Tooltip>
+			<div className="relative group">
+				<button 
+					onClick={() => setActiveModal('search')}
+					className="p-3 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group-hover:bg-gray-50"
+					title="검색"
+				>
+					<Search className="w-5 h-5 text-gray-600" />
+				</button>
+				<div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+					검색
+				</div>
+			</div>
 
 			<FilterModal
 				open={activeModal === 'filter'}
@@ -122,8 +134,6 @@ const FilterControls = ({
 				eraList={eraList}
 				personTypeList={personTypeList}
 				menuInfo={menuInfo}
-				keepMounted
-				container={document.body}
 			/>
 
 			<SortModal
@@ -133,8 +143,6 @@ const FilterControls = ({
 				setSortCriteria={setSortCriteria}
 				sortOrder={sortOrder}
 				setSortOrder={setSortOrder}
-				keepMounted
-				container={document.body}
 			/>
 
 			<SearchModal open={activeModal === 'search'} onClose={handleCloseModal} />
@@ -145,7 +153,7 @@ const FilterControls = ({
 				viewType={viewType}
 				onViewTypeChange={handleViewTypeChange}
 			/>
-		</ControlsContainer>
+		</div>
 	);
 };
 

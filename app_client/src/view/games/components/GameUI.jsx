@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { ThemeProvider } from '@emotion/react';
-import { createTheme } from '@mui/material/styles';
-import * as S from '../styles';
 import { useGameState } from '../hooks/useGameState';
 import { PlayerSection } from './PlayerSection';
 import { TopicSection } from './TopicSection';
@@ -12,6 +9,7 @@ import { CardBattle } from './CardBattle';
 import { ScoreCalculator } from '../logic/ScoreCalculator';
 import { ActionSection } from './ActionSection';
 import { ManualModal } from './ManualModal';
+import { Button } from '../../../components/ui/button';
 
 const GameUI = ({ settings }) => {
 	const {
@@ -35,26 +33,34 @@ const GameUI = ({ settings }) => {
 
 	// 게임 상태가 완전히 초기화될 때까지 로딩 표시
 	if (!gameState || !gameState.playerHand) {
-		return <div>Loading...</div>;
+		return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
 	}
 
 	return (
-		<S.GameContainer>
+		<div className="relative w-full max-w-6xl mx-auto p-5 min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col gap-5">
 			{/* 턴 표시 */}
-			<S.TurnIndicator>
-				<S.InfoText color="white">턴 {gameState.turn}</S.InfoText>
-			</S.TurnIndicator>
+			<div className="absolute top-5 left-5 px-5 py-2.5 bg-black/50 rounded-lg z-10">
+				<p className="m-0 text-base text-white">턴 {gameState.turn}</p>
+			</div>
 
 			{/* 전체 카드 목록 버튼과 남은 카드 수 */}
-			<S.TopButtonSection>
-				<S.LibraryButton onClick={() => setIsModalOpen(true)}>
+			<div className="flex items-center gap-5 absolute top-5 right-5 z-10">
+				<Button
+					onClick={() => setIsModalOpen(true)}
+					variant="default"
+					size="sm"
+				>
 					전체 카드
-				</S.LibraryButton>
-				<S.LibraryButton onClick={() => setIsManualOpen(true)}>
+				</Button>
+				<Button
+					onClick={() => setIsManualOpen(true)}
+					variant="default"
+					size="sm"
+				>
 					플레이 방법
-				</S.LibraryButton>
-				<S.InfoText>남은 카드: {gameState.mainDeckCount}</S.InfoText>
-			</S.TopButtonSection>
+				</Button>
+				<p className="m-0 text-base text-gray-800 dark:text-gray-200">남은 카드: {gameState.mainDeckCount}</p>
+			</div>
 
 			{/* 주제 섹션 */}
 			<TopicSection
@@ -101,26 +107,28 @@ const GameUI = ({ settings }) => {
 
 			{/* 게임 종료 시 표시될 오버레이 */}
 			{gameOver && (
-				<S.GameOverOverlay>
-					<S.GameOverContent>
-						<S.InfoText fontSize="2rem" fontWeight="600">
+				<div className="fixed top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center z-50">
+					<div className="bg-white dark:bg-gray-800 p-8 rounded-lg text-center flex flex-col gap-4">
+						<p className="m-0 text-3xl font-semibold text-gray-800 dark:text-gray-200">
 							게임 종료!
-						</S.InfoText>
-						<S.InfoText fontSize="1.5rem">
+						</p>
+						<p className="m-0 text-2xl text-gray-700 dark:text-gray-300">
 							{gameState.playerHealth <= 0 ? '상대방' : '플레이어'} 승리!
-						</S.InfoText>
-						<S.ActionButton
+						</p>
+						<Button
 							onClick={() => window.location.reload()}
-							variant="contained">
+							variant="default"
+							size="lg"
+						>
 							다시 시작
-						</S.ActionButton>
-					</S.GameOverContent>
-				</S.GameOverOverlay>
+						</Button>
+					</div>
+				</div>
 			)}
 
 			{/* 플레이 방법 모달 */}
 			<ManualModal open={isManualOpen} onClose={() => setIsManualOpen(false)} />
-		</S.GameContainer>
+		</div>
 	);
 };
 

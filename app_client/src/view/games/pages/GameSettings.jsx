@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-	Container,
-	Typography,
-	Slider,
-	FormControl,
-	FormLabel,
-	RadioGroup,
-	FormControlLabel,
-	Radio,
-} from '@mui/material';
-import * as S from './styles/gameSettingsStyles';
+import { Button } from '../../../components/ui/button';
+import { Card, CardContent } from '../../../components/ui/card';
+import { Label } from '../../../components/ui/label';
 
 const GameSettings = () => {
 	const navigate = useNavigate();
@@ -37,121 +29,142 @@ const GameSettings = () => {
 	};
 
 	return (
-		<S.SettingsContainer>
-			<Container maxWidth="md">
-				<S.Header>
-					<Typography variant="h3">게임 설정</Typography>
-					<S.BackButton onClick={() => navigate('/games')}>
+		<div className="min-h-screen py-10 px-4 bg-gray-100 dark:bg-gray-900">
+			<div className="max-w-4xl mx-auto">
+				<div className="flex justify-between items-center mb-10">
+					<h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200">게임 설정</h1>
+					<Button
+						onClick={() => navigate('/games')}
+						variant="default"
+						size="lg"
+					>
 						메인으로 돌아가기
-					</S.BackButton>
-				</S.Header>
+					</Button>
+				</div>
 
-				<S.SettingsContent>
-					<S.SettingSection>
-						<Typography variant="h6" gutterBottom>
-							시작 카드 수
-						</Typography>
-						<Slider
-							value={settings.initialHandSize}
-							onChange={(_, value) => handleChange('initialHandSize', value)}
-							min={3}
-							max={6}
-							step={1}
-							marks
-							valueLabelDisplay="auto"
-						/>
-					</S.SettingSection>
+				<Card className="shadow-lg">
+					<CardContent className="p-8 space-y-8">
+						<div className="space-y-4">
+							<h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+								시작 카드 수
+							</h3>
+							<div className="px-3">
+								<input
+									type="range"
+									min={3}
+									max={6}
+									step={1}
+									value={settings.initialHandSize}
+									onChange={(e) => handleChange('initialHandSize', parseInt(e.target.value))}
+									className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+								/>
+								<div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-2">
+									<span>3</span>
+									<span>4</span>
+									<span>5</span>
+									<span>6</span>
+								</div>
+								<div className="text-center mt-2 text-lg font-semibold">
+									{settings.initialHandSize}
+								</div>
+							</div>
+						</div>
 
-					<S.SettingSection>
-						<Typography variant="h6" gutterBottom>
-							난이도 설정
-						</Typography>
-						<FormControl component="fieldset">
-							<RadioGroup
-								value={settings.difficulty}
-								onChange={(e) => handleChange('difficulty', e.target.value)}>
-								<FormControlLabel
-									value="easy"
-									control={<Radio />}
-									label="쉬움"
-								/>
-								<FormControlLabel
-									value="normal"
-									control={<Radio />}
-									label="보통"
-								/>
-								<FormControlLabel
-									value="hard"
-									control={<Radio />}
-									label="어려움"
-								/>
-							</RadioGroup>
-						</FormControl>
-					</S.SettingSection>
+						<div className="space-y-4">
+							<h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+								난이도 설정
+							</h3>
+							<div className="space-y-2">
+								{['easy', 'normal', 'hard'].map((difficulty) => (
+									<Label key={difficulty} className="flex items-center space-x-3 cursor-pointer">
+										<input
+											type="radio"
+											name="difficulty"
+											value={difficulty}
+											checked={settings.difficulty === difficulty}
+											onChange={(e) => handleChange('difficulty', e.target.value)}
+											className="w-4 h-4 text-primary-main bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600"
+										/>
+										<span className="text-gray-700 dark:text-gray-300">
+											{difficulty === 'easy' ? '쉬움' : difficulty === 'normal' ? '보통' : '어려움'}
+										</span>
+									</Label>
+								))}
+							</div>
+						</div>
 
-					<S.SettingSection>
-						<Typography variant="h6" gutterBottom>
-							AI 속도
-						</Typography>
-						<FormControl component="fieldset">
-							<RadioGroup
-								value={settings.aiSpeed}
-								onChange={(e) => handleChange('aiSpeed', e.target.value)}>
-								<FormControlLabel
-									value="slow"
-									control={<Radio />}
-									label="느림"
-								/>
-								<FormControlLabel
-									value="normal"
-									control={<Radio />}
-									label="보통"
-								/>
-								<FormControlLabel
-									value="fast"
-									control={<Radio />}
-									label="빠름"
-								/>
-							</RadioGroup>
-						</FormControl>
-					</S.SettingSection>
+						<div className="space-y-4">
+							<h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+								AI 속도
+							</h3>
+							<div className="space-y-2">
+								{['slow', 'normal', 'fast'].map((speed) => (
+									<Label key={speed} className="flex items-center space-x-3 cursor-pointer">
+										<input
+											type="radio"
+											name="aiSpeed"
+											value={speed}
+											checked={settings.aiSpeed === speed}
+											onChange={(e) => handleChange('aiSpeed', e.target.value)}
+											className="w-4 h-4 text-primary-main bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600"
+										/>
+										<span className="text-gray-700 dark:text-gray-300">
+											{speed === 'slow' ? '느림' : speed === 'normal' ? '보통' : '빠름'}
+										</span>
+									</Label>
+								))}
+							</div>
+						</div>
 
-					<S.SettingSection>
-						<Typography variant="h6" gutterBottom>
-							배경음악 볼륨
-						</Typography>
-						<Slider
-							value={settings.bgmVolume}
-							onChange={(_, value) => handleChange('bgmVolume', value)}
-							min={0}
-							max={1}
-							step={0.1}
-							valueLabelDisplay="auto"
-							valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
-						/>
-					</S.SettingSection>
+						<div className="space-y-4">
+							<h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+								배경음악 볼륨
+							</h3>
+							<div className="px-3">
+								<input
+									type="range"
+									min={0}
+									max={1}
+									step={0.1}
+									value={settings.bgmVolume}
+									onChange={(e) => handleChange('bgmVolume', parseFloat(e.target.value))}
+									className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+								/>
+								<div className="text-center mt-2 text-lg font-semibold">
+									{Math.round(settings.bgmVolume * 100)}%
+								</div>
+							</div>
+						</div>
 
-					<S.SettingSection>
-						<Typography variant="h6" gutterBottom>
-							효과음 볼륨
-						</Typography>
-						<Slider
-							value={settings.sfxVolume}
-							onChange={(_, value) => handleChange('sfxVolume', value)}
-							min={0}
-							max={1}
-							step={0.1}
-							valueLabelDisplay="auto"
-							valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
-						/>
-					</S.SettingSection>
+						<div className="space-y-4">
+							<h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+								효과음 볼륨
+							</h3>
+							<div className="px-3">
+								<input
+									type="range"
+									min={0}
+									max={1}
+									step={0.1}
+									value={settings.sfxVolume}
+									onChange={(e) => handleChange('sfxVolume', parseFloat(e.target.value))}
+									className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+								/>
+								<div className="text-center mt-2 text-lg font-semibold">
+									{Math.round(settings.sfxVolume * 100)}%
+								</div>
+							</div>
+						</div>
 
-					<S.ButtonGroup>
-						<S.SaveButton onClick={handleSave}>설정 저장</S.SaveButton>
-					</S.ButtonGroup>
-				</S.SettingsContent>
-			</Container>
-		</S.SettingsContainer>
+						<div className="flex justify-end mt-10">
+							<Button onClick={handleSave} variant="default" size="lg" className="px-8">
+								설정 저장
+							</Button>
+						</div>
+					</CardContent>
+				</Card>
+			</div>
+		</div>
 	);
 };
 

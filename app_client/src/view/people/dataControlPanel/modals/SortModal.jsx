@@ -1,51 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
-	List,
-	ListItem,
-	Chip,
-	Typography,
-	Box,
-	Divider,
-	Button,
-	ToggleButton,
-	ToggleButtonGroup,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { ArrowUpward, ArrowDownward, RestartAlt } from '@mui/icons-material';
+import { ArrowUp, ArrowDown, RotateCcw } from 'lucide-react';
 import { sortIcons } from '../icons/sortIcons';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from 'components/ui/dialog';
+import { Button } from 'components/ui/button';
+import { Separator } from 'components/ui/separator';
 
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-	'& .MuiDialogContent-root': {
-		padding: theme.spacing(3),
-	},
-	'& .MuiList-root': {
-		display: 'flex',
-		flexWrap: 'wrap',
-		gap: theme.spacing(1),
-		padding: theme.spacing(2),
-	},
-	'& .MuiListItem-root': {
-		width: 'auto',
-		padding: 0,
-	},
-}));
-
-const SortSection = styled(Box)(({ theme }) => ({
-	marginBottom: theme.spacing(3),
-}));
-
-const OrderToggleGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-	display: 'flex',
-	justifyContent: 'center',
-	marginTop: theme.spacing(2),
-	'& .MuiToggleButton-root': {
-		padding: theme.spacing(1, 3),
-	},
-}));
 
 // 기본 정렬 설정
 const DEFAULT_SORT = {
@@ -111,76 +70,88 @@ const SortModal = ({
 	};
 
 	return (
-		<StyledDialog
-			open={open}
-			onClose={handleCancel}
-			maxWidth="sm"
-			fullWidth
-			disableEnforceFocus
-			disableAutoFocus
-			keepMounted={false}>
-			<DialogTitle>정렬 설정</DialogTitle>
-			<DialogContent>
-				<Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleCancel()}>
+			<DialogContent className="max-w-md">
+				<DialogHeader>
+					<DialogTitle>정렬 설정</DialogTitle>
+				</DialogHeader>
+
+				<div className="flex justify-end mb-4">
 					<Button
-						startIcon={<RestartAlt />}
+						variant="outline"
+						size="sm"
 						onClick={handleReset}
-						color="inherit"
-						size="small">
+						className="flex items-center gap-2"
+					>
+						<RotateCcw className="w-4 h-4" />
 						초기화
 					</Button>
-				</Box>
+				</div>
 
-				<SortSection>
-					<Typography variant="h6" gutterBottom>
-						정렬 기준
-					</Typography>
-					<Divider />
-					<List>
+				{/* 정렬 기준 섹션 */}
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold mb-2">정렬 기준</h3>
+					<Separator className="mb-4" />
+					<div className="flex flex-wrap gap-2 p-2">
 						{sortIcons.map(({ value, label, icon: Icon }) => (
-							<ListItem key={value}>
-								<Chip
-									icon={<Icon />}
-									label={label}
-									onClick={() => handleSortClick(value)}
-									color={tempSortCriteria === value ? 'primary' : 'default'}
-									variant={tempSortCriteria === value ? 'filled' : 'outlined'}
-								/>
-							</ListItem>
+							<button
+								key={value}
+								onClick={() => handleSortClick(value)}
+								className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+									tempSortCriteria === value
+										? 'bg-blue-600 text-white hover:bg-blue-700'
+										: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+								}`}
+							>
+								<Icon className="w-4 h-4 mr-1" />
+								{label}
+							</button>
 						))}
-					</List>
-				</SortSection>
+					</div>
+				</div>
 
-				<SortSection>
-					<Typography variant="h6" gutterBottom align="center">
-						정렬 순서
-					</Typography>
-					<Divider />
-					<OrderToggleGroup
-						value={tempSortOrder}
-						exclusive
-						onChange={handleOrderChange}
-						aria-label="정렬 순서">
-						<ToggleButton value="asc" aria-label="오름차순">
-							<ArrowUpward sx={{ mr: 1 }} />
+				{/* 정렬 순서 섹션 */}
+				<div className="mb-6">
+					<h3 className="text-lg font-semibold mb-2 text-center">정렬 순서</h3>
+					<Separator className="mb-4" />
+					<div className="flex justify-center gap-2 mt-2">
+						<button
+							onClick={() => setTempSortOrder('asc')}
+							className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${
+								tempSortOrder === 'asc'
+									? 'bg-blue-600 text-white hover:bg-blue-700'
+									: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+							}`}
+							aria-label="오름차순"
+						>
+							<ArrowUp className="w-4 h-4 mr-2" />
 							오름차순
-						</ToggleButton>
-						<ToggleButton value="desc" aria-label="내림차순">
-							<ArrowDownward sx={{ mr: 1 }} />
+						</button>
+						<button
+							onClick={() => setTempSortOrder('desc')}
+							className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${
+								tempSortOrder === 'desc'
+									? 'bg-blue-600 text-white hover:bg-blue-700'
+									: 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
+							}`}
+							aria-label="내림차순"
+						>
+							<ArrowDown className="w-4 h-4 mr-2" />
 							내림차순
-						</ToggleButton>
-					</OrderToggleGroup>
-				</SortSection>
+						</button>
+					</div>
+				</div>
+
+				<DialogFooter>
+					<Button variant="outline" onClick={handleCancel}>
+						취소
+					</Button>
+					<Button onClick={handleConfirm}>
+						확인
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleCancel} color="inherit">
-					취소
-				</Button>
-				<Button onClick={handleConfirm} color="primary" variant="contained">
-					확인
-				</Button>
-			</DialogActions>
-		</StyledDialog>
+		</Dialog>
 	);
 };
 

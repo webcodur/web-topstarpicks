@@ -4,11 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install:fe": "pnpm --prefix app_client install",
+    "install:be": "pnpm --prefix app_server install",
+    "install:all": "pnpm run install:fe && pnpm run install:be",
+    "dev:fe": "pnpm --prefix app_client start",
+    "dev:be": "pnpm --prefix app_server start",
+    "dev": "concurrently \"pnpm run dev:be\" \"pnpm run dev:fe\"",
+    "build:fe": "pnpm --prefix app_client run build",
+    "build:fe:prod": "pnpm --prefix app_client run build:prod",
+    "build": "pnpm run build:fe",
+    "test:fe": "pnpm --prefix app_client test",
+    "test:be": "pnpm --prefix app_server test",
+    "test": "pnpm run test:be && pnpm run test:fe",
+    "clean": "rimraf node_modules app_client/node_modules app_server/node_modules app_client/build",
     "fe": "pnpm --prefix app_client start",
     "be": "pnpm --prefix app_server start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "nest": "pnpm --prefix app_server start:dev",
+    "nest:prod": "pnpm --prefix app_server start:prod",
+    "nest:build": "pnpm --prefix app_server build",
+    "install:nest": "pnpm --prefix app_server install"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pnpm": "^10.15.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "rimraf": "^6.0.1"
+  }
 }

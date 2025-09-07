@@ -1,28 +1,19 @@
-// import LabelIcon from '@mui/icons-material/Label';
-import FlagIcon from '@mui/icons-material/Flag';
-import GradeIcon from '@mui/icons-material/Grade';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Flag, Star, Calendar } from 'lucide-react';
 
 export const sortIcons = [
 	{
 		value: 'influence',
 		label: '영향력',
-		icon: GradeIcon,
+		icon: Star,
 	},
-
 	{
 		value: 'nationality',
 		label: '국적',
-		icon: FlagIcon,
+		icon: Flag,
 	},
 	{
 		value: 'age',
 		label: '나이/시대',
-		icon: CalendarMonthIcon,
+		icon: Calendar,
 	},
-	// {
-	// 	value: 'name',
-	// 	label: '이름',
-	// 	icon: LabelIcon,
-	// },
 ];

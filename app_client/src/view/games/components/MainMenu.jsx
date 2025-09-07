@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { useTheme } from '@emotion/react';
-import * as S from './styles/mainMenuStyles';
-import { Typography } from '@mui/material';
+import { Button } from '../../../components/ui/button';
 import LoadingScreen from './LoadingScreen';
 
 export const MainMenu = ({ onStartGame, onShowManual, onShowSettings }) => {
-	const theme = useTheme();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleStartGame = async () => {
@@ -18,31 +15,52 @@ export const MainMenu = ({ onStartGame, onShowManual, onShowSettings }) => {
 	};
 
 	return (
-		<S.MainMenuContainer>
+		<div className="relative min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 flex flex-col items-center justify-center p-6">
 			{isLoading && <LoadingScreen />}
-			<S.BackgroundOverlay />
+			
+			{/* Background overlay */}
+			<div className="absolute inset-0 bg-black/20" />
 
-			<S.TitleSection>
-				<div>
-					<S.GameTitle variant="h2" component="h1">
+			{/* Title Section */}
+			<div className="relative z-10 text-center mb-12">
+				<div className="space-y-4">
+					<h1 className="text-4xl md:text-6xl font-bold text-white drop-shadow-lg">
 						천하쟁패
-					</S.GameTitle>
-					{/* <S.SubTitle variant="h5" color="textSecondary">
-						1:1 카드 전략 대전
-					</S.SubTitle>					 */}
-					<S.SubTitle variant="h5" color="textSecondary">
+					</h1>
+					<p className="text-lg md:text-xl text-white/80">
 						게임은 현재 제작중에 있습니다
-					</S.SubTitle>
+					</p>
 				</div>
-			</S.TitleSection>
+			</div>
 
-			<S.MenuSection>
-				<S.MenuButton onClick={handleStartGame}>게임 시작</S.MenuButton>
-				<S.MenuButton onClick={onShowManual}>플레이 방법</S.MenuButton>
-				<S.MenuButton onClick={onShowSettings}>게임 설정</S.MenuButton>
-			</S.MenuSection>
+			{/* Menu Section */}
+			<div className="relative z-10 space-y-4 w-full max-w-sm">
+				<Button 
+					onClick={handleStartGame}
+					className="w-full py-3 text-lg font-semibold bg-blue-500 hover:bg-blue-600 text-white"
+				>
+					게임 시작
+				</Button>
+				<Button 
+					onClick={onShowManual}
+					variant="outline"
+					className="w-full py-3 text-lg font-semibold border-white/30 text-white hover:bg-white/10"
+				>
+					플레이 방법
+				</Button>
+				<Button 
+					onClick={onShowSettings}
+					variant="outline"
+					className="w-full py-3 text-lg font-semibold border-white/30 text-white hover:bg-white/10"
+				>
+					게임 설정
+				</Button>
+			</div>
 
-			<S.VersionInfo>v1.0.0</S.VersionInfo>
-		</S.MainMenuContainer>
+			{/* Version Info */}
+			<div className="relative z-10 absolute bottom-4 right-4 text-white/60 text-sm">
+				v1.0.0
+			</div>
+		</div>
 	);
 };

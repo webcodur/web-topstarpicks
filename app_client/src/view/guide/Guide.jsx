@@ -1,42 +1,31 @@
-import React from 'react';
-import {
-	Box,
-	Container,
-	Typography,
-	CardContent,
-	AccordionDetails,
-	AccordionSummary,
-	useTheme,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import {
-	StyledHeader,
-	HeaderContent,
-	FeatureCard,
-	StyledAccordion,
-} from './Guide.styles';
+import React, { useState } from 'react';
+import { ChevronDown, Hand, HelpCircle } from 'lucide-react';
+import { Card, CardContent } from '../../components/ui/card';
+import { useAtom } from 'jotai';
+import { darkModeAtom } from '../../store/atom';
 
 const Guide = () => {
-	const theme = useTheme();
+	const [expandedFaq, setExpandedFaq] = useState(null);
+	const [darkMode] = useAtom(darkModeAtom);
+	
 	const features = [
 		{
-			icon: (
-				<TouchAppIcon sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-			),
+			icon: <Hand className="w-10 h-10 text-primary mb-4" />,
 			title: '직접 유명인사들의 영향력을 평가해볼 수 있습니다.',
 			description:
 				'사이트에 없는 유명인사들의 영향력 지표를 직접 측정해 볼 수 있습니다. chatGPT 를 활용한 영향력 생성기를 활용해 보세요! (개발중입니다)',
 		},
 		{
-			icon: (
-				<HelpOutlineIcon sx={{ fontSize: 40, color: 'primary.main', mb: 2 }} />
-			),
+			icon: <HelpCircle className="w-10 h-10 text-primary mb-4" />,
 			title: '24/7 지원',
 			description: '언제든 연락주세요. 담당자가 도움드리겠습니다.',
 		},
 	];
+	
+	const toggleFaq = (index) => {
+		setExpandedFaq(expandedFaq === index ? null : index);
+	};
+
 	const faqs = [
 		{
 			question: '서비스 이용은 무료인가요?',
@@ -56,70 +45,97 @@ const Guide = () => {
 	];
 
 	return (
-		<Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-			<StyledHeader theme={theme}>
-				<HeaderContent>
-					<Container maxWidth="lg">
-						<Typography variant="h3" component="h1" gutterBottom>
-							서비스 이용 가이드
-						</Typography>
-						<Typography variant="h6">
-							더 나은 사이트 이용을 위해 TopStarPicks가 제공하는 기능을 확인해
-							보세요
-						</Typography>
-					</Container>
-				</HeaderContent>
-			</StyledHeader>
+		<div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+			{/* Header Section */}
+			<div className={`py-16 px-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} border-b`}>
+				<div className="max-w-4xl mx-auto text-center">
+					<h1 className={`text-4xl font-bold mb-4 ${
+						darkMode ? 'text-white' : 'text-gray-900'
+					}`}>
+						서비스 이용 가이드
+					</h1>
+					<p className={`text-xl ${
+						darkMode ? 'text-gray-300' : 'text-gray-600'
+					}`}>
+						더 나은 사이트 이용을 위해 TopStarPicks가 제공하는 기능을 확인해 보세요
+					</p>
+				</div>
+			</div>
 
-			<Container maxWidth="lg" sx={{ py: 8 }}>
+			<div className="max-w-4xl mx-auto py-16 px-4">
 				{/* Features Section */}
-				<Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+				<h2 className={`text-3xl font-bold mb-8 ${
+					darkMode ? 'text-white' : 'text-gray-900'
+				}`}>
 					주요 기능
-				</Typography>
-				<Box
-					sx={{
-						display: 'grid',
-						gridTemplateColumns: {
-							xs: '1fr',
-							md: 'repeat(2, 1fr)',
-						},
-						gap: 3,
-						mb: 8,
-					}}>
+				</h2>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
 					{features.map((feature, index) => (
-						<FeatureCard key={index} theme={theme} elevation={3}>
-							<CardContent sx={{ p: 4 }}>
-								{feature.icon}
-								<Typography variant="h6" gutterBottom>
+						<Card key={index} className={`p-6 shadow-lg ${
+							darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'
+						}`}>
+							<CardContent className="p-0">
+								{React.cloneElement(feature.icon, {
+									className: `w-10 h-10 mb-4 ${
+										darkMode ? 'text-blue-400' : 'text-blue-600'
+									}`
+								})}
+								<h3 className={`text-xl font-semibold mb-2 ${
+									darkMode ? 'text-white' : 'text-gray-900'
+								}`}>
 									{feature.title}
-								</Typography>
-								<Typography variant="body2" color="text.secondary">
+								</h3>
+								<p className={`text-sm leading-relaxed ${
+									darkMode ? 'text-gray-300' : 'text-gray-600'
+								}`}>
 									{feature.description}
-								</Typography>
+								</p>
 							</CardContent>
-						</FeatureCard>
+						</Card>
 					))}
-				</Box>
+				</div>
 
 				{/* FAQ Section */}
-				<Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
+				<h2 className={`text-3xl font-bold mb-8 ${
+					darkMode ? 'text-white' : 'text-gray-900'
+				}`}>
 					자주 묻는 질문
-				</Typography>
-				{faqs.map((faq, index) => (
-					<StyledAccordion key={index} theme={theme}>
-						<AccordionSummary
-							expandIcon={<ExpandMoreIcon />}
-							aria-controls={`panel${index}-content`}
-							id={`panel${index}-header`}>
-							<Typography variant="h6">{faq.question}</Typography>
-						</AccordionSummary>
-						<AccordionDetails>
-							<Typography>{faq.answer}</Typography>
-						</AccordionDetails>
-					</StyledAccordion>
-				))}
-			</Container>
-		</Box>
+				</h2>
+				<div className="space-y-4">
+					{faqs.map((faq, index) => (
+						<div key={index} className={`border rounded-lg ${
+							darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
+						}`}>
+							<button
+								className={`w-full p-4 text-left flex items-center justify-between hover:bg-opacity-50 ${
+									darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+								}`}
+								onClick={() => toggleFaq(index)}>
+								<h3 className={`text-lg font-semibold ${
+									darkMode ? 'text-white' : 'text-gray-900'
+								}`}>
+									{faq.question}
+								</h3>
+								<ChevronDown className={`w-5 h-5 transition-transform ${
+									expandedFaq === index ? 'rotate-180' : ''
+								} ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+							</button>
+							{expandedFaq === index && (
+								<div className={`px-4 pb-4 border-t ${
+									darkMode ? 'border-gray-700' : 'border-gray-200'
+								}`}>
+									<p className={`pt-4 ${
+										darkMode ? 'text-gray-300' : 'text-gray-700'
+									}`}>
+										{faq.answer}
+									</p>
+								</div>
+							)}
+						</div>
+					))}
+				</div>
+			</div>
+		</div>
 	);
 };
 

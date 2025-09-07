@@ -1,6 +1,7 @@
 // AgeBoundaries.jsx
 import React from 'react';
-import { Box, TextField } from '@mui/material';
+import { Input } from '../../components/ui';
+import { Label } from '../../components/ui';
 
 const AgeBoundaries = ({ eraBoundaries, setEraBoundaries }) => {
 	const handleEraBoundaryChange = (era) => (event) => {
@@ -11,36 +12,44 @@ const AgeBoundaries = ({ eraBoundaries, setEraBoundaries }) => {
 	};
 
 	return (
-		<Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
-			<TextField
-				label="고대/중세 경계 (서로마 제국 멸망)"
-				type="number"
-				value={eraBoundaries.ancient}
-				onChange={handleEraBoundaryChange('ancient')}
-				sx={{ width: '20%' }}
-			/>
-			<TextField
-				label="중세/근대 경계 (동로마 제국 멸망)"
-				type="number"
-				value={eraBoundaries.medieval}
-				onChange={handleEraBoundaryChange('medieval')}
-				sx={{ width: '20%' }}
-			/>
-			<TextField
-				label="근대/현대 경계 (프랑스 대혁명)"
-				type="number"
-				value={eraBoundaries.early_modern}
-				onChange={handleEraBoundaryChange('early_modern')}
-				sx={{ width: '20%' }}
-			/>
-			<TextField
-				label="현재 (2차 세계대전)"
-				type="number"
-				value={eraBoundaries.modern}
-				onChange={handleEraBoundaryChange('modern')}
-				sx={{ width: '20%' }}
-			/>
-		</Box>
+		<div className="flex justify-between mb-4 gap-4">
+			<div className="w-1/5">
+				<Label htmlFor="ancient">고대/중세 경계 (서로마 제국 멸망)</Label>
+				<Input
+					id="ancient"
+					type="number"
+					value={eraBoundaries.ancient}
+					onChange={handleEraBoundaryChange('ancient')}
+				/>
+			</div>
+			<div className="w-1/5">
+				<Label htmlFor="medieval">중세/근대 경계 (동로마 제국 멸망)</Label>
+				<Input
+					id="medieval"
+					type="number"
+					value={eraBoundaries.medieval}
+					onChange={handleEraBoundaryChange('medieval')}
+				/>
+			</div>
+			<div className="w-1/5">
+				<Label htmlFor="early_modern">근대/현대 경계 (프랑스 대혁명)</Label>
+				<Input
+					id="early_modern"
+					type="number"
+					value={eraBoundaries.early_modern}
+					onChange={handleEraBoundaryChange('early_modern')}
+				/>
+			</div>
+			<div className="w-1/5">
+				<Label htmlFor="modern">현재 (2차 세계대전)</Label>
+				<Input
+					id="modern"
+					type="number"
+					value={eraBoundaries.modern}
+					onChange={handleEraBoundaryChange('modern')}
+				/>
+			</div>
+		</div>
 	);
 };
 

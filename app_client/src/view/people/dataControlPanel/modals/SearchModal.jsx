@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import {
 	Dialog,
-	DialogTitle,
-	IconButton,
-	TextField,
-	List,
-	ListItem,
-	ListItemText,
-	InputAdornment,
-	Box,
 	DialogContent,
-	Typography,
-} from '@mui/material';
+	DialogHeader,
+	DialogTitle,
+	DialogClose
+} from 'components/ui/dialog';
+import { Input } from 'components/ui/input';
+import { Button } from 'components/ui/button';
 import {
-	Close as CloseIcon,
+	X as CloseIcon,
 	Search as SearchIcon,
 	Mic as MicIcon,
-} from '@mui/icons-material';
+} from 'lucide-react';
 
 const SearchModal = ({ open, onClose }) => {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -47,66 +43,53 @@ const SearchModal = ({ open, onClose }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-			<DialogTitle sx={{ m: 0, p: 2 }}>
-				인물 검색
-				<IconButton
-					onClick={onClose}
-					sx={{
-						position: 'absolute',
-						right: 8,
-						top: 8,
-					}}>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
+		<Dialog open={open} onOpenChange={onClose}>
+			<DialogContent className="sm:max-w-md">
+				<DialogHeader>
+					<DialogTitle>인물 검색</DialogTitle>
+					<DialogClose />
+				</DialogHeader>
 
-			<Box sx={{ p: 2 }}>
-				<TextField
-					fullWidth
-					value={searchTerm}
-					onChange={handleSearchChange}
-					placeholder="인물 이름을 입력하세요"
-					variant="outlined"
-					InputProps={{
-						startAdornment: (
-							<InputAdornment position="start">
-								<SearchIcon />
-							</InputAdornment>
-						),
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton
-									onClick={handleVoiceInput}
-									color={isListening ? 'primary' : 'default'}>
-									<MicIcon />
-								</IconButton>
-							</InputAdornment>
-						),
-					}}
-				/>
+				<div className="space-y-4">
+					<div className="relative">
+						<SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+						<Input
+							value={searchTerm}
+							onChange={handleSearchChange}
+							placeholder="인물 이름을 입력하세요"
+							className="pl-10 pr-10"
+						/>
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={handleVoiceInput}
+							className={`absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
+								isListening ? 'text-blue-600' : 'text-gray-400'
+							}`}>
+							<MicIcon className="h-4 w-4" />
+						</Button>
+					</div>
 
-				{suggestions.length > 0 && (
-					<List>
-						{suggestions.map((suggestion, index) => (
-							<ListItem
-								button
-								key={index}
-								onClick={() => {
-									setSearchTerm(suggestion);
-									// TODO: 검색 실행 로직
-								}}>
-								<ListItemText primary={suggestion} />
-							</ListItem>
-						))}
-					</List>
-				)}
-			</Box>
+					{suggestions.length > 0 && (
+						<div className="border rounded-md">
+							{suggestions.map((suggestion, index) => (
+								<button
+									key={index}
+									className="w-full text-left px-3 py-2 hover:bg-gray-100 border-b last:border-b-0"
+									onClick={() => {
+										setSearchTerm(suggestion);
+										// TODO: 검색 실행 로직
+									}}>
+									{suggestion}
+								</button>
+							))}
+						</div>
+					)}
 
-			<DialogContent>
-				<Typography variant="body1" style={{ padding: '20px' }}>
-					이 기능은 현재 개발 중입니다.
-				</Typography>
+					<div className="p-5 text-center">
+						<p className="text-gray-600">이 기능은 현재 개발 중입니다.</p>
+					</div>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

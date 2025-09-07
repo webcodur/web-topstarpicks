@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react';
-import { Box, IconButton } from '@mui/material';
 import { motion } from 'framer-motion';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import RotateRightIcon from '@mui/icons-material/RotateRight';
-import LayersClearIcon from '@mui/icons-material/LayersClear';
-import FlipToBackIcon from '@mui/icons-material/FlipToBack';
-import SubdirectoryArrowLeftIcon from '@mui/icons-material/SubdirectoryArrowLeft';
-import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
-import CallMissedOutgoingIcon from '@mui/icons-material/CallMissedOutgoing';
+import { RotateCcw } from 'lucide-react';
 
 // 1. 카드 스타일 상수 - 모든 스타일 값을 한 곳에서 관리
 const CARD_STYLES = {
@@ -42,89 +35,41 @@ const calculateCardPosition = (index, totalCards) => {
 
 // 3. 네비게이션 버튼 컴포넌트
 const NavigationButton = ({ direction, onClick }) => (
-	<IconButton
+	<button
 		onClick={onClick}
-		sx={{
-			position: 'absolute',
-			left: '0px',
-			bottom: '0px',
-			color: 'white',
-			zIndex: 10,
-			backgroundColor: '#42A5F5',
-			'&:hover': {
-				backgroundColor: '#42A5F5',
-			},
-			width: '40px',
-			height: '40px',
-			padding: '8px',
-			borderRadius: '50%',
-		}}>
-		<RotateLeftIcon fontSize="large" />
-	</IconButton>
+		className="absolute left-0 bottom-0 text-white z-10 bg-blue-400 hover:bg-blue-500 w-10 h-10 p-2 rounded-full transition-colors"
+	>
+		<RotateCcw size={24} />
+	</button>
 );
 
 // 4. 개별 카드 컴포넌트
 const CelebCard = React.memo(({ imageData, xPos, yPos, index, onClick }) => (
-	<Box
+	<div
 		onClick={index === 0 ? onClick : undefined}
-		sx={{
-			position: 'absolute',
-			// 반응형 너비: 모바일에서는 축소된 크기, 데스크톱에서는 원래 크기
-			width: {
-				xs: `${CARD_STYLES.WIDTH * CARD_STYLES.MOBILE.SCALE}px`,
-				md: `${CARD_STYLES.WIDTH}px`,
-			},
-			height: {
-				xs: `${CARD_STYLES.HEIGHT * CARD_STYLES.MOBILE.SCALE}px`,
-				md: `${CARD_STYLES.HEIGHT}px`,
-			},
-			// 3D 변환: translate(-50%, -50%)로 중앙 정렬 후 회전과 Z축 이동
-			transform: {
-				xs: `translate(-50%, -50%) rotateY(${
-					index * CARD_STYLES.MOBILE.ROTATION
-				}deg) 
-					 translateZ(${index * CARD_STYLES.MOBILE.Z_TRANSLATION}px)`,
-				md: `translate(-50%, -50%) rotateY(${
-					index * CARD_STYLES.DESKTOP.ROTATION
-				}deg) 
-					 translateZ(${index * CARD_STYLES.DESKTOP.Z_TRANSLATION}px)`,
-			},
-			// 카드 위치 계산: 50%는 컨테이너 중앙, xPos/yPos로 상대적 위치 조정
-			left: {
-				xs: `calc(50% + ${xPos * CARD_STYLES.MOBILE.SCALE}px)`,
-				md: `calc(50% + ${xPos}px)`,
-			},
-			top: {
-				xs: `calc(50% + ${yPos * CARD_STYLES.MOBILE.SCALE}px)`,
-				md: `calc(50% + ${yPos}px)`,
-			},
-			borderRadius: '20px',
-			overflow: 'hidden',
-			boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-			transition: 'all 0.5s ease',
+		className={`
+			absolute rounded-[20px] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-500 
+			${index === 0 ? 'cursor-pointer' : 'cursor-default'}
+			w-[160px] h-[224px] md:w-[200px] md:h-[280px]
+			after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-black/30 after:z-10
+		`}
+		style={{
 			background: CARD_STYLES.BACKGROUND,
-			cursor: index === 0 ? 'pointer' : 'default',
-			'&::after': {
-				content: '""',
-				position: 'absolute',
-				inset: 0,
-				background:
-					'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%)',
-				zIndex: 1,
-			},
-		}}>
+			transform: `translate(-50%, -50%) rotateY(${
+				index * (window.innerWidth >= 768 ? CARD_STYLES.DESKTOP.ROTATION : CARD_STYLES.MOBILE.ROTATION)
+			}deg) translateZ(${
+				index * (window.innerWidth >= 768 ? CARD_STYLES.DESKTOP.Z_TRANSLATION : CARD_STYLES.MOBILE.Z_TRANSLATION)
+			}px)`,
+			left: `calc(50% + ${xPos * (window.innerWidth >= 768 ? 1 : CARD_STYLES.MOBILE.SCALE)}px)`,
+			top: `calc(50% + ${yPos * (window.innerWidth >= 768 ? 1 : CARD_STYLES.MOBILE.SCALE)}px)`,
+		}}
+	>
 		<img
 			src={imageData.imageUrl}
 			alt={`Celebrity ${index + 1}`}
-			style={{
-				width: '100%',
-				height: '100%',
-				objectFit: 'cover',
-				position: 'relative',
-				zIndex: 0,
-			}}
+			className="w-full h-full object-cover relative z-0"
 		/>
-	</Box>
+	</div>
 ));
 
 // 5. 단순화된 갤러리 컴포넌트
@@ -137,24 +82,9 @@ const CelebGallery = React.memo(
 		);
 
 		return (
-			<Box
-				sx={{
-					position: 'relative',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					perspective: '1000px',
-					width: {
-						xs: '240px', // 모바일에서는 더 작은 너비
-						md: '300px', // 데스크톱에서는 원래 크기
-					},
-					height: {
-						xs: '296px', // 모바일에서는 더 작은 높이 (370px * 0.8)
-						md: '370px', // 데스크톱에서는 원래 크기
-					},
-					margin: 'auto',
-					borderRadius: '10px',
-				}}>
+			<div className="relative flex items-center justify-center w-[240px] md:w-[300px] h-[296px] md:h-[370px] mx-auto rounded-[10px]"
+				style={{ perspective: '1000px' }}
+			>
 				{/* 네비게이션 버튼들 */}
 				<NavigationButton direction="left" onClick={moveRight} />
 
@@ -196,7 +126,7 @@ const CelebGallery = React.memo(
 						</motion.div>
 					);
 				})}
-			</Box>
+			</div>
 		);
 	}
 );

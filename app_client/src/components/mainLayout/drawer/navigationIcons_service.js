@@ -1,17 +1,16 @@
-import SignpostIcon from '@mui/icons-material/Signpost';
-import ContactsIcon from '@mui/icons-material/Contacts';
+import { Signpost, ContactRound } from 'lucide-react';
 
 const navigationIcons = [
 	{
 		key: 'about',
 		text: '제작자',
-		icon: <ContactsIcon />,
+		icon: <ContactRound className="w-5 h-5" />,
 		to: '/about',
 	},
 	{
 		key: 'guide',
 		text: '가이드',
-		icon: <SignpostIcon />,
+		icon: <Signpost className="w-5 h-5" />,
 		to: '/guide',
 	},
 ];

@@ -1,11 +1,6 @@
 import React, { useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, animate } from 'framer-motion';
-import {
-	StatsContainer,
-	StatBox,
-	StatNumber,
-	StatLabel,
-} from 'view/home/styles/StatisticsSectionStyles';
+// Using Tailwind classes instead of styled-components
 
 // 통계 섹션 컴포넌트 - 메모이제이션을 통한 성능 최적화
 const StatisticsSection = React.memo(() => {
@@ -66,7 +61,7 @@ const StatisticsSection = React.memo(() => {
 	}, [animateCount, stats]);
 
 	return (
-		<StatsContainer>
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
 			{stats.map((stat, index) => (
 				// 각 통계 항목을 순차적으로 페이드인 애니메이션과 함께 표시
 				<motion.div
@@ -74,15 +69,19 @@ const StatisticsSection = React.memo(() => {
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ delay: index * 0.2 }}>
-					<StatBox>
-						<StatNumber ref={stat.ref} data-animated="false">
+					<div className="bg-white rounded-lg p-6 shadow-lg text-center">
+						<div 
+							ref={stat.ref} 
+							data-animated="false"
+							className="text-3xl font-bold text-blue-600 mb-2"
+						>
 							0+
-						</StatNumber>
-						<StatLabel>{stat.label}</StatLabel>
-					</StatBox>
+						</div>
+						<div className="text-lg font-medium text-gray-700">{stat.label}</div>
+					</div>
 				</motion.div>
 			))}
-		</StatsContainer>
+		</div>
 	);
 });
 

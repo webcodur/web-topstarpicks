@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from '../../ui/dialog';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Label } from '../../ui/label';
 
 const AdminLoginModal = ({ open, onClose }) => {
 	const [password, setPassword] = useState('');
@@ -18,44 +26,35 @@ const AdminLoginModal = ({ open, onClose }) => {
 	};
 
 	return (
-		<Modal open={open} onClose={onClose}>
-			<Box
-				sx={{
-					position: 'absolute',
-					top: '50%',
-					left: '50%',
-					transform: 'translate(-50%, -50%)',
-					width: 300,
-					bgcolor: 'background.paper',
-					boxShadow: 24,
-					p: 4,
-					borderRadius: 2,
-				}}>
-				<Typography variant="h6" component="h2" gutterBottom>
-					관리자 로그인
-				</Typography>
-				<form onSubmit={handleSubmit}>
-					<TextField
-						fullWidth
-						type="password"
-						label="비밀번호"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						error={!!error}
-						helperText={error}
-						margin="normal"
-					/>
+		<Dialog open={open} onOpenChange={onClose}>
+			<DialogContent className="sm:max-w-[400px]">
+				<DialogHeader>
+					<DialogTitle>관리자 로그인</DialogTitle>
+				</DialogHeader>
+				<form onSubmit={handleSubmit} className="space-y-4 pt-4">
+					<div className="space-y-2">
+						<Label htmlFor="password">비밀번호</Label>
+						<Input
+							id="password"
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							className={error ? 'border-red-500' : ''}
+							placeholder="비밀번호를 입력하세요"
+						/>
+						{error && (
+							<p className="text-sm text-red-500">{error}</p>
+						)}
+					</div>
 					<Button
 						type="submit"
-						variant="contained"
-						color="primary"
-						fullWidth
-						sx={{ mt: 2 }}>
+						className="w-full"
+					>
 						로그인
 					</Button>
 				</form>
-			</Box>
-		</Modal>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

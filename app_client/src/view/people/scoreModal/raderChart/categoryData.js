@@ -1,9 +1,4 @@
-import PublicIcon from '@mui/icons-material/Public';
-import SecurityIcon from '@mui/icons-material/Security';
-import ScienceIcon from '@mui/icons-material/Science';
-import PeopleIcon from '@mui/icons-material/People';
-import BusinessIcon from '@mui/icons-material/Business';
-import PaletteIcon from '@mui/icons-material/Palette';
+import { Globe, Shield, Microscope, Users, Building2, Palette } from 'lucide-react';
 
 export const categories = (person) => [
 	{
@@ -11,7 +6,7 @@ export const categories = (person) => [
 		exp: person.cultural_exp,
 		score: person.cultural || 0,
 		desc: '문화와 예술 분야에서의 영향력과 기여도를 평가한 것이다.',
-		icon: <PaletteIcon />,
+		icon: <Palette />,
 		fullMark: 10,
 	},
 	{
@@ -19,7 +14,7 @@ export const categories = (person) => [
 		exp: person.political_exp,
 		score: person.political || 0,
 		desc: '정치와 외교 분야에서의 영향력과 업적을 평가한 것이다.',
-		icon: <PublicIcon />,
+		icon: <Globe />,
 		fullMark: 10,
 	},
 	{
@@ -27,7 +22,7 @@ export const categories = (person) => [
 		exp: person.strategic_exp,
 		score: person.strategic || 0,
 		desc: '전략적 사고와 국가 안보에 대한 기여도를 평가한 것이다.',
-		icon: <SecurityIcon />,
+		icon: <Shield />,
 		fullMark: 10,
 	},
 	{
@@ -35,7 +30,7 @@ export const categories = (person) => [
 		exp: person.economic_exp,
 		score: person.economic || 0,
 		desc: '산업 발전과 경제 분야에서의 영향력을 평가한 것이다.',
-		icon: <BusinessIcon />,
+		icon: <Building2 />,
 		fullMark: 10,
 	},
 	{
@@ -43,7 +38,7 @@ export const categories = (person) => [
 		exp: person.social_exp,
 		score: person.social || 0,
 		desc: '사회와 윤리 분야에서의 영향력과 기여도를 평가한 것이다.',
-		icon: <PeopleIcon />,
+		icon: <Users />,
 		fullMark: 10,
 	},
 	{
@@ -51,7 +46,7 @@ export const categories = (person) => [
 		exp: person.tech_exp,
 		score: person.tech || 0,
 		desc: '기술 혁신과 과학 발전에 대한 기여도를 평가한 것이다.',
-		icon: <ScienceIcon />,
+		icon: <Microscope />,
 		fullMark: 10,
 	},
 ];

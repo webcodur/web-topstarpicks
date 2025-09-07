@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { Divider, Box } from '@mui/material';
 import PersonCard from './personCard/PersonCard';
 import { getSortedAndGroupedData, getSortLabel } from 'utils/professionUtils';
-import { StencilTypography } from './PeopleGridStyles';
+import { Separator } from 'components/ui/separator';
 
 const PeopleGrid = ({
 	professionData,
@@ -27,38 +26,26 @@ const PeopleGrid = ({
 		<>
 			{groupedData.map((group, groupIndex) => (
 				<React.Fragment key={`group-${group.key}-${groupIndex}`}>
-					{groupIndex > 0 && sortCriteria && <Divider sx={{ my: 2 }} />}
-					<br />
-					<br />
+					{groupIndex > 0 && sortCriteria && <Separator className="my-4" />}
+					<div className="mb-6" />
 
 					{sortCriteria && (
-						<StencilTypography variant="h5" sx={{ my: 2 }}>
+						<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 my-4 stencil-font">
 							{getSortLabel(sortCriteria, group.key, eraBoundaries, group)}
-						</StencilTypography>
+						</h2>
 					)}
 
-					<Box sx={{ display: 'flex', flexWrap: 'wrap', margin: -2 }}>
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 						{group.persons.map((person) => (
-							<Box
-								key={`person-${person.id}`}
-								sx={{
-									width: {
-										xs: '100%',
-										sm: '50%',
-										md: '33.33%',
-										lg: '25%',
-										xl: '20%',
-									},
-									padding: 2,
-								}}>
+							<div key={`person-${person.id}`}>
 								<PersonCard
 									person={person}
 									contentName={contentName}
 									onModalOpen={onModalOpen}
 								/>
-							</Box>
+							</div>
 						))}
-					</Box>
+					</div>
 				</React.Fragment>
 			))}
 		</>

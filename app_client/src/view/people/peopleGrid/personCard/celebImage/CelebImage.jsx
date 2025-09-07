@@ -1,12 +1,6 @@
 // CelebImage.jsx
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import {
-	ImageContainer,
-	StyledImage,
-	StyledVideo,
-	RankBorder,
-	RankScore,
-} from './celebImageStyle';
+import { getRankBorderStyle } from './celebImageStyle';
 
 const CelebImage = ({ imgLink, vidLink, name, rank }) => {
 	const [isMobile, setIsMobile] = useState(false);
@@ -58,30 +52,44 @@ const CelebImage = ({ imgLink, vidLink, name, rank }) => {
 		}
 	}, [isMobile, vidLink]);
 
+	const rankBorderClass = getRankBorderStyle(rank);
+
 	return (
-		<RankBorder rank={rank}>
-			<ImageContainer
+		<div className={`relative p-4 rounded-lg ${rankBorderClass}`}>
+			<div
+				className="relative w-full pt-[180%] overflow-hidden rounded-md cursor-pointer"
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				onClick={handleClick}>
-				{rank && <RankScore>{rank}</RankScore>}
-				<StyledImage
+				{rank && (
+					<div 
+						className="absolute top-1 left-1 bg-black/70 text-white px-2 py-1 rounded-md z-10 font-['Permanent_Marker'] text-xl transform -rotate-3"
+						style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
+					>
+						{rank}
+					</div>
+				)}
+				<img
 					src={imgLink}
 					alt={name}
-					style={{ opacity: isHovering && vidLink ? 0 : 1 }}
+					className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
+						isHovering && vidLink ? 'opacity-0' : 'opacity-100'
+					}`}
 				/>
 				{vidLink && (
-					<StyledVideo
+					<video
 						ref={videoRef}
 						src={vidLink}
 						loop
 						muted
-						playsInline // iOS에서 인라인 재생 허용
-						style={{ opacity: isHovering ? 1 : 0 }}
+						playsInline
+						className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
+							isHovering ? 'opacity-100' : 'opacity-0'
+						}`}
 					/>
 				)}
-			</ImageContainer>
-		</RankBorder>
+			</div>
+		</div>
 	);
 };
 

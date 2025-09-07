@@ -1,25 +1,26 @@
 // SettingsModal.jsx
 /* 우상단 설정창 */
 import React, { memo } from 'react';
-import {
-	Modal,
-	Typography,
-	IconButton,
-	Switch,
-	FormControlLabel,
-	Select,
-	MenuItem,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { X } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { darkModeAtom, languageAtom } from 'store/atom';
 import { useLanguage } from 'i18n/i18nUtils';
 import { useTranslation } from 'react-i18next';
 import {
-	SettingsModalContainer,
-	SettingsModalHeader,
-	LanguageSelectWrapper,
-} from './AppBarStyles';
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from '../../ui/dialog';
+import { Switch } from '../../ui/switch';
+import { Label } from '../../ui/label';
+import { Button } from '../../ui/button';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '../../ui/dropdown-menu';
 
 const SettingsModal = memo(({ open, onClose }) => {
 	const [darkMode, setDarkMode] = useAtom(darkModeAtom);
@@ -29,40 +30,54 @@ const SettingsModal = memo(({ open, onClose }) => {
 
 	const handleDarkModeToggle = () => setDarkMode(!darkMode);
 
+	const languageOptions = {
+		ko: t('korean'),
+		en: t('english'),
+	};
+
 	return (
-		<Modal open={open} onClose={onClose} aria-labelledby="settings-modal-title">
-			<SettingsModalContainer>
-				{/* 제목/닫기 버튼 */}
-				<SettingsModalHeader>
-					<Typography id="settings-modal-title" variant="h6" component="h2">
-						{t('settings')}
-					</Typography>
-					<IconButton onClick={onClose} aria-label="close">
-						<CloseIcon />
-					</IconButton>
-				</SettingsModalHeader>
+		<Dialog open={open} onOpenChange={onClose}>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>{t('settings')}</DialogTitle>
+				</DialogHeader>
+				
+				<div className="space-y-6 py-4">
+					{/* 다크 모드 */}
+					<div className="flex items-center justify-between">
+						<Label htmlFor="dark-mode" className="text-base">
+							{t(darkMode ? 'dark_mode' : 'light_mode')}
+						</Label>
+						<Switch
+							id="dark-mode"
+							checked={darkMode}
+							onCheckedChange={handleDarkModeToggle}
+						/>
+					</div>
 
-				{/* 다크 모드 */}
-				<FormControlLabel
-					control={
-						<Switch checked={darkMode} onChange={handleDarkModeToggle} />
-					}
-					label={t(darkMode ? 'dark_mode' : 'light_mode')}
-				/>
-
-				{/* 다국어 설정 */}
-				<LanguageSelectWrapper>
-					<Typography variant="subtitle1">{t('language_settings')}</Typography>
-					<Select
-						value={language}
-						onChange={(e) => handleLanguageChange(e.target.value)}
-						fullWidth>
-						<MenuItem value="ko">{t('korean')}</MenuItem>
-						<MenuItem value="en">{t('english')}</MenuItem>
-					</Select>
-				</LanguageSelectWrapper>
-			</SettingsModalContainer>
-		</Modal>
+					{/* 다국어 설정 */}
+					<div className="space-y-2">
+						<Label className="text-base">{t('language_settings')}</Label>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="outline" className="w-full justify-between">
+									{languageOptions[language]}
+									<span className="ml-2">▼</span>
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="w-full">
+								<DropdownMenuItem onClick={() => handleLanguageChange('ko')}>
+									{t('korean')}
+								</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+									{t('english')}
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+				</div>
+			</DialogContent>
+		</Dialog>
 	);
 });
 

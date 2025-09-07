@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
+import { Button } from '../../../../components/ui/button';
+import { Input } from '../../../../components/ui/input';
+import { Label } from '../../../../components/ui/label';
 import {
-	TextField,
-	Button,
-	Grid,
-	Select,
-	MenuItem,
-	FormControl,
-	InputLabel,
-	Box,
-	Typography,
-} from '@mui/material';
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '../../../../components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
 import { createRecommendation } from 'api/recommendationApi';
 import { useContentNames } from 'hooks/useContentNames';
 import { fetchPersonInfo } from 'api/celebrityApi';
@@ -51,8 +50,6 @@ const NewRecsForm = ({ showSnackbar }) => {
 				title: '',
 				creator: '',
 				release_date: '',
-				// recommendation_text: '',
-				// recommendation_source: '',
 				img_link: '',
 				affiliate_link: '',
 				mediaDescription: '',
@@ -70,7 +67,6 @@ const NewRecsForm = ({ showSnackbar }) => {
 
 	const clearField = () => {
 		setFormData({
-			// celebrity_id: '',
 			...formData,
 			content_id: 1,
 			title: '',
@@ -84,191 +80,175 @@ const NewRecsForm = ({ showSnackbar }) => {
 		});
 	};
 
+	const handleContentTypeSelect = (contentType) => {
+		setFormData({ ...formData, content_id: contentType.id });
+	};
+
+	const selectedContentType = Object.values(contentNames).find(
+		(type) => type.id === formData.content_id
+	);
+
 	return (
-		<Box maxWidth="md" margin="auto">
-			<Typography variant="h6" gutterBottom>
+		<div className="max-w-4xl mx-auto space-y-6">
+			<h2 className="text-lg font-semibold mb-4">
 				새 추천 정보 추가
-			</Typography>
+			</h2>
 			<form onSubmit={handleSubmitName}>
-				<Grid container spacing={2} alignItems="center">
-					<Grid item xs={8}>
-						<TextField
-							fullWidth
-							size="small"
-							label="유명인사 이름"
+				<div className="flex gap-4 items-end">
+					<div className="flex-1 space-y-2">
+						<Label htmlFor="celeb">유명인사 이름</Label>
+						<Input
+							id="celeb"
 							name="celeb"
 							value={celebName}
 							onChange={handleChangeCelebName}
 							required
+							placeholder="유명인사 이름을 입력하세요"
 						/>
-					</Grid>
-					<Grid item xs={4}>
-						<Button
-							type="submit"
-							variant="contained"
-							color="primary"
-							size="small">
-							셀럽 정보 확인
-						</Button>
-					</Grid>
-				</Grid>
+					</div>
+					<Button type="submit" size="sm">
+						셀럽 정보 확인
+					</Button>
+				</div>
 			</form>
 
 			{celebId > 0 && (
 				<form onSubmit={handleSubmitRecs}>
-					<Grid container spacing={2} mt={2}>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								fullWidth
-								size="small"
-								label="제목"
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+						<div className="space-y-2">
+							<Label htmlFor="title">제목</Label>
+							<Input
+								id="title"
 								name="title"
 								value={formData.title}
 								onChange={handleChange}
 								required
+								placeholder="제목을 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<FormControl fullWidth size="small">
-								<InputLabel id="content-type-label">컨텐츠 타입</InputLabel>
-								<Select
-									labelId="content-type-label"
-									name="content_id"
-									value={formData.content_id}
-									onChange={handleChange}
-									required
-									label="컨텐츠 타입">
+						</div>
+						
+						<div className="space-y-2">
+							<Label>컨텐츠 타입</Label>
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="outline" className="w-full justify-between">
+										{selectedContentType?.name || '컨텐츠 타입을 선택하세요'}
+										<ChevronDown className="h-4 w-4 opacity-50" />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent className="w-full">
 									{Object.values(contentNames).map((type) => (
-										<MenuItem key={type.name} value={type.id}>
+										<DropdownMenuItem
+											key={type.id}
+											onSelect={() => handleContentTypeSelect(type)}
+										>
 											{type.name}
-										</MenuItem>
+										</DropdownMenuItem>
 									))}
-								</Select>
-							</FormControl>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								fullWidth
-								size="small"
-								label="제작자"
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="creator">제작자</Label>
+							<Input
+								id="creator"
 								name="creator"
 								value={formData.creator}
 								onChange={handleChange}
+								placeholder="제작자를 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								fullWidth
-								size="small"
-								label="출시일"
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="release_date">출시일</Label>
+							<Input
+								id="release_date"
 								name="release_date"
 								type="text"
 								placeholder="0000-00-00"
 								value={formData.release_date}
 								onChange={handleChange}
-								InputLabelProps={{ shrink: true }}
 							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								fullWidth
-								size="small"
-								label="추천 이유"
+						</div>
+
+						<div className="md:col-span-2 space-y-2">
+							<Label htmlFor="recommendation_text">추천 이유</Label>
+							<textarea
+								id="recommendation_text"
 								name="recommendation_text"
 								value={formData.recommendation_text}
 								onChange={handleChange}
-								multiline
-								minRows={3}
-								maxRows={12}
+								rows={3}
 								required
+								className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+								placeholder="추천 이유를 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								fullWidth
-								size="small"
-								label="미디어 설명"
+						</div>
+
+						<div className="md:col-span-2 space-y-2">
+							<Label htmlFor="mediaDescription">미디어 설명</Label>
+							<textarea
+								id="mediaDescription"
 								name="mediaDescription"
 								value={formData.mediaDescription}
 								onChange={handleChange}
-								multiline
-								minRows={3}
-								maxRows={12}
+								rows={3}
+								className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+								placeholder="미디어 설명을 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={4}>
-							<TextField
-								fullWidth
-								size="small"
-								label="출처"
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="recommendation_source">출처</Label>
+							<Input
+								id="recommendation_source"
 								name="recommendation_source"
 								value={formData.recommendation_source}
 								onChange={handleChange}
-								InputProps={{
-									style: {
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-									},
-								}}
+								placeholder="출처를 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={4}>
-							<TextField
-								fullWidth
-								size="small"
-								label="이미지 링크"
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="img_link">이미지 링크</Label>
+							<Input
+								id="img_link"
 								name="img_link"
 								value={formData.img_link}
 								onChange={handleChange}
-								InputProps={{
-									style: {
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-									},
-								}}
+								placeholder="이미지 링크를 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={4}>
-							<TextField
-								fullWidth
-								size="small"
-								label="제휴 링크"
+						</div>
+
+						<div className="space-y-2">
+							<Label htmlFor="affiliate_link">제휴 링크</Label>
+							<Input
+								id="affiliate_link"
 								name="affiliate_link"
 								value={formData.affiliate_link}
 								onChange={handleChange}
-								InputProps={{
-									style: {
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-									},
-								}}
+								placeholder="제휴 링크를 입력하세요"
 							/>
-						</Grid>
-						<Grid item xs={12}>
-							<Button
-								type="submit"
-								variant="contained"
-								color="primary"
-								size="small">
+						</div>
+
+						<div className="md:col-span-2 flex gap-4 mt-6">
+							<Button type="submit" className="flex-1">
 								추천 정보 추가
 							</Button>
 							<Button
 								type="button"
-								variant="contained"
-								color="secondary"
-								size="small"
+								variant="outline"
 								onClick={clearField}
-								sx={{ ml: 1 }}>
+								className="flex-1"
+							>
 								필드 클리어
 							</Button>
-						</Grid>
-					</Grid>
+						</div>
+					</div>
 				</form>
 			)}
-		</Box>
+		</div>
 	);
 };
 

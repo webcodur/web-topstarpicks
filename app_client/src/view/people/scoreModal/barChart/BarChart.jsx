@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
 import {
 	BarChart,
 	Bar,
@@ -10,105 +9,72 @@ import {
 	LabelList,
 } from 'recharts';
 import { prepareBarData } from './barDataUtils';
+import { useAtom } from 'jotai';
+import { darkModeAtom } from '../../../../store/atom';
 
 const BarChartComponent = ({ transhistoricity, exp }) => {
-	const theme = useTheme();
+	const [darkMode] = useAtom(darkModeAtom);
 	const barData = prepareBarData(transhistoricity);
-	const chartStyles = {
-		container: {
-			border: `1px solid ${theme.palette.divider}`,
-			borderRadius: theme.shape.borderRadius,
-			padding: theme.spacing(2),
-			backgroundColor: theme.palette.background.paper,
-			boxShadow: theme.shadows[3],
-		},
-		title: {
-			fontWeight: 'bold',
-			marginBottom: theme.spacing(2),
-			textAlign: 'center',
-		},
-		contentWrapper: {
-			display: 'flex',
-			gap: '25px',
-		},
-		chartContainer: {
-			width: '50%',
-			height: '300px',
-			display: 'flex',
-			flexDirection: 'column',
-		},
-		descriptionContainer: {
-			width: '40%',
-			display: 'flex',
-			alignItems: 'center',
-		},
-		bar: {
-			fill: theme.palette.primary.main,
-		},
-		axisLabel: {
-			fontSize: 12,
-			fill: theme.palette.text.secondary,
-		},
-		chartMargin: {
-			top: 20,
-			right: 20,
-			left: 10,
-			bottom: 5,
-		},
+
+	const chartMargin = {
+		top: 20,
+		right: 20,
+		left: 10,
+		bottom: 5,
 	};
 
 	return (
-		<Box sx={chartStyles.container}>
-			<Box sx={chartStyles.contentWrapper}>
-				<Box sx={chartStyles.chartContainer}>
-					<Typography variant="body2">
-						<b>통시성:</b> 시대를 넘어 세상에 영향을 준 정도
-					</Typography>
+		<div className={`border rounded-lg p-4 shadow-lg ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
+			<div className="flex gap-6">
+				<div className="w-1/2 h-[300px] flex flex-col">
+					<p className={`text-sm mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+						<strong>통시성:</strong> 시대를 넘어 세상에 영향을 준 정도
+					</p>
 					<ResponsiveContainer width="100%" height="100%">
 						<BarChart
 							data={barData}
-							margin={chartStyles.chartMargin}
+							margin={chartMargin}
 							layout="horizontal">
 							<CartesianGrid
 								strokeDasharray="3 3"
-								stroke={theme.palette.divider}
+								stroke={darkMode ? '#374151' : '#e5e7eb'}
 							/>
 							<XAxis
 								dataKey="name"
-								tick={chartStyles.axisLabel}
-								axisLine={{ stroke: theme.palette.text.secondary }}
-								tickLine={{ stroke: theme.palette.text.secondary }}
+								tick={{ fontSize: 12, fill: darkMode ? '#9ca3af' : '#6b7280' }}
+								axisLine={{ stroke: darkMode ? '#9ca3af' : '#6b7280' }}
+								tickLine={{ stroke: darkMode ? '#9ca3af' : '#6b7280' }}
 							/>
 							<YAxis
 								type="number"
 								domain={[0, 40]}
 								ticks={[0, 10, 20, 30, 40]}
-								tick={chartStyles.axisLabel}
-								axisLine={{ stroke: theme.palette.text.secondary }}
-								tickLine={{ stroke: theme.palette.text.secondary }}
+								tick={{ fontSize: 12, fill: darkMode ? '#9ca3af' : '#6b7280' }}
+								axisLine={{ stroke: darkMode ? '#9ca3af' : '#6b7280' }}
+								tickLine={{ stroke: darkMode ? '#9ca3af' : '#6b7280' }}
 							/>
 							<Bar
 								dataKey="score"
 								name="통시성"
-								{...chartStyles.bar}
+								fill="#3b82f6"
 								barSize={40}>
 								<LabelList
 									dataKey="score"
 									position="insideRight"
-									fill={theme.palette.background.paper}
+									fill={darkMode ? '#1f2937' : '#ffffff'}
 									fontSize={12}
 								/>
 							</Bar>
 						</BarChart>
 					</ResponsiveContainer>
-				</Box>
-				<Box sx={chartStyles.descriptionContainer}>
-					<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-						<Typography variant="body2">{exp}</Typography>
-					</Box>
-				</Box>
-			</Box>
-		</Box>
+				</div>
+				<div className="w-2/5 flex items-center">
+					<div className="flex flex-col">
+						<p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{exp}</p>
+					</div>
+				</div>
+			</div>
+		</div>
 	);
 };
 
